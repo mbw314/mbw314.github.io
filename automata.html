@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />	
+	<title>Michael Bradford Williams</title>
+	<link rel="stylesheet" type="text/css" href="./css/styles.css" /> 
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+</head> 
+
+<body>
+
+	
+<div class="container">
+
+<div class="topsmall">
+<div class="topleftsmall">
+   <a href="./index.html">
+	<script type="text/javascript">
+      		showImage("300x50");
+   	</script>
+   </a>
+</div>
+<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+</div>
+
+<div class="middle">
+
+<h2>Cellular Automata</h2>
+
+<h3>Introduction</h3>
+
+<p>While recovering from wisdom tooth extraction in May, 2007, I decided to occupy myself by writing a computer program to draw cellular automata.  For those unfamiliar cellular automata, the idea is simple.  You can think of them as pictures that are created iteratively using a set of simple rules, starting from some initial data.  For the type that I chose to create, we start with a grid whose boxes are blank, and color in one box.  Then, move down one row.  Each box in that row will then be either colored or not, depending on a rule that incorporates the three boxes above it in the previous row (above to the left, directly above, and above to the right).  Here's part of the grid, illustrating which boxes on which the bottom box depends.</p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+	<td>
+		<img src="./images/automata/box7_off.png" alt=" " />
+	</td>
+</tr>
+</table>
+
+<p>Continue coloring boxes in this manner, going down one row at a time.  [For practical purposes, it is easy to make the first colored box in the top row, middle column.  Also, since the grid will have finite width, we have to be careful with the boxes on the edges.  I'll say more about that in a moment...] </p>
+
+<h3>The Rules</h3>
+
+<p>How do we make the "rules" for creating an automaton?  First, let's consider, as above, an individual box, and the three boxes above it in the previous row.  How many possible configurations are there for the three boxes?  Still assuming that a box can either be colored or blank, there are 2^3 = 8 configurations.  That is, two choices for the first box, times two choices for the second box, times two choices for the last box.  Here are the eight configurations.</p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+	<td><img src="./images/automata/box0_off.png"  alt=" "/>
+		<img src="./images/automata/box1_off.png" alt=" " />
+		<img src="./images/automata/box2_off.png" alt=" " />
+		<img src="./images/automata/box3_off.png" alt=" " />
+		<img src="./images/automata/box4_off.png" alt=" " />
+		<img src="./images/automata/box5_off.png" alt=" " />
+		<img src="./images/automata/box6_off.png" alt=" " />
+		<img src="./images/automata/box7_off.png" alt=" " />
+	</td>
+</tr>
+</table>
+
+<p>To determine a rule, we must look at each configuration and then decide to either color the corresponding lower box or leave it blank.  This gives two choices per configuration, so there are 2^(2^3) = 2^8 = 256 rules.  For example, the images above determine a (boring) rule, but here is another.</p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+	<td><img src="./images/automata/box0_on.png" alt=" " />
+		<img src="./images/automata/box1_on.png" alt=" " />
+		<img src="./images/automata/box2_off.png" alt=" " />
+		<img src="./images/automata/box3_on.png" alt=" " />
+		<img src="./images/automata/box4_on.png" alt=" " />
+		<img src="./images/automata/box5_off.png" alt=" " />
+		<img src="./images/automata/box6_on.png" alt=" " />
+		<img src="./images/automata/box7_off.png" alt=" " />
+	</td>
+</tr>
+</table>
+
+<p>Here is the beginning of the automaton determined by this rule.</p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+	<td><img src="./images/automata/example.png" alt=" " /></td>
+</tr>
+</table>
+
+<h3>Fixed Width, Arbitrary Height</h3>
+
+<p>Addressing the above unresolved question, what happens if we want the image to be of arbitary height, while the width is constrained?  My solution to this was to make the image "cylindrical" in the following sense: the left-most box in a row sees the box right above it, the box to the upper right, but since there no box to the upper left, it uses the right-most box in the previous row.  Similarly, the right-most box in a row sees the left-most box in the previous row.  This way, we can create an image as tall as we like, but with a fixed width.  This was implemented using modular arithmetic.  If the image has width <i>w</i>, then the boxes above the <i>i</i>-th box in a row are <i>i-1</i> (mod <i>w</i>), <i>i</i> (mod <i>w</i>), and <i>1+1</i> (mod <i>w</i>).</p>
+
+<h3>Colors, and More Examples</h3>
+
+<p>Aesthetically speaking, there is no good reason to only use black and white all the time, so we might as well allow for any pair of colors to be used, one for "blank" and one for "colored".  Also, there the question of the first row.  Why should it be blank except for one box?  I thought starting with random input on the first row might make for more interesting images.  Also, I though one might like the ability to increase the box size by a factor of 2.  These ideas went into the first version of the program (see below), which generated the following examples --click to enlarge.</p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+	<td><a href="./images/automata/2/automata-800x120011011010-0.png">
+			<img src="./images/automata/2/automata-800x120011011010-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/2/automata-800x1200-random-01110000-3.png">
+			<img src="./images/automata/2/automata-800x1200-random-01110000-3-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/2/automata-800x1200-random-01101101-0.png">
+			<img src="./images/automata/2/automata-800x1200-random-01101101-0-thumb.png"  alt=" "/></a></td>
+	<td><a href="./images/automata/2/automata-800x1200-random-10011010-0.png">
+			<img src="./images/automata/2/automata-800x1200-random-10011010-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/2/automata-800x1200-random-01101110-0.png">
+			<img src="./images/automata/2/automata-800x1200-random-01101110-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/2/automata-800x1200-random-10010111-3.png">
+			<img src="./images/automata/2/automata-800x1200-random-10010111-3-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/2/automata-800x1200-random-10101001-0.png">
+			<img src="./images/automata/2/automata-800x1200-random-10101001-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/2/automata-800x1200-random-10011001-0.png">
+			<img src="./images/automata/2/automata-800x1200-random-10011001-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/2/automata-800x1200-random-10010111-0.png">
+			<img src="./images/automata/2/automata-800x1200-random-10010111-0-thumb.png" alt=" " /></a></td>
+
+</tr>
+</table>	
+
+<p>A quick glance at a few of these images reveals a (perhaps) startling feature.  Even though these automata are all described by a small set of very simple rules, their behavior is emphatically not simple!  Chaos and randomness (unrelated to the randomness in the first row!) emerge seemingly from nowhere in all but the most basic examples.  Much has been studied regarding just how "random" things can get.  For example, they are random enough to be used as <a href="http://reference.wolfram.com/mathematica/tutorial/RandomNumberGeneration.html">pseudorandom number generators</a> in <a href="http://www.wolfram.com/products/mathematica/index.html">Mathematica</a>.  <a href="http://psoup.math.wisc.edu/mcell/ca_links.html">Here's</a> a bunch of links with way more information.</p>
+
+<h3>More Colors</h3>
+
+<p>Another natural question to ask is, "What is so special about two colors?"  The answer, of course, is "nothing."  The next modification to the program was to consider 3 colors, and then arbitrarily many colors.  As the number of colors increases, so does the complexity.  This is apparent in the number of possible rules.  For the three boxes above a given box, we have 3^3 = 27 possible configurations.  If for each such configuration we must select a color from three, then there are 3^(3^3) = 3^27 = 7,625,597,484,987 rules!  That is roughly a thousand rules for each person on earth!  I was able to create an interface for the 3-color version, with 27 buttons to set the rules (see below).  Here are some results.</p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+	<td><a href="./images/automata/3/automata201012110000111111000121221-95.png">
+			<img src="./images/automata/3/automata201012110000111111000121221-95-thumb.png"  alt=" "/></a></td>
+	<td><a href="./images/automata/3/automata-1000x1000210110120122102010001100210-3.png">
+			<img src="./images/automata/3/automata-1000x1000210110120122102010001100210-3-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata211101122120002122200210100-1.png">
+			<img src="./images/automata/3/automata211101122120002122200210100-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200-1--random-002011122212110100020201101-2.png">
+			<img src="./images/automata/3/automata-900x1200-1--random-002011122212110100020201101-2-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200-1--random-000212020002011122001001112-1.png">
+			<img src="./images/automata/3/automata-900x1200-1--random-000212020002011122001001112-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata000002000000100212000012120-54.png">
+			<img src="./images/automata/3/automata000002000000100212000012120-54-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200-1--random-000010111100200002000120201-1.png">
+			<img src="./images/automata/3/automata-900x1200-1--random-000010111100200002000120201-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata100002110000121212000111120-75.png">
+			<img src="./images/automata/3/automata100002110000121212000111120-75-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-1000x1240-1--random-102101001211000020001120020-2.png">
+			<img src="./images/automata/3/automata-1000x1240-1--random-102101001211000020001120020-2-thumb.png" alt=" " /></a></td>
+</tr>
+<tr align="center">
+	<td><a href="./images/automata/3/automata-1000x1240-1--random-201012110000111111001120020-1.png">
+			<img src="./images/automata/3/automata-1000x1240-1--random-201012110000111111001120020-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200-1--random-102000200200102121111001112-1.png">
+			<img src="./images/automata/3/automata-900x1200-1--random-102000200200102121111001112-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200-1--random-001100100102111121110112202-0.png">
+			<img src="./images/automata/3/automata-900x1200-1--random-001100100102111121110112202-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200-1--random-201122002101212111000000012-0.png">
+			<img src="./images/automata/3/automata-900x1200-1--random-201122002101212111000000012-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200001200000021221212200111120-1.png">
+			<img src="./images/automata/3/automata-900x1200001200000021221212200111120-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200-1-012102100100110011020201102-1.png">
+			<img src="./images/automata/3/automata-900x1200-1-012102100100110011020201102-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200-1-012102002200001012012120100-1.png">
+			<img src="./images/automata/3/automata-900x1200-1-012102002200001012012120100-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-900x1200-1--random-011211022021010002001201102-1.png">
+			<img src="./images/automata/3/automata-900x1200-1--random-011211022021010002001201102-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-800x1000-1--random-001012121000110102022021111-3.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-001012121000110102022021111-3-thumb.png" alt=" " /></a></td>
+</tr>
+<tr align="center">
+	<td><a href="./images/automata/3/automata-800x1000-1--random-001011011102011001111022100-1.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-001011011102011001111022100-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-800x1000-1--random-000100002010011012121010020-0.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-000100002010011012121010020-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-800x1000-1--random-110122122010112000012001002-1.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-110122122010112000012001002-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-800x1000-1--random-020102021220011201210210110-1.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-020102021220011201210210110-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-800x1000-1--random-112000220201100102001110021-1.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-112000220201100102001110021-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-800x1000-1--random-111120000222100212101102102-0.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-111120000222100212101102102-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-800x1000-1--random-200011000100001120000210120-1.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-200011000100001120000210120-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-800x1000-1--random-120020101121111201021111101-1.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-120020101121111201021111101-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/3/automata-800x1000-1--random-010001201101112002101200012-0.png">
+			<img src="./images/automata/3/automata-800x1000-1--random-010001201101112002101200012-0-thumb.png" alt=" " /></a></td>
+</tr>
+</table>	
+
+<p>I pasted together some series of images generated by the same rule.</p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+	<td><a href="./images/automata/automata201012110000111111000121220-series.png">
+			<img src="./images/automata/automata201012110000111111000121220-series-small.png" alt=" " /></a></td>
+	<td><a href="./images/automata/automata000002000000100212000012120-series.png">
+			<img src="./images/automata/automata000002000000100212000012120-series-small.png" alt=" " /></a></td>
+	<td><a href="./images/automata/automata211101122120002122200210100-series.png">
+			<img src="./images/automata/automata211101122120002122200210100-series-small.png"  alt=" "/></a></td>
+	<td><a href="./images/automata/automata012102002200001012012120100-series.png">
+			<img src="./images/automata/automata012102002200001012012120100-series-small.png" alt=" " /></a></td>
+</tr>
+</table>	
+
+<h3>Even More Colors</h3>
+
+<p>To count the number of possible rules of an arbitrary number, say <i>n</i>, of colors, we follow the same procedure.  There are <i>n^3</i> configurations, and each has <i>n</i> choices associated to create a rule.  This means there are <i>n^(n^3)</i> possible rules.  This immediately ruled out a nice interface for selecting a rule, so I opted to allow only random rule generation.  At this point, even specifying a rule becomes unweidly.  The most logical way is to use a base-<i>n</i> number with each digit representing a configuration (so there are <i>n^3</i> digits).  When there are 7 colors, 7^3 = 343, and this is more characters than some operating systems will allow in a filename.  This makes it impractical to use this naming scheme to save an image with a name that containes the rule info used to generate that image.  Therefore, in the n-color applet, I used a timestamp as part of the filename to make it unique.</p>
+
+<p>One thing I noticed was that the "interestingness" of the images peaks at around 3 or 4 colors.  When there are too many colors, things look too random, like colorful static.  Here are some examples.</p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+	<td><a href="./images/automata/n/automata-4-800x1000-1-3203211010000303232110233330103333333021031112213103111030330003-3.png">
+			<img src="./images/automata/n/automata-4-800x1000-1-3203211010000303232110233330103333333021031112213103111030330003-3-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/n/automata-4-800x1000-1--random-0002133200203302010033203113113232133111111301203233112101232220-1.png">
+			<img src="./images/automata/n/automata-4-800x1000-1--random-0002133200203302010033203113113232133111111301203233112101232220-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/n/automata-4-800x1000-1-1200301302100201133103312132311113233130333203310321330133031300-5.png">
+			<img src="./images/automata/n/automata-4-800x1000-1-1200301302100201133103312132311113233130333203310321330133031300-5-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/n/automata-3-900x1200-1--random-022111100101122200210010100-0.png">
+			<img src="./images/automata/n/automata-3-900x1200-1--random-022111100101122200210010100-0-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/n/automata-6-800x1000-2--random-45015033344135313434043531403001355315444343053033335055134440545-1.png">
+			<img src="./images/automata/n/automata-6-800x1000-2--random-45015033344135313434043531403001355315444343053033335055134440545-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/n/automata-4-800x1000-1-3331333111030333012123233123031000332100131212110000111033110323-1.png">
+			<img src="./images/automata/n/automata-4-800x1000-1-3331333111030333012123233123031000332100131212110000111033110323-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/n/automata-6-800x1000-2--random-555-3.png">
+			<img src="./images/automata/n/automata-6-800x1000-2--random-555-3-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/n/automata-4-800x1000-2--random-3203003203202203333310123332010331301200020300222333332032030300-1.png">
+			<img src="./images/automata/n/automata-4-800x1000-2--random-3203003203202203333310123332010331301200020300222333332032030300-1-thumb.png" alt=" " /></a></td>
+	<td><a href="./images/automata/n/automata-4-800x1000-1-2132302023130233121301033200121012013031000233003031033322001303-1.png">
+			<img src="./images/automata/n/automata-4-800x1000-1-2132302023130233121301033200121012013031000233003031033322001303-1-thumb.png" alt=" " /></a></td>
+</tr>
+</table>	
+
+<h3>Other Types</h3>
+
+<p>There are further generalizations of the rules that were used up to this point.  Why limit the effect of the previously drawn rows to just the three boxes that are directly above the given box.   The coloring of a box could depend on any number of boxes from any number of previous rows.  This makes things much, much more complex.  Namely, if we create a rule using <i>k</i> total boxes and <i>n</i> colors, then there <i>n^(n^k)</i> possible rules.  For the n-color version, I gave a few choices for what boxes go into making a rule.  Here's a picture illustrating the new rules.
+</p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+        <td><img src="./images/automata/.png" alt=" " /></td>
+        <td><img src="./images/automata/.png" alt=" " /></td>
+        <td><img src="./images/automata/.png" alt=" " /></td>
+        <td><img src="./images/automata/.png" alt=" " /></td>
+        <td><img src="./images/automata/.png" alt=" " /></td>
+        <td><img src="./images/automata/.png" alt=" " /></td>
+        <td><img src="./images/automata/.png" alt=" " /></td>
+</tr>
+</table>
+
+
+<h3>The Program</h3>
+
+<p>Here is the program, which runs <a href="./automata2.html">inside a webpage</a> (although you'll need a good web browser 
+for it to work properly).</p>
+<!--
+<p>I wrote the program to draw the automata using <a href="http://www.java.com/en/">Java</a>.  There are three of them: the first one was for two colors, the second was for three, and the third allows for variable colors.  Below are pictures of how the first and third look.</p> 
+
+<table  align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="center">
+	<td><a href="./images/automata/2-color-control.png">
+			<img src="./images/automata/2-color-control-thumb.png" alt="the control window" /></a></td>
+	<td><a href="./images/automata/2-color-example.png">
+			<img src="./images/automata/2-color-example-thumb.png" alt="the display window" /></a></td>
+</tr>
+<tr><td> <br /> </td></tr>
+<tr align="center">
+	<td><a href="./images/automata/n-color-control.png">
+			<img src="./images/automata/n-color-control-thumb.png" alt="the control window" /></a></td>
+	<td><a href="./images/automata/4-color-example.png">
+			<img src="./images/automata/4-color-example-thumb.png" alt="the display window" /></a></td>
+</tr>
+</table>
+
+<p>You can download the files for the Java applets here:</p>
+<ul>
+   <li><a href="./2-color.zip">2-color.zip</a> (2-color version) </li>
+   <li><a href="./3-color.zip">3-color.zip</a> (3-color version)</li>
+   <li><a href="./Automata.java">Automata.java</a> (variable color version)</li>
+</ul>
+
+<p>After unzipping, you'll need to compile the source code yourself, with the <a href="http://java.sun.com/javase/downloads/index.jsp">Java SE Development Kit</a>.  In each case, use the command</p>
+<pre>javac Automata.java</pre>
+<p>from the command line.</p>  
+
+<p>Once compiled, you'll need the <a href="http://www.java.com/en/download/manual.jsp">Java Runtime Environment</a> to run it.  The applets are started with the command</p>
+<pre>java Automata</pre> 
+<p>from the command line.</p>
+-->
+</div>
+
+<div class="bottom">
+<p>last modified: 7/03/2009</p>
+</div>
+
+</div>
+
+</body>
+</html>
