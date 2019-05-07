@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />	
+	<title>N-gon Pattern</title>
+	<link rel="stylesheet" type="text/css" href="./css/styles.css" /> 
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+	<link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
+	<script type="text/javascript" src="./js/range.js"></script>
+	<script type="text/javascript" src="./js/timer.js"></script>
+	<script type="text/javascript" src="./js/slider.js"></script>
+</head> 
+
+<body onLoad="drawSomething();">
+	
+<div class="container">
+
+<div class="topsmall">
+
+<div class="topleftsmall">
+   <a href="./index.html">
+	<script type="text/javascript">
+      		showImage("300x50");
+   	</script>
+   </a>
+</div>
+
+<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+
+</div>
+
+<div class="middle">
+
+<h2>N-gon Pattern</h2>
+
+<p>Here's a simple applet that draws regular n-gons on a grid, while allowing the radius, number of sides, and angle of rotation (phase) of the n-gons, as well as the grid size (separation) to change.  <a href="./pattern2.html">Click here</a> for an animated version.</p>
+
+<p>You'll need a modern browser to view it (e.g. <a href="http://www.mozilla.com/firefox/">Firefox</a>, 
+<a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.apple.com/safari/">Safari</a>). </p>
+</div>
+
+<div class="middle">
+
+<table border="0" align="center">
+
+<tr>
+	<td><p>Radius:</p></td>
+	<td><div class="slider" id="radSlider" tabIndex="1"><input class="slider-input" id="radSliderInput"/></div></td>
+
+	<td> </td>
+	<td><p>Separation:</p></td>
+	<td><div class="slider" id="sepSlider" tabIndex="1"><input class="slider-input" id="sepSliderInput"/></div></td>
+</tr>
+
+<tr>
+	<td><p>Sides:</p></td>
+	<td><div class="sides" id="sidesSlider" tabIndex="1"><input class="sides-input" id="sidesSliderInput"/></div></td>
+	
+	<td> </td>
+
+	<td><p>Phase:</p></td>
+	<td><div class="phase" id="phaseSlider" tabIndex="1"><input class="phase-input" id="phaseSliderInput"/></div></td>
+</tr>
+
+
+</table>
+
+<script type="text/javascript">
+
+var radSl = new Slider(document.getElementById("radSlider"), document.getElementById("radSliderInput"));
+var sepSl = new Slider(document.getElementById("sepSlider"), document.getElementById("sepSliderInput"));
+var sidesSl = new Slider(document.getElementById("sidesSlider"), document.getElementById("sidesSliderInput"));
+var phaseSl = new Slider(document.getElementById("phaseSlider"), document.getElementById("phaseSliderInput"));
+
+var ctx;
+var width = window.outerWidth;
+var height = window.outerHeight;
+
+radSl.setMinimum(25);
+radSl.setValue(175);
+radSl.setMaximum(300);
+
+sepSl.setMinimum(20);
+sepSl.setValue(100);
+sepSl.setMaximum(400);
+
+sidesSl.setMinimum(3);
+sidesSl.setValue(4);
+sidesSl.setMaximum(10);
+
+phaseSl.setMinimum(0);
+phaseSl.setValue(60);
+phaseSl.setMaximum(360);
+
+radSl.onchange = function () {
+	drawSomething();
+};
+
+sepSl.onchange = function () {
+	drawSomething();
+};
+
+sidesSl.onchange = function () {	
+	drawSomething();
+};
+
+phaseSl.onchange = function () {	
+	drawSomething();
+};
+
+window.onresize = function () {
+	radSl.recalculate();
+	sepSl.recalculate();
+	sidesSl.recalculate();
+	phaseSl.recalculate();	
+	drawSomething();
+};	
+	
+function drawSomething() {	
+	// get the canvas element using the DOM
+	var canvas = document.getElementById("canvas");
+
+	// Make sure we don't execute when canvas isn't supported
+	if (canvas.getContext){
+
+		// use getContext to use the canvas for drawing
+		ctx = canvas.getContext('2d');
+		
+		//canvas.width = width - 50;
+		//canvas.height = height - 250;		
+				
+		var c1 = Math.floor(255*radSl.getValue()/radSl.getMaximum());
+		var c2 = Math.floor(255*(sepSl.getMaximum()-sepSl.getValue())/sepSl.getMaximum());		
+		var c3 = Math.floor(255*(phaseSl.getMaximum()-phaseSl.getValue())/phaseSl.getMaximum());		
+				
+		//draw background
+		ctx.fillStyle = 'rgb(' + c1 + ',' + c2 + ',' + c3 + ')';
+		ctx.fillRect(0,0,width,height);
+		
+		var rad = radSl.getValue();
+		var sep = sepSl.getValue();
+		var N = sidesSl.getValue();
+		var phi = phaseSl.getValue()*Math.PI/(N*180);
+		
+		for(var i = 0 - sep - rad; i <= width + rad + sep; i = i + sep) {
+			for(var j = 0 - sep - rad; j <= height + rad + sep; j = j + sep) {
+				drawNGon(N,i,j,rad,ctx,phi);
+			}
+		}
+	}
+};		
+
+function drawNGon(n,x,y,rad,ctx,phi) {
+	
+	// rotate "1" (the starting point) appropriately
+	var startX = rad*Math.cos(phi) + x;
+	var startY = rad*Math.sin(phi) + y;
+	
+	var X = 0;
+	var Y = 0;
+	
+	ctx.beginPath();
+	ctx.moveTo(startX,startY);
+	
+	// connect the Nth roots of unity, properly rotated, scaled, and translated
+	for(k=0; k<n; k++) {
+		
+		X = x + rad*Math.cos(k*2*Math.PI/n + phi);
+		Y = y + rad*Math.sin(k*2*Math.PI/n + phi);
+	
+		ctx.lineTo(X,Y);		
+	}	
+
+	ctx.lineTo(startX,startY);
+	ctx.stroke();	
+}
+
+
+</script>
+</div>
+
+<div class="middle">
+
+<center>   
+<canvas id="canvas" width="750" height="750"></canvas>
+</center>
+
+</div>
+
+
+
+
+
+<div class="bottom">
+<p>last modified: 06/23/2011</p>
+</div>
+
+</div>
+
+</body>
+</html>
