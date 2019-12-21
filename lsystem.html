@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>L-System</title>
+    <script language="JavaScript" type="text/javascript" src="./lsystem.js"></script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+
+  <body onload="init();" style="background-color:powderblue;">
+    <canvas id="canvas" width="750" height="750"></canvas>
+
+    <form name="parameters" action="#">
+    <table border="0" align="left">
+    <tr>
+      <td align="left">
+    		<input type="button" name="iterate" value="Draw Next Iteration" onclick="draw_iteration();" />
+    	</td>
+      <td align="left">
+        <select name="example_select">
+  			  <option value="ex1" selected="selected">Example 1</option>
+			    <option value="ex2">Example 2</option>
+          <option value="ex3">Example 3</option>
+          <option value="ex4">Example 4</option>
+          <option value="ex5">Example 5</option>
+          <option value="ex6">Example 6</option>
+          <option value="ex7">Example 7</option>
+          <option value="ex8">Example 8</option>
+          <option value="ex9">Example 9</option>
+          <option value="ex10">Example 10</option>
+          <option value="ex11">Example 11</option>
+          <option value="ex12">Example 12</option>
+          <option value="ex13">Example 13</option>
+          <option value="ex14">Example 14</option>
+          <option value="ex15">Example 15</option>
+          <option value="ex16">Example 16</option>
+          <option value="ex17">Example 17</option>
+          <option value="ex18">Example 18</option>
+		    </select>
+      </td>
+      <td align="left">
+    		<input type="button" name="example" value="Load Example / Reset"
+          onclick="load_example(parameters.example_select.value);" />
+    	</td>
+    </tr>
+    </table>
+    </form>
+    <br />    <br />    <br />
+    <form name="outform" action="#">
+	    <textarea rows="15" cols="100" name="output"></textarea>
+    </form>
+  </body>
+</html>
