@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Mandelbrot Set</title>
+  <script language="JavaScript" type="text/javascript" src="./mand.js"></script>
+  <style type="text/css">
+    canvas { border: 1px solid black; }
+  </style>
+</head>
+
+<body onload="init();" style="background-color:powderblue;">
+
+<canvas id="canvas" width="750" height="750">
+    <p>Your browser is currently unsupported.</p>
+    <p>Supported browsers: <a href="http://www.opera.com">Opera</a>, <a
+      href="http://www.mozilla.com">Firefox</a>, <a
+      href="http://www.apple.com/safari">Safari</a>, and <a
+      href="http://www.konqueror.org">Konqueror</a>.</p>
+</canvas>
+
+<form name="parameters" action="#">
+<table border="0" align="left">
+<tr>
+  <td align="left">
+    <input type="button" name="reset" value="Reset" onclick="reset_state();" />
+  </td>
+  <td align="left">
+    <input type="button" name="zoom_in" value="Zoom In" onclick="zoom(-1.0, 0.01);" />
+  </td>
+</tr>
+</table>
+</form>
+
+<form name="outform">
+	<textarea rows="20" cols="80" name="output"></textarea>
+</form>
+
+
+</body>
+</html>
