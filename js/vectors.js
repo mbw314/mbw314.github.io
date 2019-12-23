@@ -190,29 +190,11 @@ function draw() {
 
 
 function ev_mousemove (ev) {
-	// Get the mouse position relative to the canvas element.
-	// if (ev.layerX || ev.layerX == 0) { // Firefox
-	// 	x = ev.layerX - canvasMinX;
-	// 	y = ev.layerY - canvasMinY;
-	// } else if (ev.offsetX || ev.offsetX == 0) { // Opera
-	// 	x = ev.offsetX - canvasMinX;
-	// 	y = ev.offsetY - canvasMinY;
-	// }
-	// document.getElementById("x-coord").value = x;
-	// document.getElementById("y-coord").value = y;
-
-	//function getCursorPosition(canvas, event) {
   const rect = canvas.getBoundingClientRect()
   x = ev.clientX - rect.left
   y = ev.clientY - rect.top
 	document.getElementById("x-coord").value = x;
 	document.getElementById("y-coord").value = y;
-  //console.log("x: " + x + " y: " + y)
-  //document.outform.output.value = `mouse: (${x}, ${y})`;
-  //return {x: x, y: y};
-	//}
-
-
 }
 
 function circle(x,y,r) {
