@@ -877,44 +877,7 @@ function init(){
 			document.outform.output.value += "drew grid graph with " + N + " x " + M + " vertices" + '\n';
 		}
 
-		//g = completeBipartiteGraph(3,3);
-		//g = completeGraph(4);
-		//g = randomGraph(8);
-		//g = grid(7,4);
-
-		/*
-		g = new Graph([],[]);
-
-		v1 = new Vertex(1,50,50);
-		v2 = new Vertex(2,300,300);
-		v3 = new Vertex(3,300,50);
-		v4 = new Vertex(4,50,300);
-
-		g.addVertex(v1);
-		g.addVertex(v2);
-		g.addVertex(v3);
-		g.addVertex(v4);
-
-		g.addEdge( new Edge(v1,v2) );
-		g.addEdge( new Edge(v2,v3) );
-		g.addEdge( new Edge(v3,v4) );
-		*/
-
-		// test intersection
-		/*
-		document.outform.output.value = intersects(
-			g.edges[0].v0.xCoord,
-			g.edges[0].v0.yCoord,
-			g.edges[0].v1.xCoord,
-			g.edges[0].v1.yCoord,
-			g.edges[1].v0.xCoord,
-			g.edges[1].v0.yCoord,
-			g.edges[1].v1.xCoord,
-			g.edges[1].v1.yCoord);
-		*/
-		// call the drawing function
 		return setInterval(draw, 10);
-		//draw();
 	}
 	else { alert('You need a better web browser to see this.'); }
 }
