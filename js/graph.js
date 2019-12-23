@@ -611,14 +611,9 @@ function draw() {
 }
 
 function ev_mousemove (ev) {
-	// Get the mouse position relative to the canvas element.
-	if (ev.layerX || ev.layerX == 0) { // Firefox
-		x_mouse = ev.layerX - canvasMinX;
-		y_mouse = ev.layerY - canvasMinY;
-	} else if (ev.offsetX || ev.offsetX == 0) { // Opera
-		x_mouse = ev.offsetX - canvasMinX;
-		y_mouse = ev.offsetY - canvasMinY;
-	}
+  const rect = canvas.getBoundingClientRect()
+  x_mouse = ev.clientX - rect.left
+  y_mouse = ev.clientY - rect.top
 }
 
 // find the position of the upper-left corner of an object (e.g., the canvase)
