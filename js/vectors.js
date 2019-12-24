@@ -23,15 +23,12 @@ var sep = 50;	// separation of vectors (vertical and horizontal)
 var mode = 1;
 var away = 1;
 
-
 var canvas, ctx;
-var width = 750;
+var WIDTH = 750;
+var HEIGHT = 750;
+var width = 750; // TODO: fix this
 var height = 750;
 var diag = Math.sqrt(width*width + height*height);  // diagonal length of canvas
-
-//var canvasMinX;
-//var canvasMinY;
-
 
 
 function setupArrays() {
@@ -81,7 +78,7 @@ function setupArrays() {
 
 function draw() {
 
-	clear();
+	clear_canvas();
 
 	// if anything changed, update the variables and reset the arrays
 	if( away != document.getElementById("direction").value ||
@@ -100,19 +97,19 @@ function draw() {
 			for(var j = 0 - sep; j <= height + sep; j = j + sep) {
 				var dist = Math.sqrt( (i-x)*(i-x) + (j-y)*(j-y) );
 
-				ctx.strokeStyle = 'rgb('	+ Math.round(255-255*x/width) + ','
+				var color = 'rgb('	+ Math.round(255-255*x/width) + ','
 											+ Math.round(255*dist/diag) + ','
 											+ Math.round(255*y/height) + ')';
 
-				line(i,j,i+(x-i)*Math.min(0.9*sep/dist,1/2)*away,j+(y-j)*Math.min(0.9*sep/dist,1/2)*away);
-				circle(i,j,2);
+				drawLine(i, j, i+(x-i)*Math.min(0.9*sep/dist,1/2)*away,j+(y-j)*Math.min(0.9*sep/dist,1/2)*away, color);
+				drawCircle(i,j,2, color);
 			}
 		}
 	}
 	else if( mode == 1 ) { // vectors that remember their last direction (when outside range of mouse)
 		for(var i=0; i < width/sep + 3; i++) {
 			for(var j=0; j < height/sep + 3; j++) {
-
+        var color = "";
 				r_squared[i][j] = (p_x[i][j]-x)*(p_x[i][j]-x) + (p_y[i][j]-y)*(p_y[i][j]-y);
 				if( r_squared[i][j] < K*K*sep*sep ) {
 
@@ -134,7 +131,7 @@ function draw() {
 					p_y[i][j] = Math.min(rad,Math.sqrt(r_squared[i][j]))*(y1 - y0[i][j])
 								/Math.sqrt( (x1-x0[i][j])*(x1-x0[i][j]) + (y1-y0[i][j])*(y1-y0[i][j]) ) + y0[i][j];
 
-					ctx.strokeStyle = 'rgb('	+ Math.round( 255-255*r_squared[i][j]/(K*K*sep*sep))  + ','
+					color = 'rgb('	+ Math.round( 255-255*r_squared[i][j]/(K*K*sep*sep))  + ','
 												+ 0 + ','
 												+ Math.round( 255*r_squared[i][j]/(K*K*sep*sep) ) + ')';
 				}
@@ -142,11 +139,11 @@ function draw() {
 					v_x[i][j] = 0;
 					v_y[i][j] = 0;
 
-					ctx.strokeStyle = 'rgb(' + 0 + ',' + 0 + ',' + Math.round( 255*K*K*sep*sep/r_squared[i][j] )  + ')';
+					color = 'rgb(' + 0 + ',' + 0 + ',' + Math.round( 255*K*K*sep*sep/r_squared[i][j] )  + ')';
 				}
 
-				circle(x0[i][j],y0[i][j],2);
-				line(x0[i][j],y0[i][j],p_x[i][j],p_y[i][j]);
+				drawCircle(x0[i][j], y0[i][j], 2, color);
+				drawLine(x0[i][j], y0[i][j], p_x[i][j], p_y[i][j], color);
 			}
 		}
 	}
@@ -177,12 +174,12 @@ function draw() {
 							/Math.sqrt( (x1-x0[i][j])*(x1-x0[i][j]) + (y1-y0[i][j])*(y1-y0[i][j]) ) + y0[i][j];
 
 				var a_norm_squared = a_x[i][j]*a_x[i][j] + (a_y[i][j]-grav*a_g)*(a_y[i][j]-grav*a_g)
-				ctx.strokeStyle = 'rgb('	+ Math.round( (255*2/Math.PI)*Math.atan(a_norm_squared) ) + ','
+				var color = 'rgb('	+ Math.round( (255*2/Math.PI)*Math.atan(a_norm_squared) ) + ','
 											+ 0 + ','
 											+ Math.round( 255-(255*2/Math.PI)*Math.atan(a_norm_squared) ) + ')';
 
-				circle(x0[i][j],y0[i][j],2);
-				line(x0[i][j],y0[i][j],p_x[i][j],p_y[i][j]);
+				drawCircle(x0[i][j], y0[i][j], 2, color);
+				drawLine(x0[i][j], y0[i][j], p_x[i][j], p_y[i][j], color);
 			}
 		}
 	}
@@ -197,53 +194,6 @@ function ev_mousemove (ev) {
 	document.getElementById("y-coord").value = y;
 }
 
-function circle(x,y,r) {
-	ctx.beginPath();
-	ctx.arc(x, y, r, 0, Math.PI*2, true);
-	ctx.closePath();
-	ctx.stroke();
-}
-
-function rect(x,y,w,h) {
-	ctx.beginPath();
-	ctx.rect(x,y,w,h);
-	ctx.closePath();
-	ctx.fill();
-}
-
-function line(x0,y0,x1,y1) {
-	ctx.beginPath();
-	ctx.moveTo(x0,y0);
-	ctx.lineTo(x1,y1);
-	ctx.closePath();
-	ctx.stroke();
-}
-
-function clear() {
-	ctx.fillStyle = "rgb(255,255,255)";
-	ctx.beginPath();
-	ctx.rect(0, 0, width, height);
-	ctx.closePath();
-	ctx.fill();
-}
-
-
-// find the position of the upper-left corner of an object (e.g., the canvase)
-// function findPos(obj) {
-// 	var curLeft = 0;
-// 	var curTop = 0;
-//
-// 	if(obj.offsetParent) {
-//
-// 		do {
-// 			curLeft += obj.offsetLeft;
-// 			curTop += obj.offsetTop;
-// 		} while (obj = obj.offsetParent);
-// 	}
-//
-// 	return [curLeft,curTop];
-// }
-
 
 function init() {
 
@@ -251,9 +201,6 @@ function init() {
 	canvas = document.getElementById("canvas");
 	canvas.width = width;
 	canvas.height = height;
-
-	//canvasMinX = findPos(canvas)[0];
-	//canvasMinY = findPos(canvas)[1];
 
 	// Make sure we don't execute when canvas isn't supported
 	if (canvas.getContext){
