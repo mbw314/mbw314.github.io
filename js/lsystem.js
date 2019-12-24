@@ -1,4 +1,3 @@
-
 class Pen {
   constructor(width, color, is_on) {
     this.width = width; // positive int
@@ -192,7 +191,6 @@ class Turtle {
     }
 
     this.pos = new_pos;
-    //this.printStatus(`move ${dist}`);
     //this.printStatus(`move ${dist}`);
   }
 

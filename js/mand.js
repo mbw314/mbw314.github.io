@@ -35,7 +35,7 @@ const Y_MIN = -1.5
 const Y_MAX = 1.5;
 const RADIUS = 2.0;
 const MAX_ITERATIONS = 105;
-const SCALE_FACTOR = 1.5;
+const SCALE_FACTOR = 2.5;
 const COLOR0 = new Color(0, 0, 255);
 const COLOR1 = new Color(0, 255, 0);
 
@@ -66,7 +66,7 @@ class MandelbrotSet {
 		this.color0 = color0;
 		this.color1 = color1;
 		this.color_lookup = Color.get_color_lookup(color0, color1, max_iterations);
-		this.color_lookup.forEach(c => println(c.toString()));
+		//this.color_lookup.forEach(c => println(c.toString()));
   }
 
   toString() {
@@ -187,7 +187,11 @@ function init() {
 	// Make sure we don't execute when canvas isn't supported
 	if (canvas.getContext){
 		ctx = canvas.getContext('2d');
-		canvas.addEventListener('click', function(e) {zoom(e.clientX, e.clientY);});
+		canvas.addEventListener('click', function(e) {
+			const rect = canvas.getBoundingClientRect()
+			x = e.clientX - rect.left;
+			y = e.clientY - rect.top;
+			zoom(x, y);});
 		clear_canvas();
     reset_state();
 	}
