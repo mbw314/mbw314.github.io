@@ -35,19 +35,15 @@ function setRule(i) {
 	if( i == 0 ) { //typical 3 boxes in row above current box
 		rule = new Array(Math.pow(n,3));
 		//alert("setRule with i = " + i);
-	}
-	else if( i == 1 ) { // 2 boxes in row above current box
+	} else if( i == 1 ) { // 2 boxes in row above current box
 		rule = new Array(Math.pow(n,2));
 		//alert("setRule with i = " + i);
-	}
-	else if( i == 2 ) { // 5 boxes in row above current box
+	} else if( i == 2 ) { // 5 boxes in row above current box
 		rule = new Array(Math.pow(n,5));
 		//alert("setRule with i = " + i);
-	}
-    else if( i == 3 ) { // 4 boxes, three in row above, one two rows above
+	}  else if( i == 3 ) { // 4 boxes, three in row above, one two rows above
 		rule = new Array(Math.pow(n,4));
-	}
-	else if( i == 4 ) { // 6 boxes, three in row above, three in row two above
+	} else if( i == 4 ) { // 6 boxes, three in row above, three in row two above
 		rule = new Array(Math.pow(n,6));
 	}
 
@@ -147,8 +143,7 @@ function drawAutomata(colors,sty,magn,fst,wth,hgt,scr,ref){
 		if( style == 0 || style == 1 || style == 2 ) {
 			firstrows = 1;
 		//alert("firstrows = " + firstrows);
-		}
-		else if( style == 3 || style == 4 ) {
+		} else if( style == 3 || style == 4 ) {
 			firstrows = 2;
 		//alert("firstrows = " + firstrows);
 		}

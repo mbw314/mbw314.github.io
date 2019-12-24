@@ -9,7 +9,7 @@ var thickness_default = 2;
 var edgeClick = 5;
 var permArr = [], usedChars = [];
 
-function Vertex(n,x,y) {
+function Vertex(n, x ,y) {
 	this.name = n; // a unique integer
 	this.xCoord = Math.floor(x);
 	this.yCoord = Math.floor(y);
@@ -21,7 +21,6 @@ function Vertex(n,x,y) {
 }
 
 Vertex.prototype.drawVertex = function(c) {
-
 	if( this.halo ) {
 		c.fillStyle = color_halo;
 		c.beginPath();
@@ -73,15 +72,12 @@ Vertex.prototype.getDegree = function() {
 };
 
 Vertex.prototype.deleteNeighbor = function(n) {
-
 	var i = this.neighbors.indexOf(n);
-
 	if( i != -1 )
 		var throwaway = this.neighbors.splice(i,1);
 };
 
 Vertex.prototype.printVertexData = function() {
-
 	var str = "vertex " + this.name + " (" + this.xCoord + "," + this.yCoord + ") [";
 	for( var i=0; i<this.neighbors.length; i++ )
 		str += " " + this.neighbors[i];
@@ -90,7 +86,7 @@ Vertex.prototype.printVertexData = function() {
 	return str;
 };
 
-function Edge(v,w) {
+function Edge(v, w) {
 	if( v.isEqual(w) ) return false;
 	else {
 		this.v0 = v;
@@ -104,9 +100,7 @@ function Edge(v,w) {
 }
 
 Edge.prototype.drawEdge = function(c) {
-
 	if( this.halo ) {
-
 		c.strokeStyle = color_halo;
 		c.lineWidth = width_halo;
 		c.beginPath();
@@ -116,8 +110,9 @@ Edge.prototype.drawEdge = function(c) {
 		c.stroke();
 	}
 
-	if( this.selected )
+	if( this.selected ) {
 		c.strokeStyle = color_selected;
+	}
 	else c.strokeStyle = this.color;
 	c.lineWidth = this.thickness;
 	c.beginPath();
@@ -127,10 +122,8 @@ Edge.prototype.drawEdge = function(c) {
 	c.stroke();
 };
 
-Edge.prototype.hitTestEdge = function(hitX,hitY) {
-
+Edge.prototype.hitTestEdge = function(hitX, hitY) {
 	//document.outform.output.value += "hit testing edge" + '\n';
-
 	var x0 = this.v0.xCoord;
 	var y0 = this.v0.yCoord;
 	var x1 = this.v1.xCoord;
@@ -151,7 +144,7 @@ Edge.prototype.updateThickness = function(t) {
 	this.thickness = t;
 };
 
-function Graph(V,E) {
+function Graph(V, E) {
 	this.vertices = V;
 	this.edges = E;
 	this.selectedVertexIndex = -1;
@@ -179,10 +172,8 @@ Graph.prototype.addEdge = function(e) {
 };
 
 Graph.prototype.getAdjMatrix = function() {
-
 	var L = this.vertices.length;
 	var throwaway = 0;
-
 	var matrix = [];
 	for(var i=0; i<L; i++) {
 		matrix[i] = [];
@@ -212,11 +203,9 @@ Graph.prototype.getVertexByName = function(n) {
 Graph.prototype.vertexIsInTriangle = function(v) {
 	// if degree is 2
 	if( v.neighbors.length == 2 ) {
-
 		// is neighbor 0 in the list of neighbors of neighbor 1?
 		var n0 = v.neighbors[0];
 		var v1 = this.getVertexByName(v.neighbors[1]);
-
 		if( v1.neighbors.indexOf(n0) != -1 )
 			return true;
 		else return false;
@@ -225,7 +214,6 @@ Graph.prototype.vertexIsInTriangle = function(v) {
 }
 
 Graph.prototype.deleteVertex = function(v) {
-
 	var throwaway = 0;
 	var delIndex = -1;
 
@@ -247,11 +235,8 @@ Graph.prototype.deleteVertex = function(v) {
 };
 
 Graph.prototype.deleteEdgeByVertexNames = function(n0,n1) {
-
 	// warning: this does not update vertex neighbor lists!
-
 	var throwaway = 0;
-
 	for( var i=0; i<this.edges.length; i++ ) {
 
 		if( (n0==this.edges[i].v0.name && n1==this.edges[i].v1.name) ||
@@ -263,17 +248,14 @@ Graph.prototype.deleteEdgeByVertexNames = function(n0,n1) {
 };
 
 Graph.prototype.deleteEdgeByIndex = function(i) {
-
 	// remove neighbors
 	this.edges[i].v0.deleteNeighbor(this.edges[i].v1.name);
 	this.edges[i].v1.deleteNeighbor(this.edges[i].v0.name);
-
 	// remove the edge
 	var throwaway = this.edges.splice(i,1);
 };
 
 Graph.prototype.seriesReduce = function() {
-
 	var i = this.selectedVertexIndex;
 	this.vertices[i].selected = false;
 
@@ -295,7 +277,6 @@ Graph.prototype.seriesReduce = function() {
 };
 
 Graph.prototype.isIsomorphicToKn = function(n) {
-
 	if( this.vertices.length == n ) {
 		for( var i=0; i<this.vertices.length; i++ ) {
 			if( this.vertices[i].getDegree() != n-1 )
@@ -307,7 +288,6 @@ Graph.prototype.isIsomorphicToKn = function(n) {
 };
 
 Graph.prototype.isIsomorphicToK33 = function() {
-
 	if( this.vertices.length != 6 ) {
 		//document.outform.output.value += "wrong # of vertices " + '\n';
 		return false;
@@ -330,14 +310,10 @@ Graph.prototype.isIsomorphicToK33 = function() {
 	var matrix = [];
 
 	for( var k=0; k<P; k++ ) {
-
 		curIndices = perm.slice(k,k+1);
 		//document.outform.output.value += "curIndices = " + curIndices + '\n';
-
 		matrix = [];
-
 		for(var i=0; i<6; i++) {
-
 			//document.outform.output.value += "this.V.length = " + this.vertices.length +
 			//					", trying to access element " + curIndices[0][i] + '\n';
 
@@ -362,7 +338,6 @@ Graph.prototype.isIsomorphicToK33 = function() {
 };
 
 Graph.prototype.isPlanarDrawing = function() {
-
 	//check that no two edges intersect
 	for( var i=0; i<this.edges.length; i++ )
 		for( var j=i+1; j<this.edges.length; j++ )
@@ -376,9 +351,8 @@ Graph.prototype.isPlanarDrawing = function() {
 	return true;
 };
 
-function randomGraph(n,w,h) {
-
-	var R = Math.min(w,h)/3;
+function randomGraph(n, w, h) {
+	var R = Math.min(w, h)/3;
 	var theta = 0;
 	var x0 = w/2;
 	var y0 = h/2;
@@ -403,8 +377,7 @@ function randomGraph(n,w,h) {
 	return G;
 };
 
-function completeGraph(n,w,h) {
-
+function completeGraph(n, w, h) {
 	var R = Math.min(w,h)/3;
 	var theta = 0;
 	var x0 = w/2;
@@ -424,8 +397,7 @@ function completeGraph(n,w,h) {
 	return G;
 };
 
-function completeBipartiteGraph(n,m,w,h) {
-
+function completeBipartiteGraph(n, m, w, h) {
 	// assume n>0, m>0
 	var Gr = new Graph([],[]);
 
@@ -445,8 +417,7 @@ function completeBipartiteGraph(n,m,w,h) {
 	return Gr;
 };
 
-function gridGraph(n,m,w,h) {
-
+function gridGraph(n, m, w, h) {
 	// assume n>0, m>0
 	var Gr = new Graph([],[]);
 
@@ -470,7 +441,6 @@ function gridGraph(n,m,w,h) {
 };
 
 function pDistance(x, y, x1, y1, x2, y2) {
-
 	var A = x - x1;
 	var B = y - y1;
 	var C = x2 - x1;
@@ -510,8 +480,7 @@ function printMatrix(m) {
 	}
 };
 
-function equalMatrices(A,B) {
-
+function equalMatrices(A, B) {
 	for( var i=0; i<A.length; i++ )
 		for( var j=0; j<A[i].length; j++ )
 			if( A[i][j] != B[i][j] )
@@ -535,7 +504,7 @@ function permute(input) {
 	return permArr;
 };
 
-function intersects(a,b,c,d,p,q,r,s) {
+function intersects(a, b, c, d, p, q, r, s) {
 	// returns true iff the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
 	var det, gamma, lambda;
 	det = (c - a) * (s - q) - (r - p) * (d - b);
@@ -550,7 +519,6 @@ function intersects(a,b,c,d,p,q,r,s) {
 };
 
 
-
 var x = 150;
 var y = 150;
 var x_mouse, y_mouse, dragHoldX, dragHoldY, mouseX, mouseY;
@@ -559,7 +527,8 @@ var dy = 4;
 var canvas,ctx;
 var width = 750;//window.innerWidth;
 var height = 500;//window.innerHeight;
-//var WIDTH, HEIGHT;
+var WIDTH = 750;//window.innerWidth;
+var HEIGHT = 500;//window.innerHeight;
 var time0 = 0;
 var time1 = 0;
 var g = new Graph([],[]);
@@ -571,69 +540,30 @@ var type = "rand";
 var N = 7;
 var M = 2;
 
-var canvasMinX;
-var canvasMinY;
-
-
-function circle(x,y,r) {
-	ctx.beginPath();
-	ctx.arc(x, y, r, 0, Math.PI*2, true);
-	ctx.closePath();
-	ctx.fill();
-}
-
-function rect(x,y,w,h) {
-	ctx.beginPath();
-	ctx.rect(x,y,w,h);
-	ctx.closePath();
-	ctx.fill();
-}
-
-function clear() {
-	ctx.fillStyle = "#FFFFFF";
-	rect(0, 0, width, height);
-}
 
 function draw() {
-
-	clear();
+	clear_canvas();
 
 	for( var i=0; i<g.vertices.length; i++ )
-		if( g.vertices[i].hitTestVertex(x_mouse,y_mouse) )
+		if( g.vertices[i].hitTestVertex(x_mouse, y_mouse) )
 			g.vertices[i].halo = true;
 
 	for( var j=0; j<g.edges.length; j++ )
-		if( g.edges[j].hitTestEdge(x_mouse,y_mouse) )
+		if( g.edges[j].hitTestEdge(x_mouse, y_mouse) )
 			g.edges[j].halo = true;
 
 	g.drawGraph(ctx);
 	g.resetHalos();
 }
 
-function ev_mousemove (ev) {
+function ev_mousemove2 (ev) { // TODO: refactor so that vars here match canvasUtil.js conventions
   const rect = canvas.getBoundingClientRect()
   x_mouse = ev.clientX - rect.left
   y_mouse = ev.clientY - rect.top
 }
 
-// find the position of the upper-left corner of an object (e.g., the canvase)
-function findPos(obj) {
-	var curLeft = 0;
-	var curTop = 0;
-
-	if(obj.offsetParent) {
-
-		do {
-			curLeft += obj.offsetLeft;
-			curTop += obj.offsetTop;
-		} while (obj = obj.offsetParent);
-	}
-
-	return [curLeft,curTop];
-}
 
 function mouseMoveListener(evt) {
-
 	var posX;
 	var posY;
 	var shapeRad = g.vertices[dragIndex].radius;
@@ -654,15 +584,10 @@ function mouseMoveListener(evt) {
 
 	g.vertices[dragIndex].xCoord = posX;
 	g.vertices[dragIndex].yCoord = posY;
-
-	//draw();
-
 }
 
 function mouseDownListener(evt) {
-
 	//document.outform.output.value += "mousedown" + '\n';
-
 	var i;
 	//We are going to pay attention to the layering order of the objects so
 	//that if a mouse down occurs over more than object, only the topmost one
@@ -705,13 +630,10 @@ function mouseDownListener(evt) {
 		evt.returnValue = false;
 	} //older IE
 	return false;
-
 }
 
 function mouseUpListener(evt) {
-
 	//document.outform.output.value += "mouseup" + '\n';
-
 	g.resetHalos();
 
 	canvas.addEventListener("mousedown", mouseDownListener, false);
@@ -720,11 +642,9 @@ function mouseUpListener(evt) {
 		dragging = false;
 		window.removeEventListener("mousemove", mouseMoveListener, false);
 	}
-
 }
 
 function mouseDblclickListener(evt) {
-
 	for( var i=0; i < g.vertices.length; i++) {
 		if( g.vertices[i].hitTestVertex(x_mouse,y_mouse) ) {
 			//document.outform.output.value += g.vertices[i].printVertexData() + '\n';
@@ -760,7 +680,6 @@ function mouseDblclickListener(evt) {
 			}
 		}
 	}
-
 }
 
 function reduce() {
@@ -805,8 +724,7 @@ function isPlanar() {
 		document.outform.output.value += "  planar drawing: no" + '\n';
 }
 
-function updateGraph(newType,newN,newM) {
-
+function updateGraph(newType, newN, newM) {
 	//document.outform.output.value += "called updateGraph with "
 	//				+ newType + " " + newN + " " + newM + '\n';
 
@@ -829,8 +747,7 @@ function updateGraph(newType,newN,newM) {
 }
 
 
-function init(){
-
+function init() {
 	var date0 = new Date();
 	time0 = date0.getTime();
 	document.outform.output.value = "";
@@ -839,11 +756,6 @@ function init(){
 	canvas = document.getElementById("canvas");
 	canvas.width = width;
 	canvas.height = height;
-	//WIDTH = canvas.width;
-	//HEIGHT = canvas.height;
-
-	canvasMinX = findPos(canvas)[0];
-	canvasMinY = findPos(canvas)[1];
 
 	// Make sure we don't execute when canvas isn't supported
 	if (canvas.getContext){
@@ -851,7 +763,7 @@ function init(){
 		ctx = canvas.getContext('2d');
 
 		// Attach the event handlers
-		canvas.addEventListener('mousemove', ev_mousemove, false);
+		canvas.addEventListener('mousemove', ev_mousemove2, false);
 		canvas.addEventListener("mousedown", mouseDownListener, false);
 		window.addEventListener("mouseup", mouseUpListener, false);
 		window.addEventListener("dblclick", mouseDblclickListener, false);
@@ -863,12 +775,10 @@ function init(){
 		if( type == "rand" ) {
 			g = randomGraph(N,width,height);
 			document.outform.output.value += "drew random graph with " + N + " vertices" + '\n';
-		}
-		else if( type == "comp" ) {
+		} else if( type == "comp" ) {
 			g = completeGraph(N,width,height);
 			document.outform.output.value += "drew complete graph with " + N + " vertices" + '\n';
-		}
-		else if( type == "bipt" ) {
+		} else if( type == "bipt" ) {
 			g = completeBipartiteGraph(N,M,width,height);
 			document.outform.output.value += "drew complete bipartite graph with " + N + " + " + M + " vertices" + '\n';
 		}

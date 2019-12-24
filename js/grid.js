@@ -26,24 +26,8 @@ var data5; // c for dot,  c for line
 
 var count = 0;
 
-function drawLine(x0,y0,x1,y1,c) {
-  ctx.beginPath();
-  ctx.strokeStyle = c;
-  ctx.moveTo(x0,y0);
-  ctx.lineTo(x1,y1);
-  ctx.closePath();
-  ctx.stroke();
-}
 
-function drawDot(x,y,r,c) {
-  ctx.beginPath();
-  ctx.fillStyle = c;
-  ctx.arc(x,y,r,0,2*Math.PI,true);
-  ctx.closePath();
-  ctx.fill();
-}
-
-function addLine(x0,y0,x1,y1,c) {
+function addLine(x0, y0, x1, y1, c) {
   type.length++;
   data1.length++;
   data2.length++;
@@ -59,7 +43,7 @@ function addLine(x0,y0,x1,y1,c) {
   data5[data5.length-1] = c;
 }
 
-function addDot(x,y,r,c) {
+function addDot(x, y, r, c) {
   if( type[type.length-1] == "dot" &&
     data1[data1.length-1] == x &&
     data2[data2.length-1] == y &&
@@ -87,9 +71,9 @@ function addDot(x,y,r,c) {
 function draw() {
   if (count < type.length) {
     if (type[count] == "dot")
-      drawDot(data1[count],data2[count],data3[count],data5[count]);
+      drawDisk(data1[count], data2[count], data3[count], data5[count]);
     else
-      drawLine(data1[count],data2[count],data3[count],data4[count],data5[count]);
+      drawLine(data1[count], data2[count], data3[count], data4[count], data5[count]);
 
     count++;
   }
@@ -106,7 +90,7 @@ function firstPoints() {
          0 < y0 && y0 < Math.round(HEIGHT/sep) ) {  //inside the bounds
 
     if (dots[x0][y0] == 0) {	// spot is empty
-      addDot(x0*sep,y0*sep,dotRad,"rgb(0,255,0)");
+      addDot(x0*sep, y0*sep, dotRad, "rgb(0,255,0)");
       dots[x0][y0] = 1;
       dotsLeft = dotsLeft - 1;
 
@@ -143,8 +127,8 @@ function firstPoints() {
             canGoAhead = 0;
             canTurnRight = 0;
 
-            addLine(x0*sep,y0*sep,x1*sep,y1*sep,"rgb(255,255,255)");
-            addDot(x1*sep,y1*sep,dotRad,"rgb(255,255,255)");
+            addLine(x0*sep, y0*sep, x1*sep, y1*sep, "rgb(255,255,255)");
+            addDot(x1*sep, y1*sep, dotRad, "rgb(255,255,255)");
             dotsLeft = dotsLeft - 1;
             dots[x1][y1] = 1;
 
@@ -193,10 +177,10 @@ function moveToNext(d) {
 
     if (dots[x2][y2] == 0) {
 
-      addDot(x2*sep,y2*sep,dotRad,"rgb(255,255,255)");
+      addDot(x2*sep, y2*sep, dotRad, "rgb(255,255,255)");
       dotsLeft = dotsLeft - 1;
       dots[x2][y2] = 1;
-      addLine(x1*sep,y1*sep,x2*sep,y2*sep,"rgb(255,255,255)");
+      addLine(x1*sep, y1*sep, x2*sep, y2*sep, "rgb(255,255,255)");
 
       x0 = x1;
       y0 = y1;
@@ -250,7 +234,7 @@ function init(){
     for (var i=0; i<dots.length; i++) {
       for (var j=0; j<dots[i].length; j++) {
         dots[i][j] = 0;
-        if (j > 0 && i > 0) drawDot(i*sep,j*sep,tempRad,"rgb(0,0,0)");
+        if (j > 0 && i > 0) drawDisk(i*sep, j*sep, tempRad, "rgb(0,0,0)");
       }
     }
 
@@ -267,7 +251,7 @@ function init(){
     // draw reference dots
     for (var i=1; i<Math.round(WIDTH/sep); i++) {
       for( var j=1; j<Math.round(HEIGHT/sep); j++) {
-        drawDot(i*sep,j*sep,tempRad,'rgb(0,0,0)');
+        drawDisk(i*sep, j*sep, tempRad, 'rgb(0,0,0)');
       }
     }
 
@@ -275,15 +259,10 @@ function init(){
 
     // figure everything out!
     while (dotsLeft > 0) { // keep drawing stuff
-
       firstPoints();
-
       while (move == 0) {
-
         var turn = Math.round(Math.random()*2);  // random interger 0 (Left), 1 (ahead), 2 (right) for the direction to turn
-
         moveToNext(turn);
-
         if (canTurnLeft == 1 && canGoAhead == 1 && canTurnRight == 1) {
           move = 1;
         }
@@ -292,11 +271,12 @@ function init(){
       // "end dot"
       if ( 0 < x1 && x1 < Math.round(WIDTH/sep) &&
         0 < y1 && y1 < Math.round(HEIGHT/sep) ) {
-        addDot(x1*sep,y1*sep,dotRad,"rgb(255,0,0)");
+        addDot(x1*sep, y1*sep, dotRad, "rgb(255,0,0)");
       }
     }
 
     // call the drawing function
     return setInterval(draw, 25);
-  } else { alert('You need a better web browser to see this.'); }
+  } else {
+    alert('You need a better web browser to see this.'); }
 }

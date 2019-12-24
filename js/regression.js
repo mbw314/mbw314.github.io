@@ -3,7 +3,7 @@ var canvas;
 var ctx;
 var WIDTH = 750;
 var HEIGHT = 750;
-var posX, posY, mouseX, mouseY;
+// var posX, posY, mouseX, mouseY;
 
 var M = 100;
 var Jlin = [1000000];
@@ -74,8 +74,6 @@ function gdIter() {
 
 
 function refreshData() {
-	//document.outform.output.value = "";
-
 	// usual starting data
 	m = [0];
 	b = [Math.random()];
@@ -84,7 +82,7 @@ function refreshData() {
 	t1 = [0];
 	t0 = [Math.random()];
 
-	clear();
+	clear_canvas();
 	initPoints(M);
 	drawPoints();
 	drawLines();
@@ -92,7 +90,7 @@ function refreshData() {
 
 
 function iterate2() {
-	clear();
+	clear_canvas();
 	gdIter();
 	drawPoints();
 	drawLines();
@@ -101,7 +99,7 @@ function iterate2() {
 
 
 function drawAfterChange() {
-	clear();
+	clear_canvas();
 	drawPoints();
 	drawLines();
 	drawVerts();
@@ -120,124 +118,87 @@ function initPoints() {
 
 
 function drawPoints() {
-	for(var i=0; i<M; i++)
-		drawDot(x[i]*WIDTH,
+	for(var i=0; i<M; i++) {
+		drawDisk(
+			x[i]*WIDTH,
 			y[i]*HEIGHT,
 			pointRadius,
-			pointColor);
+			pointColor
+		);
+	}
 }
 
 
 function drawVerts() {
 	var L = t2.length;
 	for(var i=0; i<M; i++) {
-		if( document.controls.regtype.value == "lin" )
-			drawLine(x[i]*WIDTH,
-				 y[i]*HEIGHT,
-				 x[i]*WIDTH,
-				 (m[L-1]*x[i] + b[L-1])*HEIGHT,
-				 'red');
-
-		if( document.controls.regtype.value == "quad" )
-			drawLine(x[i]*WIDTH,
+		if( document.controls.regtype.value == "lin" ) {
+			drawLine(
+				x[i]*WIDTH,
+				y[i]*HEIGHT,
+				x[i]*WIDTH,
+				(m[L-1]*x[i] + b[L-1])*HEIGHT,
+				'red'
+			);
+    }
+		if( document.controls.regtype.value == "quad" ) {
+			drawLine(
+				x[i]*WIDTH,
 				y[i]*HEIGHT,
 				x[i]*WIDTH,
 				(t2[L-1]*x[i]*x[i] + t1[L-1]*x[i] + t0[L-1])*HEIGHT,
-				'red');
-	}
+				'red'
+			);
+		}
+  }
 }
 
 
 function drawLines() {
 	var L = t2.length;
-
 	// draw all but final line, scaling the color from light to dark
 	for(var i=0; i<L-1; i++) {
-
 		// evenly divide interval [0,255] and step through backwards
 		var c = Math.round((L-i)*255/L);
-
-		if( document.controls.regtype.value == "lin" )
+		if( document.controls.regtype.value == "lin" ) {
 			drawLine(0,
 				b[i]*HEIGHT,
 				1*WIDTH,
 				(m[i]*1 + b[i])*HEIGHT,
-				'rgb(' + c + ',' + c + ',' + c + ')');
-		if( document.controls.regtype.value == "quad" )
-			for(var j=0; j<WIDTH; j++)
-				drawDot(j,
+				'rgb(' + c + ',' + c + ',' + c + ')'
+			);
+		}
+		if( document.controls.regtype.value == "quad" ) {
+			for(var j=0; j<WIDTH; j++) {
+				drawDisk(
+					j,
 					(t2[i]*j*j/(WIDTH*WIDTH) + t1[i]*j/WIDTH + t0[i])*HEIGHT,
 					1,
-					'rgb(' + c + ',' + c + ',' + c + ')');
+					'rgb(' + c + ',' + c + ',' + c + ')'
+				);
+			}
+		}
 	}
 
 	// draw the final line in black
-	if( document.controls.regtype.value == "lin" )
-		drawLine(0,
+	if( document.controls.regtype.value == "lin" ) {
+		drawLine(
+			0,
 			b[L-1]*HEIGHT,
 			1*WIDTH,
 			(m[L-1]*1 + b[L-1])*HEIGHT,
 			'black');
-	if( document.controls.regtype.value == "quad" )
-		for(var j=0; j<WIDTH; j++)
-			drawDot(j,
+	}
+	if( document.controls.regtype.value == "quad" ) {
+		for(var j=0; j<WIDTH; j++) {
+			drawDisk(
+				j,
 				(t2[L-1]*j*j/(WIDTH*WIDTH) + t1[L-1]*j/WIDTH + t0[L-1])*HEIGHT,
 				1,
-				'black');
-}
-
-
-function rect(x,y,w,h) {
-	ctx.beginPath();
-	ctx.rect(x,y,w,h);
-	ctx.closePath();
-	ctx.fill();
-}
-
-function clear() {
-	ctx.fillStyle = 'white';
-	rect(0, 0, WIDTH, HEIGHT);
-}
-
-function drawLine(x0,y0,x1,y1,c) {
-	ctx.beginPath();
-	ctx.strokeStyle = c;
-	ctx.moveTo(x0,y0);
-	ctx.lineTo(x1,y1);
-	ctx.closePath();
-	ctx.stroke();
-}
-
-function drawDot(x,y,r,c) {
-	ctx.beginPath();
-	ctx.fillStyle = c;
-	ctx.arc(x,y,r,0,2*Math.PI,true);
-	ctx.closePath();
-	ctx.fill();
-}
-
-function drawCircle(x,y,r,c) {
-	ctx.beginPath();
-	ctx.strokeStyle = c;
-	ctx.arc(x,y,r,0,2*Math.PI,true);
-	ctx.closePath();
-	ctx.stroke();
-}
-
-
-// find the position of the upper-left corner of an object (e.g., the canvas)
-function findPos(obj) {
-	var curLeft = 0;
-	var curTop = 0;
-
-	if(obj.offsetParent) {
-		do {
-			curLeft += obj.offsetLeft;
-			curTop += obj.offsetTop;
-		} while (obj = obj.offsetParent);
+				'black'
+			);
+	  }
 	}
-
-	return [curLeft,curTop];
 }
 
 
@@ -245,16 +206,14 @@ function init(){
 	canvas = document.getElementById("canvas");
 	canvas.width = WIDTH;
 	canvas.height = HEIGHT;
-	if (canvas.getContext){
+	if (canvas.getContext) {
 		ctx = canvas.getContext('2d');
-
 		// parameters to create the random data
 		// A(x-B)^2+C = Ax^2 -2ABx + AB^2+C
 		t0_init = 0.8;
 		t1_init = 0;
 		t2_init = -1;
 		spread = 0.25;
-
 		refreshData();
 	}
 	else alert('You need a better web browser to see this.');

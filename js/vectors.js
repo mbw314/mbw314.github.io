@@ -29,8 +29,8 @@ var width = 750;
 var height = 750;
 var diag = Math.sqrt(width*width + height*height);  // diagonal length of canvas
 
-var canvasMinX;
-var canvasMinY;
+//var canvasMinX;
+//var canvasMinY;
 
 
 
@@ -229,20 +229,20 @@ function clear() {
 
 
 // find the position of the upper-left corner of an object (e.g., the canvase)
-function findPos(obj) {
-	var curLeft = 0;
-	var curTop = 0;
-
-	if(obj.offsetParent) {
-
-		do {
-			curLeft += obj.offsetLeft;
-			curTop += obj.offsetTop;
-		} while (obj = obj.offsetParent);
-	}
-
-	return [curLeft,curTop];
-}
+// function findPos(obj) {
+// 	var curLeft = 0;
+// 	var curTop = 0;
+//
+// 	if(obj.offsetParent) {
+//
+// 		do {
+// 			curLeft += obj.offsetLeft;
+// 			curTop += obj.offsetTop;
+// 		} while (obj = obj.offsetParent);
+// 	}
+//
+// 	return [curLeft,curTop];
+// }
 
 
 function init() {
@@ -252,8 +252,8 @@ function init() {
 	canvas.width = width;
 	canvas.height = height;
 
-	canvasMinX = findPos(canvas)[0];
-	canvasMinY = findPos(canvas)[1];
+	//canvasMinX = findPos(canvas)[0];
+	//canvasMinY = findPos(canvas)[1];
 
 	// Make sure we don't execute when canvas isn't supported
 	if (canvas.getContext){
