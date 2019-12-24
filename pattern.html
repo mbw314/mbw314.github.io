@@ -2,19 +2,20 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />	
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Circle Pattern</title>
-	<link rel="stylesheet" type="text/css" href="./css/styles.css" /> 
+	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
 	<link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
 	<script type="text/javascript" src="./js/range.js"></script>
 	<script type="text/javascript" src="./js/timer.js"></script>
 	<script type="text/javascript" src="./js/slider.js"></script>
-</head> 
+  <script type="text/javascript" src="./js/pattern.js"></script>
+</head>
 
 <body onLoad="drawSomething();">
-	
+
 <div class="container">
 
 <div class="topsmall">
@@ -37,7 +38,7 @@
 
 <p>Here's a simple applet that draws circles on a grid, while allowing the radius each circle and grid size (separation) to change.  <a href="./pattern2.html">Click here</a> for an animated version.</p>
 
-<p>You'll need a modern browser to view it (e.g. <a href="http://www.mozilla.com/firefox/">Firefox</a>, 
+<p>You'll need a modern browser to view it (e.g. <a href="http://www.mozilla.com/firefox/">Firefox</a>,
 <a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.apple.com/safari/">Safari</a>). </p>
 </div>
 
@@ -55,78 +56,11 @@
 </tr>
 
 </table>
-
-<script type="text/javascript">
-
-var radSl = new Slider(document.getElementById("radSlider"), document.getElementById("radSliderInput"));
-var sepSl = new Slider(document.getElementById("sepSlider"), document.getElementById("sepSliderInput"));
-
-var ctx;
-var width = 800;
-var height = 1000;
-var c3 = Math.floor(Math.random()*256);
-
-radSl.setMinimum(25);
-radSl.setValue(100);
-radSl.setMaximum(300);
-
-sepSl.setMinimum(20);
-sepSl.setValue(100);
-sepSl.setMaximum(400);
-
-radSl.onchange = function () {
-	drawSomething();
-};
-
-sepSl.onchange = function () {
-	drawSomething();
-};
-
-window.onresize = function () {
-	radSl.recalculate();
-	sepSl.recalculate();
-	drawSomething();
-};	
-	
-function drawSomething() {	
-	// get the canvas element using the DOM
-	var canvas = document.getElementById("canvas");
-
-	// Make sure we don't execute when canvas isn't supported
-	if (canvas.getContext){
-
-		// use getContext to use the canvas for drawing
-		ctx = canvas.getContext('2d');
-		
-		canvas.width = width - 50;
-		canvas.height = height - 250;		
-				
-		var c1 = Math.floor(255*radSl.getValue()/radSl.getMaximum());
-		var c2 = Math.floor(255*(sepSl.getMaximum()-sepSl.getValue())/sepSl.getMaximum());		
-				
-		//draw background
-		ctx.fillStyle = 'rgb(' + c1 + ',' + c2 + ',' + c3 + ')';
-		ctx.fillRect(0,0,width,height);
-		
-		var rad = radSl.getValue();
-		var sep = sepSl.getValue();
-		
-		for(var i = 0 - sep - rad; i <= width + rad + sep; i = i + sep) {
-			for(var j = 0 - sep - rad; j <= height + rad + sep; j = j + sep) {
-				ctx.beginPath();
-				ctx.arc(i,j,rad,0,2*Math.PI,true);
-				ctx.stroke();																		
-			}
-		}
-	}
-};		
-
-</script>
 </div>
 
 <div class="middle">
 
-<center>   
+<center>
 <canvas id="canvas" width="750" height="750"></canvas>
 </center>
 
