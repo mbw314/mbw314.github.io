@@ -16,6 +16,7 @@ var tempDist = [];
 var oldCentroids = [];
 var oldCentroidColor = 'gray';
 var centroidLines = [];
+var canvasUtil;
 
 
 function indexOfSmallest(a) {
@@ -83,8 +84,8 @@ function kMeansIter() {
 			}
 
 			// move the centroid to this new mean
-			centroids[k][0] = tempX/cluster.length;
-			centroids[k][1] = tempY/cluster.length;
+			centroids[k][0] = tempX / cluster.length;
+			centroids[k][1] = tempY / cluster.length;
 		}
 		else {
 			// if the cluster is empty, remove the corresponding centroid
@@ -95,8 +96,8 @@ function kMeansIter() {
 			centroids[k] = [Math.random()*WIDTH, Math.random()*HEIGHT];
 		}
 
-		L = centroidLines.push([oldCentroids[oldCentroids.length-1][0],
-						    oldCentroids[oldCentroids.length-1][1],
+		L = centroidLines.push([oldCentroids[oldCentroids.length - 1][0],
+						    oldCentroids[oldCentroids.length - 1][1],
 						    centroids[k][0],
 						    centroids[k][1]]);
 	}
@@ -106,7 +107,7 @@ function initPoints(num) {
 
 	m = num;
 	for(var i=0; i<m; i++) {
-		points[i] = [Math.random()*WIDTH, Math.random()*HEIGHT];
+		points[i] = [Math.random() * WIDTH, Math.random() * HEIGHT];
 		clusterIndex[i] = 0;
 		pointColor[i] = [0, 0, 0];
 	}
@@ -115,7 +116,7 @@ function initPoints(num) {
 function initCentroids(num) {
 	K = num;
 	for(var k=0; k<K; k++) {
-		centroids[k] = [Math.random()*WIDTH, Math.random()*HEIGHT];
+		centroids[k] = [Math.random() * WIDTH, Math.random() * HEIGHT];
 				 //= [points[k][0], points[k][1]];
 		centroidColor[k] = [Math.round(k*255/K),
 						Math.round((K-k)*255/K),
@@ -126,7 +127,7 @@ function initCentroids(num) {
 
 function drawPoints() {
 	for(var i=0; i<m; i++) {
-		drawDisk(
+		canvasUtil.drawDisk(
 			points[i][0],
 			points[i][1],
 			pointRadius,
@@ -137,32 +138,35 @@ function drawPoints() {
 
 function drawCentroids() {
 	for(var k=0; k<K; k++) {
-		drawCircle(
+		canvasUtil.drawCircle(
 			centroids[k][0],
 			centroids[k][1],
 			centroidRadius,
-			'rgb(' + centroidColor[k][0] + ',' + centroidColor[k][1] + ',' + centroidColor[k][2] + ')'
+			'rgb(' + centroidColor[k][0] + ',' + centroidColor[k][1] + ',' + centroidColor[k][2] + ')',
+			1
 		);
 	}
 
 	for(var j=0; j<oldCentroids.length; j++) {
-		drawCircle(
+		canvasUtil.drawCircle(
 			oldCentroids[j][0],
 			oldCentroids[j][1],
 			centroidRadius/2,
-			oldCentroidColor
+			oldCentroidColor,
+			1
 		);
 	}
 }
 
 function drawCentroidPaths() {
 	for(var j=0; j<centroidLines.length; j++) {
-		drawLine(
+		canvasUtil.drawLine(
 			centroidLines[j][0],
 			centroidLines[j][1],
 			centroidLines[j][2],
 			centroidLines[j][3],
-			oldCentroidColor
+			oldCentroidColor,
+			1
 		);
 	}
 }
@@ -172,12 +176,13 @@ function drawConnectors() {
 	for(var k=0; k<K; k++) {
 		cluster = getAllIndexes(clusterIndex, k);
 		for(var j=0; j<cluster.length; j++) {
-			drawLine(
+			canvasUtil.drawLine(
 				centroids[k][0],
 				centroids[k][1],
 				points[cluster[j]][0],
 				points[cluster[j]][1],
-				'black'
+				'black',
+				1
 			);
 		}
 	}
@@ -185,7 +190,7 @@ function drawConnectors() {
 
 
 function refreshData() {
-	clear_canvas();
+	canvasUtil.clear_canvas();
 	oldCentroids = [];
 	centroidLines = [];
 	initPoints(m);
@@ -195,7 +200,7 @@ function refreshData() {
 }
 
 function iterate() {
-	clear_canvas();
+	canvasUtil.clear_canvas();
 	kMeansIter();
 	drawConnectors();
 	drawCentroids();
@@ -209,7 +214,8 @@ function init() {
 	canvas.height = HEIGHT;
 	if (canvas.getContext){
 		ctx = canvas.getContext('2d');
-		clear_canvas();
+		canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
+		canvasUtil.clear_canvas();
 		refreshData();
 	}
 	else { alert('You need a better web browser to see this.'); }

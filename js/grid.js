@@ -2,6 +2,7 @@
 var canvas,ctx;
 var WIDTH = 750;
 var HEIGHT = 750;
+var canvasUtil;
 
 var sep = 50;
 var move = 0;
@@ -71,9 +72,9 @@ function addDot(x, y, r, c) {
 function draw() {
   if (count < type.length) {
     if (type[count] == "dot")
-      drawDisk(data1[count], data2[count], data3[count], data5[count]);
+      canvasUtil.drawDisk(data1[count], data2[count], data3[count], data5[count]);
     else
-      drawLine(data1[count], data2[count], data3[count], data4[count], data5[count]);
+      canvasUtil.drawLine(data1[count], data2[count], data3[count], data4[count], data5[count], 1);
 
     count++;
   }
@@ -224,6 +225,7 @@ function init(){
   if (canvas.getContext){
     // use getContext to use the canvas for drawing
     ctx = canvas.getContext('2d');
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
     sep = document.getElementById("spacing").value;
 
     // fill the array to keep track of which dots were drawn
@@ -234,7 +236,7 @@ function init(){
     for (var i=0; i<dots.length; i++) {
       for (var j=0; j<dots[i].length; j++) {
         dots[i][j] = 0;
-        if (j > 0 && i > 0) drawDisk(i*sep, j*sep, tempRad, "rgb(0,0,0)");
+        if (j > 0 && i > 0) canvasUtil.drawDisk(i * sep, j * sep, tempRad, "rgb(0,0,0)");
       }
     }
 
@@ -251,7 +253,7 @@ function init(){
     // draw reference dots
     for (var i=1; i<Math.round(WIDTH/sep); i++) {
       for( var j=1; j<Math.round(HEIGHT/sep); j++) {
-        drawDisk(i*sep, j*sep, tempRad, 'rgb(0,0,0)');
+        canvasUtil.drawDisk(i*sep, j*sep, tempRad, 'rgb(0,0,0)');
       }
     }
 

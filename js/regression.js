@@ -3,7 +3,8 @@ var canvas;
 var ctx;
 var WIDTH = 750;
 var HEIGHT = 750;
-// var posX, posY, mouseX, mouseY;
+var canvasUtil;
+var output_field;
 
 var M = 100;
 var Jlin = [1000000];
@@ -24,8 +25,12 @@ var pointColor = 'black';
 var pointRadius = 5;
 var linear = 1;
 var quadratic = 0;
+var reg_type = "linear";
+
 
 function gdIter() {
+
+  alpha = parseFloat(document.controls.learning_rate.value);
 
 	var Jlin_temp = 0; //cost function for linear regression
 	var J_m = 0; //partial derivative of Jlin w.r.t. m
@@ -43,33 +48,40 @@ function gdIter() {
 
 		// (signed) vertical distance between data point
 		// and current regression line: h(x)-y = mx + b - y
-		var diff_lin = m[L-1]*x[i] + b[L-1] - y[i];
+		var diff_lin = m[L-1] * x[i] + b[L-1] - y[i];
 
-		J_m       += diff_lin*x[i];
+		J_m       += diff_lin * x[i];
 		J_b       += diff_lin;
-		Jlin_temp += diff_lin*diff_lin;
+		Jlin_temp += diff_lin * diff_lin;
 
 		// (signed) vertical distance between data point
 		// and current regression line: h(x)-y = t2 x^2 + t1 x + t0 - y
-		var diff_quad = t2[L-1]*x[i]*x[i] + t1[L-1]*x[i] + t0[L-1] - y[i];
+		var diff_quad = t2[L-1] * x[i] * x[i] + t1[L-1] * x[i] + t0[L-1] - y[i];
 
-		J_2       += diff_quad*x[i]*x[i];
-		J_1       += diff_quad*x[i];
-		J_0       += diff_quad;
-		Jlin_temp += diff_quad*diff_quad;
+		J_2        += diff_quad * x[i] * x[i];
+		J_1        += diff_quad * x[i];
+		J_0        += diff_quad;
+		Jquad_temp += diff_quad * diff_quad;
 	}
 
 	// update Jlin, m, and b based on the gradient
-	Jlin[L] = Jlin_temp/(2*M);
-	m[L] = m[L-1] - alpha*J_m/M;
-	b[L] = b[L-1] - alpha*J_b/M;
+	Jlin[L] = Jlin_temp / (2 * M);
+	m[L] = m[L-1] - alpha * J_m / M;
+	b[L] = b[L-1] - alpha * J_b / M;
 
 	// update J, m, and b based on the gradient
-	Jquad[L] = Jquad_temp/(2*M);
-	t2[L] = t2[L-1] - alpha*J_2/M;
-	t1[L] = t1[L-1] - alpha*J_1/M;
-	t0[L] = t0[L-1] - alpha*J_0/M;
+	Jquad[L] = Jquad_temp / (2 * M);
+	t2[L] = t2[L-1] - alpha * J_2 / M;
+	t1[L] = t1[L-1] - alpha * J_1 / M;
+	t0[L] = t0[L-1] - alpha * J_0 / M;
 
+  var loss = 0;
+  if (reg_type == "linear") {
+		loss = Jlin[L];
+	} else {
+		loss = Jquad[L];
+	}
+  println(`Iteration ${L}; regression = ${reg_type}; learning rate = ${alpha}; Loss = ${loss.toFixed(5)}`);
 }
 
 
@@ -82,7 +94,9 @@ function refreshData() {
 	t1 = [0];
 	t0 = [Math.random()];
 
-	clear_canvas();
+	reg_type = document.controls.regtype.value;
+
+	canvasUtil.clear_canvas();
 	initPoints(M);
 	drawPoints();
 	drawLines();
@@ -90,7 +104,7 @@ function refreshData() {
 
 
 function iterate2() {
-	clear_canvas();
+	canvasUtil.clear_canvas();
 	gdIter();
 	drawPoints();
 	drawLines();
@@ -99,7 +113,7 @@ function iterate2() {
 
 
 function drawAfterChange() {
-	clear_canvas();
+	canvasUtil.clear_canvas();
 	drawPoints();
 	drawLines();
 	drawVerts();
@@ -107,21 +121,20 @@ function drawAfterChange() {
 
 
 function initPoints() {
-
 	// create M points 'near' the line y = t2_init * x^2 + t1_init * x + t0_init
 	for(var i=0; i<M; i++) {
 		x[i] = Math.random();
-		y[i] = t2_init*x[i]*x[i] + t1_init*x[i] + t0_init
-			   + (2*Math.random()-1)*spread*Math.random();
+		y[i] = t2_init * x[i] * x[i] + t1_init * x[i] + t0_init
+			   + (2 * Math.random() - 1) * spread * Math.random();
 	}
 }
 
 
 function drawPoints() {
 	for(var i=0; i<M; i++) {
-		drawDisk(
-			x[i]*WIDTH,
-			y[i]*HEIGHT,
+		canvasUtil.drawDisk(
+			x[i] * WIDTH,
+			y[i] * HEIGHT,
 			pointRadius,
 			pointColor
 		);
@@ -132,22 +145,24 @@ function drawPoints() {
 function drawVerts() {
 	var L = t2.length;
 	for(var i=0; i<M; i++) {
-		if( document.controls.regtype.value == "lin" ) {
-			drawLine(
-				x[i]*WIDTH,
-				y[i]*HEIGHT,
-				x[i]*WIDTH,
-				(m[L-1]*x[i] + b[L-1])*HEIGHT,
-				'red'
+		if (reg_type == "linear") {
+			canvasUtil.drawLine(
+				x[i] * WIDTH,
+				y[i] * HEIGHT,
+				x[i] * WIDTH,
+				(m[L-1] * x[i] + b[L-1]) * HEIGHT,
+				'red',
+        1
 			);
     }
-		if( document.controls.regtype.value == "quad" ) {
-			drawLine(
-				x[i]*WIDTH,
-				y[i]*HEIGHT,
-				x[i]*WIDTH,
-				(t2[L-1]*x[i]*x[i] + t1[L-1]*x[i] + t0[L-1])*HEIGHT,
-				'red'
+		if (reg_type == "quadratic") {
+			canvasUtil.drawLine(
+				x[i] * WIDTH,
+				y[i] * HEIGHT,
+				x[i] * WIDTH,
+				(t2[L-1] * x[i] * x[i] + t1[L-1] * x[i] + t0[L-1]) * HEIGHT,
+				'red',
+        1
 			);
 		}
   }
@@ -160,19 +175,20 @@ function drawLines() {
 	for(var i=0; i<L-1; i++) {
 		// evenly divide interval [0,255] and step through backwards
 		var c = Math.round((L-i)*255/L);
-		if( document.controls.regtype.value == "lin" ) {
-			drawLine(0,
-				b[i]*HEIGHT,
-				1*WIDTH,
-				(m[i]*1 + b[i])*HEIGHT,
-				'rgb(' + c + ',' + c + ',' + c + ')'
+		if (reg_type == "linear") {
+			canvasUtil.drawLine(0,
+				b[i] * HEIGHT,
+				1 * WIDTH,
+				(m[i] * 1 + b[i]) * HEIGHT,
+				'rgb(' + c + ',' + c + ',' + c + ')',
+        1
 			);
 		}
-		if( document.controls.regtype.value == "quad" ) {
+		if (reg_type == "quadratic") {
 			for(var j=0; j<WIDTH; j++) {
-				drawDisk(
+				canvasUtil.drawDisk(
 					j,
-					(t2[i]*j*j/(WIDTH*WIDTH) + t1[i]*j/WIDTH + t0[i])*HEIGHT,
+					(t2[i] * j * j / (WIDTH * WIDTH) + t1[i] * j / WIDTH + t0[i]) * HEIGHT,
 					1,
 					'rgb(' + c + ',' + c + ',' + c + ')'
 				);
@@ -181,19 +197,19 @@ function drawLines() {
 	}
 
 	// draw the final line in black
-	if( document.controls.regtype.value == "lin" ) {
-		drawLine(
+	if (reg_type == "linear") {
+		canvasUtil.drawLine(
 			0,
-			b[L-1]*HEIGHT,
+			b[L-1] * HEIGHT,
 			1*WIDTH,
-			(m[L-1]*1 + b[L-1])*HEIGHT,
+			(m[L-1] * 1 + b[L-1]) * HEIGHT,
 			'black');
 	}
-	if( document.controls.regtype.value == "quad" ) {
+	if (reg_type == "quadratic") {
 		for(var j=0; j<WIDTH; j++) {
-			drawDisk(
+			canvasUtil.drawDisk(
 				j,
-				(t2[L-1]*j*j/(WIDTH*WIDTH) + t1[L-1]*j/WIDTH + t0[L-1])*HEIGHT,
+				(t2[L-1] * j * j / (WIDTH * WIDTH) + t1[L-1] * j / WIDTH + t0[L-1]) * HEIGHT,
 				1,
 				'black'
 			);
@@ -206,8 +222,13 @@ function init(){
 	canvas = document.getElementById("canvas");
 	canvas.width = WIDTH;
 	canvas.height = HEIGHT;
+	output_field = document.outform.output;
+	//clear_text();
 	if (canvas.getContext) {
 		ctx = canvas.getContext('2d');
+		reg_type = document.controls.regtype.value;
+		canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
+
 		// parameters to create the random data
 		// A(x-B)^2+C = Ax^2 -2ABx + AB^2+C
 		t0_init = 0.8;

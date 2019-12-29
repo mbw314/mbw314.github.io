@@ -15,19 +15,19 @@ var c2;
 
 function setColors(j, step) {
 	if (scheme == 0) {
-		c[0] = Math.floor(Math.random()*256);
-		c[1] = Math.floor(Math.random()*256);
-		c[2] = Math.floor(Math.random()*256);
+		c[0] = Math.floor(Math.random() * 256);
+		c[1] = Math.floor(Math.random() * 256);
+		c[2] = Math.floor(Math.random() * 256);
 	}
 	else if (scheme == 1) {
 		if(step < Math.pow(2, j-1)) { // gets darker
-			c[0] = Math.floor(c0*(1-Math.sin((j/iter)*(Math.PI/2))));
-			c[1] = Math.floor(c1*(1-Math.sin((j/iter)*(Math.PI/2))));
-			c[2] = Math.floor(c2*(1-Math.sin((j/iter)*(Math.PI/2))));
+			c[0] = Math.floor(c0 * (1 - Math.sin((j/iter) * (Math.PI/2))));
+			c[1] = Math.floor(c1 * (1 - Math.sin((j/iter) * (Math.PI/2))));
+			c[2] = Math.floor(c2 * (1 - Math.sin((j/iter) * (Math.PI/2))));
     } else { // gets lighter
-    	c[0] = Math.floor(c0*Math.sin((j/iter)*(Math.PI/2)));
-    	c[1] = Math.floor(c1*Math.sin((j/iter)*(Math.PI/2)));
-    	c[2] = Math.floor(c2*Math.sin((j/iter)*(Math.PI/2)));
+    	c[0] = Math.floor(c0 * Math.sin((j/iter) * (Math.PI/2)));
+    	c[1] = Math.floor(c1 * Math.sin((j/iter) * (Math.PI/2)));
+    	c[2] = Math.floor(c2 * Math.sin((j/iter) * (Math.PI/2)));
     }
 	}
 }
@@ -47,21 +47,21 @@ function drawShape(){
 		iter = document.getElementById("iter").value;
 		scheme = document.getElementById("color").value;
 
-		c0 = Math.floor(Math.random()*156)+100;
-		c1 = Math.floor(Math.random()*156)+100;
-		c2 = Math.floor(Math.random()*156)+100;
+		c0 = Math.floor(Math.random() * 156) + 100;
+		c1 = Math.floor(Math.random() * 156) + 100;
+		c2 = Math.floor(Math.random() * 156) + 100;
 
 		// iteration 0
 		// lower half
 		ctx.fillStyle = 'rgb(' + c0 + ',' + c1 + ',' + c2 + ')';
 		ctx.beginPath();
-		ctx.arc(x0,y0,r0,0,theta,clockwise);
+		ctx.arc(x0, y0, r0, 0, theta, clockwise);
 		ctx.closePath();
 		ctx.fill();
 		// upper half
 		ctx.fillStyle = "rgb(0,0,0)";
 		ctx.beginPath();
-		ctx.arc(x0,y0,r0,0,theta,!clockwise);
+		ctx.arc(x0, y0, r0, 0, theta, !clockwise);
 		ctx.closePath();
 		ctx.fill();
 
@@ -80,7 +80,7 @@ function drawShape(){
 				}
 
 				ctx.beginPath();
-				ctx.arc(x,y0,r,0,theta,clockwise);
+				ctx.arc(x, y0, r, 0, theta, clockwise);
 				ctx.closePath();
 				ctx.fill();
 			}

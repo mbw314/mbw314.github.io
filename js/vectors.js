@@ -29,6 +29,7 @@ var HEIGHT = 750;
 var width = 750; // TODO: fix this
 var height = 750;
 var diag = Math.sqrt(width*width + height*height);  // diagonal length of canvas
+var canvasUtil;
 
 
 function setupArrays() {
@@ -78,7 +79,7 @@ function setupArrays() {
 
 function draw() {
 
-	clear_canvas();
+	canvasUtil.clear_canvas();
 
 	// if anything changed, update the variables and reset the arrays
 	if( away != document.getElementById("direction").value ||
@@ -101,8 +102,8 @@ function draw() {
 											+ Math.round(255*dist/diag) + ','
 											+ Math.round(255*y/height) + ')';
 
-				drawLine(i, j, i+(x-i)*Math.min(0.9*sep/dist,1/2)*away,j+(y-j)*Math.min(0.9*sep/dist,1/2)*away, color);
-				drawCircle(i,j,2, color);
+				canvasUtil.drawLine(i, j, i+(x-i)*Math.min(0.9*sep/dist,1/2)*away, j+(y-j)*Math.min(0.9*sep/dist,1/2)*away, color, 1);
+				canvasUtil.drawCircle(i, j, 2, color, 1);
 			}
 		}
 	}
@@ -142,8 +143,8 @@ function draw() {
 					color = 'rgb(' + 0 + ',' + 0 + ',' + Math.round( 255*K*K*sep*sep/r_squared[i][j] )  + ')';
 				}
 
-				drawCircle(x0[i][j], y0[i][j], 2, color);
-				drawLine(x0[i][j], y0[i][j], p_x[i][j], p_y[i][j], color);
+				canvasUtil.drawCircle(x0[i][j], y0[i][j], 2, color, 1);
+				canvasUtil.drawLine(x0[i][j], y0[i][j], p_x[i][j], p_y[i][j], color, 1);
 			}
 		}
 	}
@@ -178,8 +179,8 @@ function draw() {
 											+ 0 + ','
 											+ Math.round( 255-(255*2/Math.PI)*Math.atan(a_norm_squared) ) + ')';
 
-				drawCircle(x0[i][j], y0[i][j], 2, color);
-				drawLine(x0[i][j], y0[i][j], p_x[i][j], p_y[i][j], color);
+				canvasUtil.drawCircle(x0[i][j], y0[i][j], 2, color);
+				canvasUtil.drawLine(x0[i][j], y0[i][j], p_x[i][j], p_y[i][j], color, 1);
 			}
 		}
 	}
@@ -206,7 +207,7 @@ function init() {
 	if (canvas.getContext){
 		// use getContext to use the canvas for drawing
 		ctx = canvas.getContext('2d');
-
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
 		// Attach the mousemove event handler.
 		canvas.addEventListener('mousemove', ev_mousemove, false);
 
