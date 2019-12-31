@@ -81,7 +81,7 @@ function gdIter() {
 	} else {
 		loss = Jquad[L];
 	}
-  println(`Iteration ${L}; regression = ${reg_type}; learning rate = ${alpha}; Loss = ${loss.toFixed(5)}`);
+  canvasUtil.println(`Iteration ${L}; regression = ${reg_type}; learning rate = ${alpha}; Loss = ${loss.toFixed(5)}`);
 }
 
 
@@ -96,7 +96,7 @@ function refreshData() {
 
 	reg_type = document.controls.regtype.value;
 
-	canvasUtil.clear_canvas();
+	canvasUtil.clearCanvas();
 	initPoints(M);
 	drawPoints();
 	drawLines();
@@ -104,7 +104,7 @@ function refreshData() {
 
 
 function iterate2() {
-	canvasUtil.clear_canvas();
+	canvasUtil.clearCanvas();
 	gdIter();
 	drawPoints();
 	drawLines();
@@ -113,7 +113,7 @@ function iterate2() {
 
 
 function drawAfterChange() {
-	canvasUtil.clear_canvas();
+	canvasUtil.clearCanvas();
 	drawPoints();
 	drawLines();
 	drawVerts();
@@ -172,7 +172,7 @@ function drawVerts() {
 function drawLines() {
 	var L = t2.length;
 	// draw all but final line, scaling the color from light to dark
-	for(var i=0; i<L-1; i++) {
+	for (var i=0; i<L-1; i++) {
 		// evenly divide interval [0,255] and step through backwards
 		var c = Math.round((L-i)*255/L);
 		if (reg_type == "linear") {
@@ -185,7 +185,7 @@ function drawLines() {
 			);
 		}
 		if (reg_type == "quadratic") {
-			for(var j=0; j<WIDTH; j++) {
+			for (var j=0; j<WIDTH; j++) {
 				canvasUtil.drawDisk(
 					j,
 					(t2[i] * j * j / (WIDTH * WIDTH) + t1[i] * j / WIDTH + t0[i]) * HEIGHT,
@@ -202,14 +202,14 @@ function drawLines() {
 			0,
 			b[L-1] * HEIGHT,
 			1*WIDTH,
-			(m[L-1] * 1 + b[L-1]) * HEIGHT,
+			(m[L - 1] * 1 + b[L - 1]) * HEIGHT,
 			'black');
 	}
 	if (reg_type == "quadratic") {
-		for(var j=0; j<WIDTH; j++) {
+		for (var j=0; j<WIDTH; j++) {
 			canvasUtil.drawDisk(
 				j,
-				(t2[L-1] * j * j / (WIDTH * WIDTH) + t1[L-1] * j / WIDTH + t0[L-1]) * HEIGHT,
+				(t2[L - 1] * j * j / (WIDTH * WIDTH) + t1[L - 1] * j / WIDTH + t0[L - 1]) * HEIGHT,
 				1,
 				'black'
 			);
@@ -218,16 +218,16 @@ function drawLines() {
 }
 
 
-function init(){
+function init() {
 	canvas = document.getElementById("canvas");
 	canvas.width = WIDTH;
 	canvas.height = HEIGHT;
-	output_field = document.outform.output;
+	//output_field = document.outform.output;
 	//clear_text();
 	if (canvas.getContext) {
 		ctx = canvas.getContext('2d');
 		reg_type = document.controls.regtype.value;
-		canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
+		canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
 
 		// parameters to create the random data
 		// A(x-B)^2+C = Ax^2 -2ABx + AB^2+C

@@ -1,5 +1,5 @@
-
-var canvas,ctx;
+var canvas;
+var ctx;
 var WIDTH = 750;
 var HEIGHT = 750;
 var canvasUtil;
@@ -45,7 +45,7 @@ function addLine(x0, y0, x1, y1, c) {
 }
 
 function addDot(x, y, r, c) {
-  if( type[type.length-1] == "dot" &&
+  if (type[type.length-1] == "dot" &&
     data1[data1.length-1] == x &&
     data2[data2.length-1] == y &&
     data3[data3.length-1] == r &&
@@ -87,11 +87,11 @@ function firstPoints() {
   y0 = Math.round(Math.random()*(HEIGHT/sep));
 
   // check to make sure it's ok to draw the first point
-  if ( 0 < x0 && x0 < Math.round(WIDTH/sep) &&
-         0 < y0 && y0 < Math.round(HEIGHT/sep) ) {  //inside the bounds
+  if (0 < x0 && x0 < Math.round(WIDTH/sep) &&
+         0 < y0 && y0 < Math.round(HEIGHT/sep)) {  //inside the bounds
 
     if (dots[x0][y0] == 0) {	// spot is empty
-      addDot(x0*sep, y0*sep, dotRad, "rgb(0,255,0)");
+      addDot(x0 * sep, y0 * sep, dotRad, "rgb(0,255,0)");
       dots[x0][y0] = 1;
       dotsLeft = dotsLeft - 1;
 
@@ -118,8 +118,8 @@ function firstPoints() {
           y1 = y0 + 1;
         }
         // check to make sure it's ok to draw the second point
-        if ( 0 < x1 && x1 < Math.round(WIDTH/sep) &&
-          0 < y1 && y1 < Math.round(HEIGHT/sep) ) {
+        if (0 < x1 && x1 < Math.round(WIDTH/sep) &&
+          0 < y1 && y1 < Math.round(HEIGHT/sep)) {
 
           if (dots[x1][y1] == 0) {
             // reset booleans
@@ -252,7 +252,7 @@ function init(){
 
     // draw reference dots
     for (var i=1; i<Math.round(WIDTH/sep); i++) {
-      for( var j=1; j<Math.round(HEIGHT/sep); j++) {
+      for (var j=1; j<Math.round(HEIGHT/sep); j++) {
         canvasUtil.drawDisk(i*sep, j*sep, tempRad, 'rgb(0,0,0)');
       }
     }

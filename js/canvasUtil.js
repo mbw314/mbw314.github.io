@@ -1,15 +1,15 @@
 // need global var for the output text field
 
-function println(msg) {
-  // print a message to the text field and the console
-  output_field.value += msg + '\n';
-  console.log(msg);
-}
-
-function clear_text() {
-  // clear the text field
-  output_field.value = "";
-}
+// function println(msg) {
+//   // print a message to the text field and the console
+//   output_field.value += msg + '\n';
+//   console.log(msg);
+// }
+//
+// function clear_text() {
+//   // clear the text field
+//   output_field.value = "";
+// }
 
 
 // used in mandelbrot, but probably very inefficient. does not use paths.
@@ -19,10 +19,22 @@ function clear_text() {
 // }
 //
 class CanvasUtil {
-  constructor(ctx, width, height) {
+  constructor(ctx, width, height, output_field) {
     this.ctx = ctx;
     this.width = width;
     this.height = height;
+    this.output_field = output_field;
+  }
+
+  println(msg) {
+    // print a message to the text field and the console
+    this.output_field.value += msg + '\n';
+    console.log(msg);
+  }
+
+  clear_text() {
+    // clear the text field
+    this.output_field.value = "";
   }
 
   toString() {
@@ -68,14 +80,18 @@ class CanvasUtil {
   	this.ctx.stroke();
   }
 
-  clear_canvas() {
-    // clear the canvas by drawing a white rectangle with the same dimensions as the canvas
+  clearCanvas(color) {
+    // clear the canvas by drawing a rectangle with the same dimensions as the canvas
     //this.drawRect(0, 0, this.width, this.height, "white");
     this.ctx.beginPath();
-    this.ctx.fillStyle = "white ";
-  	this.ctx.rect(0, 0, this.width, this.height);
-  	this.ctx.closePath();
-  	this.ctx.fill();
+    if (color) {
+      this.ctx.fillStyle = color;
+    } else {
+      this.ctx.fillStyle = "white";
+    }
+    this.ctx.rect(0, 0, this.width, this.height);
+    this.ctx.closePath();
+    this.ctx.fill();
   }
 
   ev_mousemove (evt, canvas) {

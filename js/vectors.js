@@ -78,11 +78,10 @@ function setupArrays() {
 }
 
 function draw() {
-
-	canvasUtil.clear_canvas();
+	canvasUtil.clearCanvas();
 
 	// if anything changed, update the variables and reset the arrays
-	if( away != document.getElementById("direction").value ||
+	if (away != document.getElementById("direction").value ||
 	    sep  != document.getElementById("separation").value*1 ||
 		mode != document.getElementById("style").value*1) {
 
@@ -93,9 +92,9 @@ function draw() {
 		setupArrays();
 	}
 
-	if( mode == 0 ) { // vectors of boudned length
-		for(var i = 0 - sep; i <= width + sep; i = i + sep) {
-			for(var j = 0 - sep; j <= height + sep; j = j + sep) {
+	if (mode == 0) { // vectors of boudned length
+		for (var i = 0 - sep; i <= width + sep; i = i + sep) {
+			for (var j = 0 - sep; j <= height + sep; j = j + sep) {
 				var dist = Math.sqrt( (i-x)*(i-x) + (j-y)*(j-y) );
 
 				var color = 'rgb('	+ Math.round(255-255*x/width) + ','
@@ -107,9 +106,9 @@ function draw() {
 			}
 		}
 	}
-	else if( mode == 1 ) { // vectors that remember their last direction (when outside range of mouse)
-		for(var i=0; i < width/sep + 3; i++) {
-			for(var j=0; j < height/sep + 3; j++) {
+	else if (mode == 1) { // vectors that remember their last direction (when outside range of mouse)
+		for (var i=0; i < width/sep + 3; i++) {
+			for (var j=0; j < height/sep + 3; j++) {
         var color = "";
 				r_squared[i][j] = (p_x[i][j]-x)*(p_x[i][j]-x) + (p_y[i][j]-y)*(p_y[i][j]-y);
 				if( r_squared[i][j] < K*K*sep*sep ) {
@@ -152,8 +151,8 @@ function draw() {
 
 		grav = mode - 2;  // gravity on if mode = 3, off if mode = 2
 
-		for(var i=0; i < width/sep + 3; i++) {
-			for(var j=0; j < height/sep + 3; j++) {
+		for (var i=0; i < width/sep + 3; i++) {
+			for (var j=0; j < height/sep + 3; j++) {
 
 				// forces from the mouse and gravity
 				r_squared[i][j] = (p_x[i][j]-x)*(p_x[i][j]-x) + (p_y[i][j]-y)*(p_y[i][j]-y);

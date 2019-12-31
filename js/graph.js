@@ -19,7 +19,7 @@ var c_default = "#000000";
 var type = "rand";
 var N = 7;
 var M = 2;
-var canvasUtil
+var canvasUtil;
 
 var color_default = "#000000";
 var color_selected = "#FF0000";
@@ -561,7 +561,7 @@ function intersects(a, b, c, d, p, q, r, s) {
 
 
 function draw() {
-	canvasUtil.clear_canvas();
+	canvasUtil.clearCanvas();
 
 	for (var i=0; i<g.vertices.length; i++) {
 		if (g.vertices[i].hitTestVertex(x_mouse, y_mouse)) {
@@ -727,24 +727,27 @@ function deleteAnEdge() {
 }
 
 function isItK5() {
-	if (g.isIsomorphicToKn(5))
-		document.outform.output.value += "  isomorphic to K5: yes" + '\n';
-	else
-		document.outform.output.value += "  isomorphic to K5: no" + '\n';
+	if (g.isIsomorphicToKn(5)) {
+		canvasUtil.println("  isomorphic to K5: yes");
+	} else {
+		canvasUtil.println("  isomorphic to K5: no");
+	}
 }
 
 function isItK33() {
-	if (g.isIsomorphicToK33())
-		document.outform.output.value += "  isomorphic to K33: yes" + '\n';
-	else
-		document.outform.output.value += "  isomorphic to K33: no" + '\n';
+	if (g.isIsomorphicToK33()) {
+		canvasUtil.println("  isomorphic to K33: yes");
+	} else {
+		canvasUtil.println("  isomorphic to K33: no");
+	}
 }
 
 function isPlanar() {
-	if (g.isPlanarDrawing())
-		document.outform.output.value += "  planar drawing: yes" + '\n';
-	else
-		document.outform.output.value += "  planar drawing: no" + '\n';
+	if (g.isPlanarDrawing()) {
+		canvasUtil.println("  planar drawing: yes");
+	} else {
+		canvasUtil.println("  planar drawing: no");
+	}
 }
 
 function updateGraph(newType, newN, newM) {
@@ -773,7 +776,7 @@ function updateGraph(newType, newN, newM) {
 function init() {
 	var date0 = new Date();
 	time0 = date0.getTime();
-	document.outform.output.value = "";
+	//document.outform.output.value = "";
 
 	// get the canvas element using the DOM
 	canvas = document.getElementById("canvas");
@@ -781,10 +784,10 @@ function init() {
 	canvas.height = HEIGHT;
 
 	// Make sure we don't execute when canvas isn't supported
-	if (canvas.getContext){
+	if (canvas.getContext) {
 		// use getContext to use the canvas for drawing
 		ctx = canvas.getContext('2d');
-		canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
+		canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
 
 		// Attach the event handlers
 		canvas.addEventListener('mousemove', ev_mousemove2, false);
@@ -798,16 +801,16 @@ function init() {
 
 		if (type == "rand") {
 			g = randomGraph(N, width, height);
-			document.outform.output.value += "drew random graph with " + N + " vertices" + '\n';
+			canvasUtil.println(`drew random graph with ${N} vertices`);
 		} else if (type == "comp") {
 			g = completeGraph(N, width, height);
-			document.outform.output.value += "drew complete graph with " + N + " vertices" + '\n';
+			canvasUtil.println(`drew complete graph with ${N} vertices`);
 		} else if (type == "bipt") {
 			g = completeBipartiteGraph(N, M, width, height);
-			document.outform.output.value += "drew complete bipartite graph with " + N + " + " + M + " vertices" + '\n';
+			canvasUtil.println(`drew complete bipartite graph with ${N}, ${M} vertices`);
 		} else if (type == "grid") {
 			g = gridGraph(N, M, width, height);
-			document.outform.output.value += "drew grid graph with " + N + " x " + M + " vertices" + '\n';
+			canvasUtil.println(`drew grid graph with ${N} x ${M} vertices`);
 		}
 
 		return setInterval(draw, 10);

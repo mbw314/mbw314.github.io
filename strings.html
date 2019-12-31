@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="./js/range.js"></script>
 	<script type="text/javascript" src="./js/timer.js"></script>
 	<script type="text/javascript" src="./js/slider.js"></script>
+  <script type="text/javascript" src="./js/canvasUtil.js"></script>
 </head>
 
  <body onload="init();">
@@ -81,8 +82,9 @@ var width = 750;//window.outerWidth;
 var height = 750;//window.outerHeight;
 var WIDTH = 750;
 var HEIGHT = 750;
-var canvasMinX;
-var canvasMinY;
+var canvasUtil;
+//var canvasMinX;
+//var canvasMinY;
 var stop = false;
 
 var N = 1;
@@ -195,25 +197,12 @@ function stopDrawing() {
 
 
 function init(){
-
-	// get the canvas element using the DOM
-	canvas = document.getElementById("canvas");
-	//canvas.width = width - 50;
-	//canvas.height = height - 300;
-	//WIDTH = canvas.width;
-	//HEIGHT = canvas.height;
-
-	canvasMinX = findPos(canvas)[0];
-	canvasMinY = findPos(canvas)[1];
-
-	// Make sure we don't execute when canvas isn't supported
+  canvas = document.getElementById("canvas");
+  canvas.width = WIDTH;
+	canvas.height = HEIGHT;
 	if (canvas.getContext){
-		// use getContext to use the canvas for drawing
 		ctx = canvas.getContext('2d');
-
-		// Attach the mousemove event handler.
-		canvas.addEventListener('mousemove', ev_mousemove, false);
-
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
 		// initialize
 		N = 1;
 
@@ -241,41 +230,14 @@ function init(){
 		bias[0] = 1;
 
 		ctx.fillStyle = 'rgb(' + r_bg + ',' + g_bg + ',' + b_bg + ')';
-		ctx.fillRect(0,0,width,height);
+		ctx.fillRect(0, 0, width, height);
 
 		// call the drawing function
 		return setInterval(draw, 10);
 	}
-	else { alert('You need a better web browser to see this.'); }
-}
-
-
-function rect(x,y,w,h) {
-	ctx.beginPath();
-	ctx.rect(x,y,w,h);
-	ctx.closePath();
-	ctx.fill();
-}
-
-function clear() {
-	ctx.clearRect(0, 0, WIDTH, HEIGHT);
-}
-
-function drawLine(x0,y0,x1,y1,c) {
-	ctx.beginPath();
-	ctx.strokeStyle = c;
-	ctx.moveTo(x0,y0);
-	ctx.lineTo(x1,y1);
-	ctx.closePath();
-	ctx.stroke();
-}
-
-function drawDot(x,y,r,c) {
-	ctx.beginPath();
-	ctx.fillStyle = c;
-	ctx.arc(x,y,r,0,2*Math.PI,true);
-	ctx.closePath();
-	ctx.fill();
+	else {
+    alert('You need a better web browser to see this.');
+  }
 }
 
 
@@ -290,7 +252,6 @@ function draw() {
 
 		var tempN = N;
 		for (var i=0; i<tempN; i++) {
-
 			if (splitting == true && i == splitter) {
 
 				// make arrays longer
@@ -309,10 +270,9 @@ function draw() {
 
 				var t = N/N_MAX;
 
-				var r = Math.round( r0*(1-t) + r1*t );  // straight-line
-				var g = Math.round( g0*(1-t) + g1*t );
-				var b = Math.round( b0*(1-t) + b1*t );
-
+				var r = Math.round(r0*(1-t) + r1*t);  // straight-line
+				var g = Math.round(g0*(1-t) + g1*t);
+				var b = Math.round(b0*(1-t) + b1*t);
 
 				//document.outform.output.value = 'N = ' + N + ', (r,g,b) = (' + r + ',' + g + ',' + b + ')';
 
@@ -332,7 +292,7 @@ function draw() {
 				var dispX1 = (posXcur[i] - posXlast[i])*Math.cos(theta[i]) - (posYcur[i] - posYlast[i])*Math.sin(theta[i]);
 				var dispY1 = (posXcur[i] - posXlast[i])*Math.sin(theta[i]) + (posYcur[i] - posYlast[i])*Math.cos(theta[i]);
 
-				var norm1 = ds[i]/Math.sqrt( dispX1*dispX1 + dispY1*dispY1 );
+				var norm1 = ds[i] / Math.sqrt(dispX1 * dispX1 + dispY1 * dispY1);
 
 				if (posXcur[i] + dispX1*norm1 > WIDTH || posXcur[i] + dispX1*norm1 < 0) {
 					dispX1 = -dispX1;
@@ -347,7 +307,6 @@ function draw() {
 				posXcur[i] += dispX1*norm1;
 				posYlast[i] = posYcur[i];
 				posYcur[i] += dispY1*norm1;
-
 
 				var dispX2 = (posXcur[N-1] - posXlast[N-1])*Math.cos(theta[N-1]) - (posYcur[N-1] - posYlast[N-1])*Math.sin(theta[N-1]);
 				var dispY2 = (posXcur[N-1] - posXlast[N-1])*Math.sin(theta[N-1]) + (posYcur[N-1] - posYlast[N-1])*Math.cos(theta[N-1]);
@@ -400,35 +359,9 @@ function draw() {
 				posYcur[i] += dispY*norm;
 			}
 
-			drawLine(posXlast[i], posYlast[i], posXcur[i], posYcur[i], color[i], 1);
+			canvasUtil.drawLine(posXlast[i], posYlast[i], posXcur[i], posYcur[i], color[i], 1);
 		}
 	}
-}
-
-function ev_mousemove (ev) {
-	// Get the mouse position relative to the canvas element.
-	if (ev.layerX || ev.layerX == 0) { // Firefox
-		x_mouse = ev.layerX - canvasMinX;
-		y_mouse = ev.layerY - canvasMinY;
-	} else if (ev.offsetX || ev.offsetX == 0) { // Opera
-		x_mouse = ev.offsetX - canvasMinX;
-		y_mouse = ev.offsetY - canvasMinY;
-	}
-}
-
-// find the position of the upper-left corner of an object (e.g., the canvase)
-function findPos(obj) {
-	var curLeft = 0;
-	var curTop = 0;
-
-	if(obj.offsetParent) {
-		do {
-			curLeft += obj.offsetLeft;
-			curTop += obj.offsetTop;
-		} while (obj = obj.offsetParent);
-	}
-
-	return [curLeft,curTop];
 }
 
 </script>
@@ -445,15 +378,13 @@ function findPos(obj) {
     </canvas>
 </div>
 
-<!--
 <div class="middle">
 <center>
 <form name="outform">
-	<textarea rows="1" cols="80" name="output"></textarea>
+	<textarea rows="10" cols="80" name="output"></textarea>
 </form>
 </center>
 </div>
--->
 
 <div class="bottom">
 <p>last modified: 2/17/2010</p>
