@@ -7,8 +7,8 @@
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/regression.js"></script>
-  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>	
 </head>
 
 <body onload="init();">
@@ -90,8 +90,17 @@ href="http://www.google.com/chrome">Chrome</a> (Windows).</p>
 		</td>
 		<td>
 			<form name="controls">
-			Linear<input type="radio" name="regtype" value="lin" onChange="drawAfterChange();" checked="yes">
-			Quadratic<input type="radio" name="regtype" value="quad" onChange="drawAfterChange();">
+			Linear<input type="radio" name="regtype" value="linear" onChange="drawAfterChange();" checked="yes">
+			Quadratic<input type="radio" name="regtype" value="quadratic" onChange="drawAfterChange();">
+      Learning Rate
+      <select name="learning_rate">
+        <option value="0.001">0.001</option>
+        <option value="0.01">0.01</option>
+        <option value="0.1">0.1</option>
+        <option value="1.0" selected="selected">1.0</option>
+        <option value="3.0">3.0</option>
+        <option value="10.0">10.0</option>
+      </select>
 			</form>
 		</td>
 		<td align="left">
@@ -115,18 +124,16 @@ href="http://www.google.com/chrome">Chrome</a> (Windows).</p>
 </center>
 </div>
 
-<!--
 <div class="middle">
-<table>
+<table align="center">
 	<tr>
 		<td><form name="outform">
-		    <textarea rows="5" cols="100" name="output"></textarea>
+		    <textarea rows="25" cols="80" name="output"></textarea>
 		    </form>
 		</td>
 	</tr>
 </table>
 </div>
--->
 
 <div class="bottom">
 <p>last modified: 12/24/2014</p>
