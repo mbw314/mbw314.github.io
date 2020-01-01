@@ -2,15 +2,15 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Random Strings</title>
-	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
-	<link rel="shortcut icon" href="favicon.ico" />
-	<link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
-	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
-	<script type="text/javascript" src="./js/range.js"></script>
-	<script type="text/javascript" src="./js/timer.js"></script>
-	<script type="text/javascript" src="./js/slider.js"></script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Random Strings</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
+  <script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+  <script type="text/javascript" src="./js/range.js"></script>
+  <script type="text/javascript" src="./js/timer.js"></script>
+  <script type="text/javascript" src="./js/slider.js"></script>
   <script type="text/javascript" src="./js/canvasUtil.js"></script>
 </head>
 
@@ -23,9 +23,9 @@
 
 <div class="topleftsmall">
    <a href="./index.html">
-	<script type="text/javascript">
-      		showImage("300x50");
-   	</script>
+  <script type="text/javascript">
+          showImage("300x50");
+     </script>
    </a>
 </div>
 
@@ -53,26 +53,26 @@ larger versions (without the controls): <a href="./strings3.html">one like that 
 <div class="middle">
 
 <table border="0" cell-padding="0">
-	<tr>
-		<td align="right"><p>Maximum Splits:</p></td>
-		<td><div class="slider" id="splitSlider" tabIndex="1"><input class="slider-input" id="splitSliderInput"/></div></td>
-		<td> </td>
-		<td align="right"><p>Split Probability:</p></td>
-		<td><div class="slider" id="splitProbSlider" tabIndex="1"><input class="slider-input" id="splitProbSliderInput"/></div></td>
-		<td> </td>
-		<td> </td>
-		<td><input type="button" name="refresh" value="Refresh" onClick="init();">
-	</tr>
-	<tr>
-		<td align="right"><p>Average Speed:</p></td>
-		<td><div class="slider" id="speedSlider" tabIndex="1"><input class="slider-input" id="speedSliderInput"/></div></td>
-		<td> </td>
-		<td align="right"><p>Turning Angle:</p></td>
-		<td><div class="slider" id="angleSlider" tabIndex="1"><input class="slider-input" id="angleSliderInput"/></div></td>
-		<td> </td>
-		<td> </td>
-		<td><input type="button" name="stop" value="Pause" onClick="stopDrawing();">
-	</tr>
+  <tr>
+    <td align="right"><p>Maximum Splits:</p></td>
+    <td><div class="slider" id="splitSlider" tabIndex="1"><input class="slider-input" id="splitSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>Split Probability:</p></td>
+    <td><div class="slider" id="splitProbSlider" tabIndex="1"><input class="slider-input" id="splitProbSliderInput"/></div></td>
+    <td> </td>
+    <td> </td>
+    <td><input type="button" name="refresh" value="Refresh" onClick="init();">
+  </tr>
+  <tr>
+    <td align="right"><p>Average Speed:</p></td>
+    <td><div class="slider" id="speedSlider" tabIndex="1"><input class="slider-input" id="speedSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>Turning Angle:</p></td>
+    <td><div class="slider" id="angleSlider" tabIndex="1"><input class="slider-input" id="angleSliderInput"/></div></td>
+    <td> </td>
+    <td> </td>
+    <td><input type="button" name="stop" value="Pause" onClick="stopDrawing();">
+  </tr>
 </table>
 
 <script type="text/javascript">
@@ -141,99 +141,99 @@ angleSl.setValue(24);
 angleSl.setMaximum(50);
 
 splitSl.onchange = function () {
-	var a = splitSl.getMinimum();
-	var b = splitSl.getMaximum();
-	var c = 1
-	var d = N_LIMIT;
-	var x = splitSl.getValue();
+  var a = splitSl.getMinimum();
+  var b = splitSl.getMaximum();
+  var c = 1
+  var d = N_LIMIT;
+  var x = splitSl.getValue();
 
-	N_MAX = (d-c)*(x-a)/(b-a) + c;
+  N_MAX = (d-c)*(x-a)/(b-a) + c;
 };
 
 splitProbSl.onchange = function () {
-	var a = splitProbSl.getMinimum();
-	var b = splitProbSl.getMaximum();
-	var c = 0.001;
-	var d = 0.05;
-	var x = splitProbSl.getValue();
+  var a = splitProbSl.getMinimum();
+  var b = splitProbSl.getMaximum();
+  var c = 0.001;
+  var d = 0.05;
+  var x = splitProbSl.getValue();
 
-	split_prob = (d-c)*(x-a)/(b-a) + c;
+  split_prob = (d-c)*(x-a)/(b-a) + c;
 };
 
 speedSl.onchange = function () {
-	var a = speedSl.getMinimum();
-	var b = speedSl.getMaximum();
-	var c = 0.05;
-	var d = 2.5;
-	var x = speedSl.getValue();
+  var a = speedSl.getMinimum();
+  var b = speedSl.getMaximum();
+  var c = 0.05;
+  var d = 2.5;
+  var x = speedSl.getValue();
 
-	ds_avg = (d-c)*(x-a)/(b-a) + c;
-	ds_var = ds_avg/3;
+  ds_avg = (d-c)*(x-a)/(b-a) + c;
+  ds_var = ds_avg/3;
 };
 
 angleSl.onchange = function () {
-	var a = angleSl.getMinimum();
-	var b = angleSl.getMaximum();
-	var c = Math.PI/12;
-	var d = 2*Math.PI/3;
-	var x = angleSl.getValue();
+  var a = angleSl.getMinimum();
+  var b = angleSl.getMaximum();
+  var c = Math.PI/12;
+  var d = 2*Math.PI/3;
+  var x = angleSl.getValue();
 
-	angle = (d-c)*(x-a)/(b-a) + c;
+  angle = (d-c)*(x-a)/(b-a) + c;
 };
 
 
 window.onresize = function () {
-	splitSl.recalculate();
-	splitProbSl.recalculate();
-	speedSl.recalculate();
-	angleSl.recalculate();
+  splitSl.recalculate();
+  splitProbSl.recalculate();
+  speedSl.recalculate();
+  angleSl.recalculate();
 };
 
 function stopDrawing() {
-	stop = !stop;
+  stop = !stop;
 }
 
 
 function init(){
   canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
-	canvas.height = HEIGHT;
-	if (canvas.getContext){
-		ctx = canvas.getContext('2d');
+  canvas.height = HEIGHT;
+  if (canvas.getContext){
+    ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
-		// initialize
-		N = 1;
+    // initialize
+    N = 1;
 
-		posXcur = new Array(1);
-		posXlast = new Array(1);
-		posYcur = new Array(1);
-		posYlast = new Array(1);
-		color = new Array(1);
-		ds = new Array(1);
-		theta = new Array(1);
-		bias = new Array(1);
-		bias_prob = 0.05;
+    posXcur = new Array(1);
+    posXlast = new Array(1);
+    posYcur = new Array(1);
+    posYlast = new Array(1);
+    color = new Array(1);
+    ds = new Array(1);
+    theta = new Array(1);
+    bias = new Array(1);
+    bias_prob = 0.05;
 
-		splitter = 0;
-		splitting = false;
-		split_prob = 0.035;
+    splitter = 0;
+    splitting = false;
+    split_prob = 0.035;
 
-		ds[0] = Math.random()*ds_avg + ds_var;
-		theta[0] = Math.random()*Math.PI*2;
-		posXlast[0] = WIDTH/2;//Math.round(Math.random()*WIDTH);
-		posYlast[0] = HEIGHT/2;//Math.round(Math.random()*HEIGHT);
-		posXcur[0] = ds[0]*Math.cos(theta[0]) + posXlast[0];
-		posYcur[0] = ds[0]*Math.sin(theta[0]) + posYlast[0];
-		color[0] =  'rgb(' + r0 + ',' + g0 + ',' + b0 + ')';	//"rgb(0,0,0)";
-		bias[0] = 1;
+    ds[0] = Math.random()*ds_avg + ds_var;
+    theta[0] = Math.random()*Math.PI*2;
+    posXlast[0] = WIDTH/2;//Math.round(Math.random()*WIDTH);
+    posYlast[0] = HEIGHT/2;//Math.round(Math.random()*HEIGHT);
+    posXcur[0] = ds[0]*Math.cos(theta[0]) + posXlast[0];
+    posYcur[0] = ds[0]*Math.sin(theta[0]) + posYlast[0];
+    color[0] =  'rgb(' + r0 + ',' + g0 + ',' + b0 + ')';  //"rgb(0,0,0)";
+    bias[0] = 1;
 
-		ctx.fillStyle = 'rgb(' + r_bg + ',' + g_bg + ',' + b_bg + ')';
-		ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = 'rgb(' + r_bg + ',' + g_bg + ',' + b_bg + ')';
+    ctx.fillRect(0, 0, width, height);
 
-		// call the drawing function
-		return setInterval(draw, 10);
-	}
-	else {
+    // call the drawing function
+    return setInterval(draw, 10);
+  }
+  else {
     alert('You need a better web browser to see this.');
   }
 }
@@ -241,125 +241,125 @@ function init(){
 
 function draw() {
 
-	if (stop == false) {
-		if (Math.random() < split_prob && N < N_MAX) {
-			splitting = true;
-			splitter = Math.round(Math.random()*N);
-		}
-		else splitting = false;
+  if (stop == false) {
+    if (Math.random() < split_prob && N < N_MAX) {
+      splitting = true;
+      splitter = Math.round(Math.random()*N);
+    }
+    else splitting = false;
 
-		var tempN = N;
-		for (var i=0; i<tempN; i++) {
-			if (splitting == true && i == splitter) {
+    var tempN = N;
+    for (var i=0; i<tempN; i++) {
+      if (splitting == true && i == splitter) {
 
-				// make arrays longer
-				N++;
-				//document.outform.output.value = 'N = ' + N + ' split_prob = ' + split_prob + ' avg speed = ' + ds_avg + ' angle = ' + angle;
-				posXlast.length++;
-				posYlast.length++;
-				posXcur.length++;
-				posYcur.length++;
-				color.length++;
-				ds.length++;
-				theta.length++;
-				bias.length++;
+        // make arrays longer
+        N++;
+        //document.outform.output.value = 'N = ' + N + ' split_prob = ' + split_prob + ' avg speed = ' + ds_avg + ' angle = ' + angle;
+        posXlast.length++;
+        posYlast.length++;
+        posXcur.length++;
+        posYcur.length++;
+        color.length++;
+        ds.length++;
+        theta.length++;
+        bias.length++;
 
-				// fill in last spots of arrays
+        // fill in last spots of arrays
 
-				var t = N/N_MAX;
+        var t = N/N_MAX;
 
-				var r = Math.round(r0*(1-t) + r1*t);  // straight-line
-				var g = Math.round(g0*(1-t) + g1*t);
-				var b = Math.round(b0*(1-t) + b1*t);
+        var r = Math.round(r0*(1-t) + r1*t);  // straight-line
+        var g = Math.round(g0*(1-t) + g1*t);
+        var b = Math.round(b0*(1-t) + b1*t);
 
-				//document.outform.output.value = 'N = ' + N + ', (r,g,b) = (' + r + ',' + g + ',' + b + ')';
+        //document.outform.output.value = 'N = ' + N + ', (r,g,b) = (' + r + ',' + g + ',' + b + ')';
 
-				color[N-1] = 'rgb(' + r + ',' + g + ',' + b + ')';
+        color[N-1] = 'rgb(' + r + ',' + g + ',' + b + ')';
 
-				bias[N-1] = -1*bias[i];
-				theta[i]   = Math.PI/3;
-				theta[N-1] = -1*theta[i];
-				ds[N-1] = Math.random()*ds_avg + ds_var;
+        bias[N-1] = -1*bias[i];
+        theta[i]   = Math.PI/3;
+        theta[N-1] = -1*theta[i];
+        ds[N-1] = Math.random()*ds_avg + ds_var;
 
-				posXlast[N-1] = posXlast[i];
-				posYlast[N-1] = posYlast[i];
+        posXlast[N-1] = posXlast[i];
+        posYlast[N-1] = posYlast[i];
 
-				posXcur[N-1] = posXcur[i];
-				posYcur[N-1] = posYcur[i]
+        posXcur[N-1] = posXcur[i];
+        posYcur[N-1] = posYcur[i]
 
-				var dispX1 = (posXcur[i] - posXlast[i])*Math.cos(theta[i]) - (posYcur[i] - posYlast[i])*Math.sin(theta[i]);
-				var dispY1 = (posXcur[i] - posXlast[i])*Math.sin(theta[i]) + (posYcur[i] - posYlast[i])*Math.cos(theta[i]);
+        var dispX1 = (posXcur[i] - posXlast[i])*Math.cos(theta[i]) - (posYcur[i] - posYlast[i])*Math.sin(theta[i]);
+        var dispY1 = (posXcur[i] - posXlast[i])*Math.sin(theta[i]) + (posYcur[i] - posYlast[i])*Math.cos(theta[i]);
 
-				var norm1 = ds[i] / Math.sqrt(dispX1 * dispX1 + dispY1 * dispY1);
+        var norm1 = ds[i] / Math.sqrt(dispX1 * dispX1 + dispY1 * dispY1);
 
-				if (posXcur[i] + dispX1*norm1 > WIDTH || posXcur[i] + dispX1*norm1 < 0) {
-					dispX1 = -dispX1;
-					bias[i] *= -1;
-				}
-				if (posYcur[i] + dispY1*norm1 > HEIGHT || posYcur[i] + dispY1*norm1 < 0) {
-					dispY1 = -dispY1;
-					bias[i] *= -1;
-				}
+        if (posXcur[i] + dispX1*norm1 > WIDTH || posXcur[i] + dispX1*norm1 < 0) {
+          dispX1 = -dispX1;
+          bias[i] *= -1;
+        }
+        if (posYcur[i] + dispY1*norm1 > HEIGHT || posYcur[i] + dispY1*norm1 < 0) {
+          dispY1 = -dispY1;
+          bias[i] *= -1;
+        }
 
-				posXlast[i] = posXcur[i];
-				posXcur[i] += dispX1*norm1;
-				posYlast[i] = posYcur[i];
-				posYcur[i] += dispY1*norm1;
+        posXlast[i] = posXcur[i];
+        posXcur[i] += dispX1*norm1;
+        posYlast[i] = posYcur[i];
+        posYcur[i] += dispY1*norm1;
 
-				var dispX2 = (posXcur[N-1] - posXlast[N-1])*Math.cos(theta[N-1]) - (posYcur[N-1] - posYlast[N-1])*Math.sin(theta[N-1]);
-				var dispY2 = (posXcur[N-1] - posXlast[N-1])*Math.sin(theta[N-1]) + (posYcur[N-1] - posYlast[N-1])*Math.cos(theta[N-1]);
+        var dispX2 = (posXcur[N-1] - posXlast[N-1])*Math.cos(theta[N-1]) - (posYcur[N-1] - posYlast[N-1])*Math.sin(theta[N-1]);
+        var dispY2 = (posXcur[N-1] - posXlast[N-1])*Math.sin(theta[N-1]) + (posYcur[N-1] - posYlast[N-1])*Math.cos(theta[N-1]);
 
-				var norm2 = ds[N-1]/Math.sqrt( dispX2*dispX2 + dispY2*dispY2 );
+        var norm2 = ds[N-1]/Math.sqrt( dispX2*dispX2 + dispY2*dispY2 );
 
-				if (posXcur[N-1] + dispX2*norm2 > WIDTH || posXcur[N-1] + dispX2*norm2 < 0) {
-					dispX2 = -dispX2;
-					bias[N-1] *= -1;
-				}
-				if (posYcur[N-1] + dispY2*norm2 > HEIGHT || posYcur[N-1] + dispY2*norm2 < 0) {
-					dispY2 = -dispY2;
-					bias[N-1] *= -1;
-				}
+        if (posXcur[N-1] + dispX2*norm2 > WIDTH || posXcur[N-1] + dispX2*norm2 < 0) {
+          dispX2 = -dispX2;
+          bias[N-1] *= -1;
+        }
+        if (posYcur[N-1] + dispY2*norm2 > HEIGHT || posYcur[N-1] + dispY2*norm2 < 0) {
+          dispY2 = -dispY2;
+          bias[N-1] *= -1;
+        }
 
-				posXlast[N-1] = posXcur[N-1];
-				posXcur[N-1] += dispX2*norm2;
-				posYlast[N-1] = posYcur[N-1];
-				posYcur[N-1] += dispY2*norm2;
+        posXlast[N-1] = posXcur[N-1];
+        posXcur[N-1] += dispX2*norm2;
+        posYlast[N-1] = posYcur[N-1];
+        posYcur[N-1] += dispY2*norm2;
 
-			}
-			else {
-				//theta[i] = bias[i]*(Math.random()*Math.PI/3 - Math.PI/6);
-				theta[i] = bias[i]*(Math.random()*angle - angle/2);
+      }
+      else {
+        //theta[i] = bias[i]*(Math.random()*Math.PI/3 - Math.PI/6);
+        theta[i] = bias[i]*(Math.random()*angle - angle/2);
 
-				//document.outform.output.value = 'N = ' + N + ' split_prob = ' + split_prob + ' avg speed = ' + ds_avg + ' angle = ' + angle;
+        //document.outform.output.value = 'N = ' + N + ' split_prob = ' + split_prob + ' avg speed = ' + ds_avg + ' angle = ' + angle;
 
-				if (Math.random() < bias_prob) {
-					bias[0] *= -1;
-					//document.outform.output.value += 'bias changed ';
-				}
+        if (Math.random() < bias_prob) {
+          bias[0] *= -1;
+          //document.outform.output.value += 'bias changed ';
+        }
 
-				var dispX = (posXcur[i] - posXlast[i])*Math.cos(theta[i]) - (posYcur[i] - posYlast[i])*Math.sin(theta[i]);
-				var dispY = (posXcur[i] - posXlast[i])*Math.sin(theta[i]) + (posYcur[i] - posYlast[i])*Math.cos(theta[i]);
+        var dispX = (posXcur[i] - posXlast[i])*Math.cos(theta[i]) - (posYcur[i] - posYlast[i])*Math.sin(theta[i]);
+        var dispY = (posXcur[i] - posXlast[i])*Math.sin(theta[i]) + (posYcur[i] - posYlast[i])*Math.cos(theta[i]);
 
-				var norm = ds[i]/Math.sqrt( dispX*dispX + dispY*dispY );
+        var norm = ds[i]/Math.sqrt( dispX*dispX + dispY*dispY );
 
-				if (posXcur[i] + dispX*norm > WIDTH || posXcur[i] + dispX*norm < 0) {
-					dispX = -dispX;
-					bias[i] *= -1;
-				}
-				if (posYcur[i] + dispY*norm > HEIGHT || posYcur[i] + dispY*norm < 0) {
-					dispY = -dispY;
-					bias[i] *= -1;
-				}
+        if (posXcur[i] + dispX*norm > WIDTH || posXcur[i] + dispX*norm < 0) {
+          dispX = -dispX;
+          bias[i] *= -1;
+        }
+        if (posYcur[i] + dispY*norm > HEIGHT || posYcur[i] + dispY*norm < 0) {
+          dispY = -dispY;
+          bias[i] *= -1;
+        }
 
-				posXlast[i] = posXcur[i];
-				posXcur[i] += dispX*norm;
-				posYlast[i] = posYcur[i];
-				posYcur[i] += dispY*norm;
-			}
+        posXlast[i] = posXcur[i];
+        posXcur[i] += dispX*norm;
+        posYlast[i] = posYcur[i];
+        posYcur[i] += dispY*norm;
+      }
 
-			canvasUtil.drawLine(posXlast[i], posYlast[i], posXcur[i], posYcur[i], color[i], 1);
-		}
-	}
+      canvasUtil.drawLine(posXlast[i], posYlast[i], posXcur[i], posYcur[i], color[i], 1);
+    }
+  }
 }
 
 </script>
@@ -379,7 +379,7 @@ function draw() {
 <div class="middle">
 <center>
 <form name="outform">
-	<textarea rows="10" cols="80" name="output"></textarea>
+  <textarea rows="10" cols="80" name="output"></textarea>
 </form>
 </center>
 </div>

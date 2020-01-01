@@ -2,15 +2,15 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Particles</title>
-	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
-	<link rel="shortcut icon" href="favicon.ico" />
-	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
-	<link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
-	<script type="text/javascript" src="./js/range.js"></script>
-	<script type="text/javascript" src="./js/timer.js"></script>
-	<script type="text/javascript" src="./js/slider.js"></script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Particles</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+  <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
+  <script type="text/javascript" src="./js/range.js"></script>
+  <script type="text/javascript" src="./js/timer.js"></script>
+  <script type="text/javascript" src="./js/slider.js"></script>
   <script type="text/javascript" src="./js/canvasUtil.js"></script>
 </head>
 
@@ -22,9 +22,9 @@
 
 <div class="topleftsmall">
    <a href="./index.html">
-	<script type="text/javascript">
-      		showImage("300x50");
-   	</script>
+  <script type="text/javascript">
+          showImage("300x50");
+     </script>
    </a>
 </div>
 
@@ -42,50 +42,50 @@ href="http://www.mozilla.com/firefox/">Firefox</a> (Windows/Linux) and <a
 href="http://www.google.com/chrome">Chrome</a> (Windows).</p> </div>
 
 <div class="middle">
-	<table border="0" align="center">
-		<tr>
-			<td align="right"><p>Number of Particles:</p></td>
-			<td><div class="slider" id="partSlider" tabIndex="1">
-				<input class="slider-input" id="partSliderInput"/></div></td>
-			<td><input id="part-view" size="2" /></td>
+  <table border="0" align="center">
+    <tr>
+      <td align="right"><p>Number of Particles:</p></td>
+      <td><div class="slider" id="partSlider" tabIndex="1">
+        <input class="slider-input" id="partSliderInput"/></div></td>
+      <td><input id="part-view" size="2" /></td>
       <td></td>
-			<td><input type="button" name="refresh-part" value="Refresh Particles" onClick="refreshParticles();" /></td>
+      <td><input type="button" name="refresh-part" value="Refresh Particles" onClick="refreshParticles();" /></td>
     </tr>
 
-		<tr>
-			<td align="right"><p>Number of Attractors:</p></td>
-			<td><div class="slider" id="attSlider" tabIndex="1">
-				<input class="slider-input" id="attSliderInput"/></div></td>
-			<td><input id="att-view" size="2" /></td>
+    <tr>
+      <td align="right"><p>Number of Attractors:</p></td>
+      <td><div class="slider" id="attSlider" tabIndex="1">
+        <input class="slider-input" id="attSliderInput"/></div></td>
+      <td><input id="att-view" size="2" /></td>
       <td></td>
       <td><input type="button" name="refresh-att" value="Refresh Attractors" onClick="refreshAttractors();" /></td>
     </tr>
 
-		<tr>
+    <tr>
       <td align="right"><p>Gravity Strength:</p></td>
-			<td><div class="slider" id="gSlider" tabIndex="1">
-				<input class="slider-input" id="gSliderInput"/></div></td>
-			<td><input id="g-view" size="2" /></td>
+      <td><div class="slider" id="gSlider" tabIndex="1">
+        <input class="slider-input" id="gSliderInput"/></div></td>
+      <td><input id="g-view" size="2" /></td>
       <td></td>
       <td><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();">
-		</tr>
+    </tr>
 
-		<tr>
-			<td align="right"><p>Confine Particles to Canvas:</p></td>
-			<td><select id="confine">
-					<option value="0" selected>Yes</option>
-					<option value="1">No</option>
-				</select></td>
+    <tr>
+      <td align="right"><p>Confine Particles to Canvas:</p></td>
+      <td><select id="confine">
+          <option value="0" selected>Yes</option>
+          <option value="1">No</option>
+        </select></td>
     </tr>
 
     <tr>
       <td align="right"><p>Particles contribute to gravity:</p></td>
-			<td><select id="massive">
-					<option value="0" selected>Yes</option>
-					<option value="1">No</option>
-				</select></td>
-		</tr>
-	</table>
+      <td><select id="massive">
+          <option value="0" selected>Yes</option>
+          <option value="1">No</option>
+        </select></td>
+    </tr>
+  </table>
 <script type="text/javascript">
 
 var canvas;
@@ -141,7 +141,7 @@ document.getElementById("g-view").value = G_POW;
 
 
 function pauseDrawing() {
-	paused = !paused;
+  paused = !paused;
 }
 
 function refreshParticles() {
@@ -171,9 +171,9 @@ class Attractor {
   static makeRandom(n) {
     let attractors = [];
     for (let i=0; i<n; i++) {
-  		// let x = WIDTH / 2.0;  //(Math.random() * WIDTH + 1) % WIDTH; //random integer between 0 and WIDTH-1
-  		// let y = HEIGHT / 2.0; //(Math.random() * HEIGHT + 1) % HEIGHT; //random integer between 0 and HEIGHT-1
-  		// let mass  = 1000; //(Math.random() * ATT_MASS_MOD + 1) % ATT_MASS_MOD + ATT_MASS_MIN; //random integer
+      // let x = WIDTH / 2.0;  //(Math.random() * WIDTH + 1) % WIDTH; //random integer between 0 and WIDTH-1
+      // let y = HEIGHT / 2.0; //(Math.random() * HEIGHT + 1) % HEIGHT; //random integer between 0 and HEIGHT-1
+      // let mass  = 1000; //(Math.random() * ATT_MASS_MOD + 1) % ATT_MASS_MOD + ATT_MASS_MIN; //random integer
 
       let mid_x = WIDTH / 2.0;
       let mid_y = HEIGHT / 2.0;
@@ -182,7 +182,7 @@ class Attractor {
       let mass = Math.random() * (ATT_MASS_MOD + 1) + ATT_MASS_MIN; //(Math.random() * ATT_MASS_MOD + 1) % ATT_MASS_MOD + ATT_MASS_MIN; //random integer
 
       attractors.push(new Attractor(x, y, mass, ATTRACTOR_COLOR));
-  	}
+    }
     return attractors;
   }
 }
@@ -217,7 +217,7 @@ class Particle {
     // this doesn't fit too easily into the CanvasUtil framework :/
     ctx.beginPath();
     ctx.fillStyle = this.color;
-  	for (let j=0; j<this.tail_len; j++) {
+    for (let j=0; j<this.tail_len; j++) {
       let radius = 2 * this.mass * (this.tail_len - j) / this.tail_len;
       ctx.arc(this.xs[j], this.ys[j], radius, 0, 2 * Math.PI, true)
     }
@@ -296,40 +296,40 @@ class Ensemble {
     this.particles.slice(0, NUM_PARTICLES).forEach(p => p.draw());
   }
 
-  updateState() { //num_particles, num_attractors, massive_particles, confine_particles) {
-  	// update each position, velocity, acceleration
-  	for (let i=0; i<NUM_PARTICLES; i++) {
-  		// TODO: what is going on here?
+  updateState() {
+    // update each position, velocity, acceleration
+    for (let i=0; i<NUM_PARTICLES; i++) {
+      // TODO: what is going on here?
       //let G = 1 / (10 * Math.pow(10, -1 * G_POW / 5));
       let G = Math.pow(10, G_POW / 5);
 
-  		// reset accelerations
-  		this.particles[i].a_x = 0.0;
+      // reset accelerations
+      this.particles[i].a_x = 0.0;
       this.particles[i].a_y = 0.0;
 
-  		// update acceleration using forces from the attractors
-  		for (let j=0; j<NUM_ATTRACTORS; j++) {
+      // update acceleration using forces from the attractors
+      for (let j=0; j<NUM_ATTRACTORS; j++) {
         let r_x = this.particles[i].xs[0] - this.attractors[j].x;
         let r_y = this.particles[i].ys[0] - this.attractors[j].y;
         //canvasUtil.println(`diff: (${r_x}, ${r_y})`);
         let r_squared = r_x * r_x + r_y * r_y;
         // law of graviation
-  			this.particles[i].a_x += -1.0 * r_x * G * this.attractors[j].mass / Math.pow(r_squared, 1.5);
-  			this.particles[i].a_y += -1.0 * r_y * G * this.attractors[j].mass / Math.pow(r_squared, 1.5);
-  		}
+        this.particles[i].a_x += -1.0 * r_x * G * this.attractors[j].mass / Math.pow(r_squared, 1.5);
+        this.particles[i].a_y += -1.0 * r_y * G * this.attractors[j].mass / Math.pow(r_squared, 1.5);
+      }
 
-  		if (document.getElementById("massive").value == 0) {
-  			// forces from the other particles
-  			for (var j=0; j<NUM_PARTICLES; j++) {
-  				if (j != i) {
+      if (document.getElementById("massive").value == 0) {
+        // forces from the other particles
+        for (var j=0; j<NUM_PARTICLES; j++) {
+          if (j != i) {
             let r_x = this.particles[i].xs[0] - this.particles[j].xs[0];
             let r_y = this.particles[i].ys[0] - this.particles[j].ys[0];
-  					let r_squared = r_x * r_x + r_y * r_y;
-  					this.particles[i].a_x += -1.0 * r_x * G * this.particles[j].mass / Math.pow(r_squared, 1.5);
-  					this.particles[i].a_y += -1.0 * r_y * G * this.particles[j].mass / Math.pow(r_squared, 1.5);
-  				}
-  			}
-  		}
+            let r_squared = r_x * r_x + r_y * r_y;
+            this.particles[i].a_x += -1.0 * r_x * G * this.particles[j].mass / Math.pow(r_squared, 1.5);
+            this.particles[i].a_y += -1.0 * r_y * G * this.particles[j].mass / Math.pow(r_squared, 1.5);
+          }
+        }
+      }
 
       // if norm of acceleraton is too high, rescale the acceleraton vector to have appropriate length
       let acc_norm = Math.sqrt(this.particles[i].a_x * this.particles[i].a_x + this.particles[i].a_y * this.particles[i].a_y);
@@ -354,26 +354,26 @@ class Ensemble {
 
       //canvasUtil.println(`new velocity = (${this.particles[i].v_x}, ${this.particles[i].v_y})`);
 
-  		// if keeping the particles inside the canvas...
-  		if (document.getElementById("confine").value == 0) {
-  			if (this.particles[i].xs[0] + this.particles[i].v_x > WIDTH || this.particles[i].xs[0] + this.particles[i].v_x < 0) {
-  				this.particles[i].v_x *= -1.0;
+      // if keeping the particles inside the canvas...
+      if (document.getElementById("confine").value == 0) {
+        if (this.particles[i].xs[0] + this.particles[i].v_x > WIDTH || this.particles[i].xs[0] + this.particles[i].v_x < 0) {
+          this.particles[i].v_x *= -1.0;
         }
-  			if (this.particles[i].ys[0] + this.particles[i].v_y > HEIGHT || this.particles[i].ys[0] + this.particles[i].v_y < 0) {
-  				this.particles[i].v_y *= -1.0;;
+        if (this.particles[i].ys[0] + this.particles[i].v_y > HEIGHT || this.particles[i].ys[0] + this.particles[i].v_y < 0) {
+          this.particles[i].v_y *= -1.0;;
         }
-  		}
+      }
 
-  		// get new position
+      // get new position
       let pos_x = this.particles[i].xs[0] + this.particles[i].v_x;
       let pos_y = this.particles[i].ys[0] + this.particles[i].v_y;
 
       //canvasUtil.println(`new position = (${pos_x}, ${pos_y})`);
 
-  		// keep track of previous positions
+      // keep track of previous positions
       this.particles[i].xs = [pos_x].concat(this.particles[i].xs.slice(0, TAIL - 1));
       this.particles[i].ys = [pos_y].concat(this.particles[i].ys.slice(0, TAIL - 1));
-  	}
+    }
   }
 }
 
@@ -395,13 +395,13 @@ function draw() {
 
 
 function init(){
-	canvas = document.getElementById("canvas");
-	canvas.width = WIDTH;
-	canvas.height = HEIGHT;
-	if (canvas.getContext){
-		ctx = canvas.getContext('2d');
+  canvas = document.getElementById("canvas");
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
+  if (canvas.getContext){
+    ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
-		// set up the particles	and attractors
+    // set up the particles  and attractors
     ensemble = Ensemble.makeRandom(NUM_PARTICLES_MAX, NUM_ATTRACTORS_MAX);
     //ensemble.particles.forEach(p => canvasUtil.println(p.toString()));
     //ensemble.attractors.forEach(a => canvasUtil.println(a.toString()));
@@ -410,41 +410,41 @@ function init(){
 
     //this.ensemble.particles.slice(0, 1).forEach(p => canvasUtil.println(p.toString()));
     //this.ensemble.attractors.forEach(a => canvasUtil.println(a.toString()));
-		//makeParticles();
-		//makeAttractors();
+    //makeParticles();
+    //makeAttractors();
 
-		// call the drawing function
-		//return setInterval(ensemble.draw, 10);
+    // call the drawing function
+    //return setInterval(ensemble.draw, 10);
     return setInterval(draw, 5);
-	}
-	else {
+  }
+  else {
     alert('You need a better web browser to see this.');
   }
 }
 
 partSl.onchange = function () {
   document.getElementById("part-view").value = partSl.getValue();
-	NUM_PARTICLES = parseInt(partSl.getValue());
+  NUM_PARTICLES = parseInt(partSl.getValue());
     canvasUtil.println(`new number of particles = ${NUM_PARTICLES}`);
 };
 
 attSl.onchange = function () {
   document.getElementById("att-view").value = attSl.getValue();
-	NUM_ATTRACTORS = parseInt(attSl.getValue());
+  NUM_ATTRACTORS = parseInt(attSl.getValue());
   canvasUtil.println(`new number of attractors = ${NUM_ATTRACTORS}`);
 };
 
 gSl.onchange = function () {
   document.getElementById("g-view").value = gSl.getValue();
-	G_POW = parseInt(gSl.getValue());
+  G_POW = parseInt(gSl.getValue());
   canvasUtil.println(`new Gravity exponent = ${G_POW}`);
 };
 
 window.onresize = function () {
-	partSl.recalculate();
-	attSl.recalculate();
-	gSl.recalculate();
-	init();
+  partSl.recalculate();
+  attSl.recalculate();
+  gSl.recalculate();
+  init();
 };
 </script>
 
@@ -462,12 +462,12 @@ window.onresize = function () {
 
 <div class="middle">
 <table align="center">
-	<tr>
-		<td><form name="outform">
-		    <textarea rows="25" cols="80" name="output"></textarea>
-		    </form>
-		</td>
-	</tr>
+  <tr>
+    <td><form name="outform">
+        <textarea rows="25" cols="80" name="output"></textarea>
+        </form>
+    </td>
+  </tr>
 </table>
 </div>
 

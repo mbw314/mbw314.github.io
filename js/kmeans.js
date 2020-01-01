@@ -27,9 +27,9 @@ function indexOfSmallest(a) {
    return lowest;
 }
 
-function countInArray(a,i){
+function countInArray(a, i){
   var result = 0;
-  for(var o in a) {
+  for (var o in a) {
     if(a[o] == i) {
       result++;
     }
@@ -47,13 +47,12 @@ function getAllIndexes(a, v) {
 
 
 function kMeansIter() {
-
   // step 1: cluster assignment
-  for(var i=0; i<m; i++) {
+  for (var i=0; i<m; i++) {
     // for each data point, compute distances to all centroids
-    for(var k=0; k<K; k++) {
-      tempDist[k] = (points[i][0]-centroids[k][0])*(points[i][0]-centroids[k][0])
-          + (points[i][1]-centroids[k][1])*(points[i][1]-centroids[k][1]);
+    for (var k=0; k<K; k++) {
+      tempDist[k] = (points[i][0] - centroids[k][0]) * (points[i][0] - centroids[k][0])
+          + (points[i][1] - centroids[k][1]) * (points[i][1] - centroids[k][1]);
     }
     // find index corresponding to smallest distance
     clusterIndex[i] = indexOfSmallest(tempDist);
@@ -66,13 +65,10 @@ function kMeansIter() {
   var tempY = 0;
   var cluster = [];
 
-  for(var k=0; k<K; k++) {
-
-    var L = oldCentroids.push([centroids[k][0],centroids[k][1]]);
-
-    cluster = getAllIndexes(clusterIndex,k);
-
-    if( cluster.length != 0 ) {
+  for (var k=0; k<K; k++) {
+    var L = oldCentroids.push([centroids[k][0], centroids[k][1]]);
+    cluster = getAllIndexes(clusterIndex, k);
+    if (cluster.length != 0) {
       // if the cluster is non-empty, proceed
       tempX = 0;
       tempY = 0;
@@ -86,12 +82,7 @@ function kMeansIter() {
       // move the centroid to this new mean
       centroids[k][0] = tempX / cluster.length;
       centroids[k][1] = tempY / cluster.length;
-    }
-    else {
-      // if the cluster is empty, remove the corresponding centroid
-      //var removed = centroids.splice(k,1);
-      //k = k-1;
-
+    } else {
       // reassign the centroid randomly
       centroids[k] = [Math.random()*WIDTH, Math.random()*HEIGHT];
     }
@@ -104,9 +95,8 @@ function kMeansIter() {
 }
 
 function initPoints(num) {
-
   m = num;
-  for(var i=0; i<m; i++) {
+  for (var i=0; i<m; i++) {
     points[i] = [Math.random() * WIDTH, Math.random() * HEIGHT];
     clusterIndex[i] = 0;
     pointColor[i] = [0, 0, 0];
@@ -115,18 +105,16 @@ function initPoints(num) {
 
 function initCentroids(num) {
   K = num;
-  for(var k=0; k<K; k++) {
+  for (var k=0; k<K; k++) {
     centroids[k] = [Math.random() * WIDTH, Math.random() * HEIGHT];
-         //= [points[k][0], points[k][1]];
     centroidColor[k] = [Math.round(k*255/K),
             Math.round((K-k)*255/K),
             Math.round(Math.random()*255)];
   }
 }
 
-
 function drawPoints() {
-  for(var i=0; i<m; i++) {
+  for (var i=0; i<m; i++) {
     canvasUtil.drawDisk(
       points[i][0],
       points[i][1],
@@ -137,7 +125,7 @@ function drawPoints() {
 }
 
 function drawCentroids() {
-  for(var k=0; k<K; k++) {
+  for (var k=0; k<K; k++) {
     canvasUtil.drawCircle(
       centroids[k][0],
       centroids[k][1],
@@ -147,7 +135,7 @@ function drawCentroids() {
     );
   }
 
-  for(var j=0; j<oldCentroids.length; j++) {
+  for (var j=0; j<oldCentroids.length; j++) {
     canvasUtil.drawCircle(
       oldCentroids[j][0],
       oldCentroids[j][1],
@@ -159,7 +147,7 @@ function drawCentroids() {
 }
 
 function drawCentroidPaths() {
-  for(var j=0; j<centroidLines.length; j++) {
+  for (var j=0; j<centroidLines.length; j++) {
     canvasUtil.drawLine(
       centroidLines[j][0],
       centroidLines[j][1],
@@ -173,9 +161,9 @@ function drawCentroidPaths() {
 
 function drawConnectors() {
   var cluster = [];
-  for(var k=0; k<K; k++) {
+  for (var k=0; k<K; k++) {
     cluster = getAllIndexes(clusterIndex, k);
-    for(var j=0; j<cluster.length; j++) {
+    for (var j=0; j<cluster.length; j++) {
       canvasUtil.drawLine(
         centroids[k][0],
         centroids[k][1],
