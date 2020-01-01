@@ -122,7 +122,7 @@ function drawAfterChange() {
 
 function initPoints() {
 	// create M points 'near' the line y = t2_init * x^2 + t1_init * x + t0_init
-	for(var i=0; i<M; i++) {
+	for (var i=0; i<M; i++) {
 		x[i] = Math.random();
 		y[i] = t2_init * x[i] * x[i] + t1_init * x[i] + t0_init
 			   + (2 * Math.random() - 1) * spread * Math.random();
@@ -131,7 +131,7 @@ function initPoints() {
 
 
 function drawPoints() {
-	for(var i=0; i<M; i++) {
+	for (var i=0; i<M; i++) {
 		canvasUtil.drawDisk(
 			x[i] * WIDTH,
 			y[i] * HEIGHT,
@@ -144,7 +144,7 @@ function drawPoints() {
 
 function drawVerts() {
 	var L = t2.length;
-	for(var i=0; i<M; i++) {
+	for (var i=0; i<M; i++) {
 		if (reg_type == "linear") {
 			canvasUtil.drawLine(
 				x[i] * WIDTH,
@@ -222,8 +222,6 @@ function init() {
 	canvas = document.getElementById("canvas");
 	canvas.width = WIDTH;
 	canvas.height = HEIGHT;
-	//output_field = document.outform.output;
-	//clear_text();
 	if (canvas.getContext) {
 		ctx = canvas.getContext('2d');
 		reg_type = document.controls.regtype.value;

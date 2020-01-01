@@ -42,36 +42,32 @@ href="http://www.mozilla.com/firefox/">Firefox</a> (Windows/Linux) and <a
 href="http://www.google.com/chrome">Chrome</a> (Windows).</p> </div>
 
 <div class="middle">
-
-	<table border="1" align="center">
-
+	<table border="0" align="center">
 		<tr>
 			<td align="right"><p>Number of Particles:</p></td>
 			<td><div class="slider" id="partSlider" tabIndex="1">
 				<input class="slider-input" id="partSliderInput"/></div></td>
 			<td><input id="part-view" size="2" /></td>
-			<td></td>
+      <td></td>
+			<td><input type="button" name="refresh-part" value="Refresh Particles" onClick="refreshParticles();" /></td>
+    </tr>
 
+		<tr>
 			<td align="right"><p>Number of Attractors:</p></td>
 			<td><div class="slider" id="attSlider" tabIndex="1">
 				<input class="slider-input" id="attSliderInput"/></div></td>
 			<td><input id="att-view" size="2" /></td>
-		</tr>
+      <td></td>
+      <td><input type="button" name="refresh-att" value="Refresh Attractors" onClick="refreshAttractors();" /></td>
+    </tr>
 
 		<tr>
-			<!--<td align="right"><p>Tail Length:</p></td>
-			<td><div class="slider" id="tailSlider" tabIndex="1">
-				<input class="slider-input" id="tailSliderInput"/></div></td>
-			<td><input id="tail-view" size="2" /></td>
-			<td></td>-->
-
-			<td align="right"><p>Gravity Strength:</p></td>
+      <td align="right"><p>Gravity Strength:</p></td>
 			<td><div class="slider" id="gSlider" tabIndex="1">
 				<input class="slider-input" id="gSliderInput"/></div></td>
-
 			<td><input id="g-view" size="2" /></td>
-			<td> </td>
-
+      <td></td>
+      <td><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();">
 		</tr>
 
 		<tr>
@@ -80,32 +76,15 @@ href="http://www.google.com/chrome">Chrome</a> (Windows).</p> </div>
 					<option value="0" selected>Yes</option>
 					<option value="1">No</option>
 				</select></td>
-			<td> </td>
-			<td></td>
+    </tr>
 
-			<td> </td>
-			<td><input type="button" name="refresh-part" value="Refresh Particles" onClick="refreshParticles();" /></td>
-			<td> </td>
-			<td> </td>
-		</tr>
-
-		<tr>
-			<td align="right"><p>Particles influence each other:</p></td>
+    <tr>
+      <td align="right"><p>Particles contribute to gravity:</p></td>
 			<td><select id="massive">
 					<option value="0" selected>Yes</option>
 					<option value="1">No</option>
 				</select></td>
-			<td> </td>
-			<td></td>
-
-			<td> </td>
-			<td><input type="button" name="refresh-att" value="Refresh Attractors" onClick="refreshAttractors();" /></td>
-			<td> </td>
-			<td> </td>
 		</tr>
-    <tr>
-      <td><input type="button" name="pause" value="Pause" onClick="pauseDrawing();">
-    </tr>
 	</table>
 <script type="text/javascript">
 
@@ -126,15 +105,13 @@ var PARTICLE_MASS_MAX = 5;
 
 var NUM_PARTICLES_MIN = 1;
 var NUM_PARTICLES = 1;
-var NUM_PARTICLES_MAX = 5;
+var NUM_PARTICLES_MAX = 10;
 
 var NUM_ATTRACTORS_MIN = 1;
 var NUM_ATTRACTORS = 1;
 var NUM_ATTRACTORS_MAX = 5;
 
-//var TAIL_MIN = 1;
 var TAIL = 10;
-//var TAIL_MAX = 20;
 
 var ATT_MASS_MIN = 100;
 var ATT_MASS_MOD = 300;
@@ -143,11 +120,7 @@ var G_POW_MIN = 1;
 var G_POW = 5;
 var G_POW_MAX = 10;
 
-var pos_x, pos_y, vel_x, vel_y, acc_x, acc_y, mass, color;
-var att_pos_x, att_pos_y, att_mass;
-
 var partSl = new Slider(document.getElementById("partSlider"), document.getElementById("partSliderInput"));
-//var tailSl = new Slider(document.getElementById("tailSlider"), document.getElementById("tailSliderInput"));
 var attSl  = new Slider(document.getElementById("attSlider"),  document.getElementById("attSliderInput"));
 var gSl    = new Slider(document.getElementById("gSlider"),    document.getElementById("gSliderInput"));
 
@@ -155,11 +128,6 @@ partSl.setMinimum(NUM_PARTICLES_MIN);
 partSl.setValue(NUM_PARTICLES);
 partSl.setMaximum(NUM_PARTICLES_MAX);
 document.getElementById("part-view").value = NUM_PARTICLES;
-
-// tailSl.setMinimum(TAIL_MIN);
-// tailSl.setValue(TAIL);
-// tailSl.setMaximum(TAIL_MAX);
-// document.getElementById("tail-view").value = TAIL;
 
 attSl.setMinimum(NUM_ATTRACTORS_MIN);
 attSl.setValue(NUM_ATTRACTORS);
@@ -409,7 +377,7 @@ class Ensemble {
   }
 }
 
-function draw2() {
+function draw() {
   if (paused) {
     return 0;
   }
@@ -435,8 +403,8 @@ function init(){
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
 		// set up the particles	and attractors
     ensemble = Ensemble.makeRandom(NUM_PARTICLES_MAX, NUM_ATTRACTORS_MAX);
-    //this.ensemble.particles.forEach(p => canvasUtil.println(p.toString()));
-    this.ensemble.attractors.forEach(a => canvasUtil.println(a.toString()));
+    //ensemble.particles.forEach(p => canvasUtil.println(p.toString()));
+    //ensemble.attractors.forEach(a => canvasUtil.println(a.toString()));
 
     //canvasUtil.println(ensemble.toString());
 
@@ -447,7 +415,7 @@ function init(){
 
 		// call the drawing function
 		//return setInterval(ensemble.draw, 10);
-    return setInterval(draw2, 5);
+    return setInterval(draw, 5);
 	}
 	else {
     alert('You need a better web browser to see this.');
@@ -459,12 +427,6 @@ partSl.onchange = function () {
 	NUM_PARTICLES = parseInt(partSl.getValue());
     canvasUtil.println(`new number of particles = ${NUM_PARTICLES}`);
 };
-
-// tailSl.onchange = function () {
-//   document.getElementById("tail-view").value = tailSl.getValue();
-// 	TAIL = parseInt(tailSl.getValue());
-//     canvasUtil.println(`new tail size = ${TAIL}`);
-// };
 
 attSl.onchange = function () {
   document.getElementById("att-view").value = attSl.getValue();
@@ -480,7 +442,6 @@ gSl.onchange = function () {
 
 window.onresize = function () {
 	partSl.recalculate();
-	//tailSl.recalculate();
 	attSl.recalculate();
 	gSl.recalculate();
 	init();
@@ -511,7 +472,7 @@ window.onresize = function () {
 </div>
 
 <div class="bottom">
-<p>last modified: 1/11/2010</p>
+<p>last modified: 12/31/2019</p>
 </div>
 
 </div>
