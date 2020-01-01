@@ -61,8 +61,7 @@ class CanvasUtil {
   }
 
   clearCanvas(color) {
-    // clear the canvas by drawing a rectangle with the same dimensions as the canvas
-    //this.drawRect(0, 0, this.width, this.height, "white");
+    // clear the canvas by drawing a rectangle (with an optional color) with the same dimensions as the canvas
     this.ctx.beginPath();
     if (color) {
       this.ctx.fillStyle = color;
