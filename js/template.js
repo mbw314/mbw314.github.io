@@ -3,7 +3,7 @@ let ctx;
 let WIDTH = 750;
 let HEIGHT = 750;
 let canvasUtil;
-let paused;
+let paused = false;
 let mouseX = 1;
 let mouseY = 1;
 
@@ -30,7 +30,6 @@ function draw() {
 
   let time = new Date();
   let t = time.getMilliseconds() / 10;
-  // time.getMilliseconds()
   canvasUtil.drawDisk(WIDTH / 2, HEIGHT / 2, t % 250 + 1, "black");
 
   canvasUtil.clearText();
@@ -45,14 +44,10 @@ function init() {
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
-
-    // Attach the mousemove event handler.
     canvas.addEventListener('mousemove', ev_mousemove, false);
 
-    // call the drawing function
     return setInterval(draw, 10);
-  }
-  else {
+  } else {
     alert('You need a better web browser to see this.');
   }
 }
