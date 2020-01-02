@@ -134,9 +134,7 @@ function println(msg) {
   console.log(msg);
 }
 
-function clear_text() {
-  document.outform.output.value = "";
-}
+
 
 function fillPixel(x, y, c) {
 	ctx.fillStyle = c; //.toString();

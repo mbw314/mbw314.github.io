@@ -12,7 +12,7 @@ class CanvasUtil {
     console.log(msg);
   }
 
-  clear_text() {
+  clearText() {
     // clear the text field
     this.output_field.value = "";
   }
@@ -71,15 +71,5 @@ class CanvasUtil {
     this.ctx.rect(0, 0, this.width, this.height);
     this.ctx.closePath();
     this.ctx.fill();
-  }
-
-  ev_mousemove (evt, canvas) {
-    // get mouse position
-    const rect = canvas.getBoundingClientRect();
-    x = etv.clientX - rect.left;
-    y = evt.clientY - rect.top;
-    // optionally print
-    // document.getElementById("x-coord").value = x;
-    // document.getElementById("y-coord").value = y;
   }
 }
