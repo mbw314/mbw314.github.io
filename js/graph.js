@@ -616,12 +616,12 @@ function mouseDownListener(evt) {
   //getting mouse position correctly, being mindful of resizing that may
   //have occured in the browser:
   var bRect = canvas.getBoundingClientRect();
-  mouseX = (evt.clientX - bRect.left)*(canvas.width/bRect.width);
-  mouseY = (evt.clientY - bRect.top)*(canvas.height/bRect.height);
+  mouseX = (evt.clientX - bRect.left) * (canvas.width / bRect.width);
+  mouseY = (evt.clientY - bRect.top) * (canvas.height / bRect.height);
 
   //find which vertex was clicked
   for (i=0; i < g.vertices.length; i++) {
-    if (g.vertices[i].hitTestVertex(x_mouse,y_mouse)) {
+    if (g.vertices[i].hitTestVertex(x_mouse, y_mouse)) {
       dragging = true;
       if (i > highestIndex) {
         //We will pay attention to the point on the object
@@ -665,7 +665,7 @@ function mouseUpListener(evt) {
 
 function mouseDblclickListener(evt) {
   for (var i=0; i < g.vertices.length; i++) {
-    if (g.vertices[i].hitTestVertex(x_mouse,y_mouse)) {
+    if (g.vertices[i].hitTestVertex(x_mouse, y_mouse)) {
       //document.outform.output.value += g.vertices[i].printVertexData() + '\n';
 
       // deselect a selected vertex
@@ -684,7 +684,7 @@ function mouseDblclickListener(evt) {
   }
 
   for (var j=0; j < g.edges.length; j++) {
-    if (g.edges[j].hitTestEdge(x_mouse,y_mouse)) {
+    if (g.edges[j].hitTestEdge(x_mouse, y_mouse)) {
       // deselect a selected edge
       if (g.edges[j].selected && g.selectedEdgeIndex != -1) {
         g.edges[j].selected = false;
