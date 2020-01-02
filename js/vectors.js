@@ -104,8 +104,7 @@ function draw() {
         canvasUtil.drawCircle(i, j, 2, color, 1);
       }
     }
-  }
-  else if (mode == 1) { // vectors that remember their last direction (when outside range of mouse)
+  } else if (mode == 1) { // vectors that remember their last direction (when outside range of mouse)
     for (var i=0; i < width/sep + 3; i++) {
       for (var j=0; j < height/sep + 3; j++) {
         var color = "";
@@ -145,8 +144,7 @@ function draw() {
         canvasUtil.drawLine(x0[i][j], y0[i][j], p_x[i][j], p_y[i][j], color, 1);
       }
     }
-  }
-  else {
+  } else {
     grav = mode - 2;  // gravity on if mode = 3, off if mode = 2
     for (var i=0; i < width/sep + 3; i++) {
       for (var j=0; j < height/sep + 3; j++) {
