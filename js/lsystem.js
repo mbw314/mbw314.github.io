@@ -8,7 +8,7 @@ class Pen {
 
 
 class Point {
-	constructor(x, y) {
+  constructor(x, y) {
     this.x = x; // float
     this.y = y; // float
   }
@@ -56,12 +56,12 @@ class LineSegment {
   draw(ctx) { // canvas context
     //console.log(this.toString());
     ctx.strokeStyle = this.color;
-		ctx.lineWidth = this.width;
-		ctx.beginPath();
-		ctx.moveTo(this.p0.x, this.p0.y);
-		ctx.lineTo(this.p1.x, this.p1.y);
-		ctx.closePath();
-		ctx.stroke();
+    ctx.lineWidth = this.width;
+    ctx.beginPath();
+    ctx.moveTo(this.p0.x, this.p0.y);
+    ctx.lineTo(this.p1.x, this.p1.y);
+    ctx.closePath();
+    ctx.stroke();
   }
 
   toString() {
@@ -90,7 +90,7 @@ class LineSegment {
 
 
 class Vec2D extends Point {
-	constructor(x, y) {
+  constructor(x, y) {
     super(x, y);
   }
 
@@ -367,7 +367,7 @@ class LSystemDrawer {
 
   //draw_iteration(ctx) {
   draw(ctx) {
-	  let time0 = (new Date()).getTime();
+    let time0 = (new Date()).getTime();
     // translate the L-System string into sequence of Turtle drawing instructions
     clear_canvas();
     //let word = this.sys.iterate();
@@ -619,11 +619,11 @@ function clear_text() {
 }
 
 function clear_canvas() {
-	ctx.fillStyle = "#FFFFFF";
+  ctx.fillStyle = "#FFFFFF";
   ctx.beginPath();
-	ctx.rect(0, 0, WIDTH, HEIGHT);
+  ctx.rect(0, 0, WIDTH, HEIGHT);
   ctx.closePath();
-	ctx.fill();
+  ctx.fill();
 }
 
 function draw_iteration() {

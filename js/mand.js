@@ -1,32 +1,33 @@
 class Color {
-	constructor(red, green, blue) {
-		this.r = red;
-		this.g = green;
-		this.b = blue;
-	}
+  constructor(red, green, blue) {
+    this.r = red;
+    this.g = green;
+    this.b = blue;
+  }
 
   static interpolate(c0, c1, t) {
-		//println('iterpolating colors');
-		// t * c1 + (1 - t) * c0
-		let r = (t * c1.r + (1.0 - t) * c0.r) % 256;
-		let g = (t * c1.g + (1.0 - t) * c0.g) % 256;
-		let b = (t * c1.b + (1.0 - t) * c0.b) % 256;
-		return new Color(r, g, b);
-	}
+    // if a color is a point in [0, 255] x [0, 255] x [0, 255], parametrize a line segment
+    // between two colors by [0, 1], that is, c(t) = t * c1 + (1 - t) * c0,
+    // and find the color c(t) at given parameter t.
+    let r = (t * c1.r + (1.0 - t) * c0.r) % 256;
+    let g = (t * c1.g + (1.0 - t) * c0.g) % 256;
+    let b = (t * c1.b + (1.0 - t) * c0.b) % 256;
+    return new Color(r, g, b);
+  }
 
-	static get_color_lookup(c0, c1, n) {
+  static getColorLookup(c0, c1, n) {
     let lookup = [];
-		for (let i = 0; i < n; i++) {
+    for (let i = 0; i < n; i++) {
       let c = Color.interpolate(c0, c1, i / (n - 1));
-			lookup.push(c.toString());
-		}
-		lookup.push('rgb(0, 0, 0)');
-		return lookup;
-	}
+      lookup.push(c.toString());
+    }
+    lookup.push('rgb(0, 0, 0)');
+    return lookup;
+  }
 
-	toString() {
-		return `rgb(${this.r.toFixed(3)}, ${this.g.toFixed(3)}, ${this.b.toFixed(3)})`;
-	}
+  toString() {
+    return `rgb(${this.r.toFixed(3)}, ${this.g.toFixed(3)}, ${this.b.toFixed(3)})`;
+  }
 }
 
 const X_MIN = -2.0;
@@ -50,9 +51,9 @@ class MandelbrotSet {
       canvas_height,
       radius = RADIUS,
       max_iterations = MAX_ITERATIONS,
-			scale_factor = SCALE_FACTOR,
-			color0 = COLOR0,
-			color1 = COLOR1
+      scale_factor = SCALE_FACTOR,
+      color0 = COLOR0,
+      color1 = COLOR1
     }) {
     this.x_min = x_min;
     this.x_max = x_max;
@@ -62,27 +63,28 @@ class MandelbrotSet {
     this.canvas_height = canvas_height;
     this.radius = radius;
     this.max_iterations = max_iterations;
-		this.scale_factor = scale_factor;
-		this.color0 = color0;
-		this.color1 = color1;
-		this.color_lookup = Color.get_color_lookup(color0, color1, max_iterations);
-		//this.color_lookup.forEach(c => println(c.toString()));
+    this.scale_factor = scale_factor;
+    this.color0 = color0;
+    this.color1 = color1;
+    this.color_lookup = Color.getColorLookup(color0, color1, max_iterations);
+    //this.color_lookup.forEach(c => println(c.toString()));
   }
 
   toString() {
-		return `[${this.x_min.toFixed(5)}, ${this.x_max.toFixed(5)}] x [${this.y_min.toFixed(5)}, ${this.y_max.toFixed(5)}]`
-	}
+    return `[${this.x_min.toFixed(5)}, ${this.x_max.toFixed(5)}] x [${this.y_min.toFixed(5)}, ${this.y_max.toFixed(5)}]`
+  }
 
   f(x, y, c_x, c_y) {
+    // the update function
     return [x * x - y * y + c_x, 2 * x * y + c_y];
   }
 
   draw(ctx) {
-		println(this.toString());
-		let time0 = (new Date()).getTime();
-		let radius_sq = this.radius * this.radius;
-		let x_scale = (this.x_max - this.x_min) / this.canvas_width;
-		let y_scale = (this.y_max - this.y_min) / this.canvas_height;
+    println(this.toString());
+    let time0 = (new Date()).getTime();
+    let radius_sq = this.radius * this.radius;
+    let x_scale = (this.x_max - this.x_min) / this.canvas_width;
+    let y_scale = (this.y_max - this.y_min) / this.canvas_height;
     for (let x = 0; x < this.canvas_width; x++) {
       for (let y = 0; y < this.canvas_height; y++) {
         var c_x = this.x_min + x * x_scale;
@@ -91,34 +93,34 @@ class MandelbrotSet {
         var z_y = 0.0;
         let iteration = 0;
 
-				// this wikipedia optimzation is slower in chrome, faster in firefox
-				// let rsquare = 0;
+        // this wikipedia optimzation is slower in chrome, faster in firefox
+        // let rsquare = 0;
         // let isquare = 0;
         // let zsquare = 0;
-				// while (iteration < this.max_iterations && rsquare + isquare < radius_sq) {
-				// 	z_x = rsquare - isquare + c_x
-			  //   z_y = zsquare - rsquare - isquare + c_y
-			  //   rsquare = z_x * z_x
-			  //   isquare = z_y * z_y
-			  //   zsquare = (z_x + z_y) * (z_x + z_y)
-				// 	iteration += 1;
-				// }
+        // while (iteration < this.max_iterations && rsquare + isquare < radius_sq) {
+        //   z_x = rsquare - isquare + c_x
+        //   z_y = zsquare - rsquare - isquare + c_y
+        //   rsquare = z_x * z_x
+        //   isquare = z_y * z_y
+        //   zsquare = (z_x + z_y) * (z_x + z_y)
+        //   iteration += 1;
+        // }
 
         while (iteration < this.max_iterations && z_x * z_x + z_y * z_y < radius_sq) {
           [z_x, z_y] = this.f(z_x, z_y, c_x, c_y);
           iteration += 1;
         }
 
-				fillPixel(x, y, this.color_lookup[iteration]);
+        fillPixel(x, y, this.color_lookup[iteration]);
         // if ((x + y) % 500 == 0) {
-				// 	println(`x=${x.toFixed(5)}; y=${y.toFixed(5)}; z_x=${z_x.toFixed(5)}; z_y=${z_y.toFixed(5)}; iter=${iteration}; intensity=${intensity.toFixed(5)}; color=${c.toString()}`);
-  			//   //println(intensity.toString());
-				// }
+        //   println(`x=${x.toFixed(5)}; y=${y.toFixed(5)}; z_x=${z_x.toFixed(5)}; z_y=${z_y.toFixed(5)}; iter=${iteration}; intensity=${intensity.toFixed(5)}; color=${c.toString()}`);
+        //   //println(intensity.toString());
+        // }
       }
     }
-		let time1 = (new Date()).getTime();
-		var delta_t = time1 - time0;
-		println("Drawing completed in " + delta_t + " milliseconds.");
+    let time1 = (new Date()).getTime();
+    var delta_t = time1 - time0;
+    println("Drawing completed in " + delta_t + " milliseconds.");
   }
 }
 
@@ -134,68 +136,65 @@ function println(msg) {
   console.log(msg);
 }
 
-function clear_text() {
-  document.outform.output.value = "";
-}
 
 function fillPixel(x, y, c) {
-	ctx.fillStyle = c; //.toString();
-	ctx.fillRect(x, y, 1, 1);
+  ctx.fillStyle = c; //.toString();
+  ctx.fillRect(x, y, 1, 1);
 }
 
 function clear_canvas() {
-	ctx.fillStyle = "#FFFFFF";
+  ctx.fillStyle = "#FFFFFF";
   ctx.beginPath();
-	ctx.rect(0, 0, WIDTH, HEIGHT);
+  ctx.rect(0, 0, WIDTH, HEIGHT);
   ctx.closePath();
-	ctx.fill();
+  ctx.fill();
 }
 
 function zoom(x0, y0) {
-	println(`zooming in around pixel (${x0}, ${y0})`);
+  println(`zooming in around pixel (${x0}, ${y0})`);
 
-	let x_scale = (ms.x_max - ms.x_min) / ms.canvas_width;
-	let y_scale = (ms.y_max - ms.y_min) / ms.canvas_height;
+  let x_scale = (ms.x_max - ms.x_min) / ms.canvas_width;
+  let y_scale = (ms.y_max - ms.y_min) / ms.canvas_height;
 
-	let x = ms.x_min + x0 * x_scale;
-	let y = ms.y_min + y0 * y_scale;
+  let x = ms.x_min + x0 * x_scale;
+  let y = ms.y_min + y0 * y_scale;
 
-	//println(` this correspons to plane point (${x.toFixed(5)}, ${y})`)
+  //println(` this correspons to plane point (${x.toFixed(5)}, ${y})`)
 
   let new_half_width = 0.5 * (ms.x_max - ms.x_min) / ms.scale_factor;
-	let new_half_height = 0.5 * (ms.y_max - ms.y_min) / ms.scale_factor;
+  let new_half_height = 0.5 * (ms.y_max - ms.y_min) / ms.scale_factor;
 
-	ms.x_min = x - new_half_width;
-	ms.x_max = x + new_half_width;
-	ms.y_min = y - new_half_height;
-	ms.y_max = y + new_half_height;
-	//println(ms.toString());
-	ms.draw(ctx);
+  ms.x_min = x - new_half_width;
+  ms.x_max = x + new_half_width;
+  ms.y_min = y - new_half_height;
+  ms.y_max = y + new_half_height;
+  //println(ms.toString());
+  ms.draw(ctx);
 }
 
 
 function reset_state() {
-	ms = new MandelbrotSet({'canvas_width': canvas.width, 'canvas_height': canvas.height});
-	ms.draw(ctx);
+  ms = new MandelbrotSet({'canvas_width': canvas.width, 'canvas_height': canvas.height});
+  ms.draw(ctx);
 }
 
 function init() {
-	canvas = document.getElementById("canvas");
-	canvas.width = WIDTH;
-	canvas.height = WIDTH;
+  canvas = document.getElementById("canvas");
+  canvas.width = WIDTH;
+  canvas.height = WIDTH;
 
-	// Make sure we don't execute when canvas isn't supported
-	if (canvas.getContext){
-		ctx = canvas.getContext('2d');
-		canvas.addEventListener('click', function(e) {
-			const rect = canvas.getBoundingClientRect()
-			x = e.clientX - rect.left;
-			y = e.clientY - rect.top;
-			zoom(x, y);});
-		clear_canvas();
+  // Make sure we don't execute when canvas isn't supported
+  if (canvas.getContext){
+    ctx = canvas.getContext('2d');
+    canvas.addEventListener('click', function(e) {
+      const rect = canvas.getBoundingClientRect()
+      x = e.clientX - rect.left;
+      y = e.clientY - rect.top;
+      zoom(x, y);});
+    clear_canvas();
     reset_state();
-	}
-	else { alert('You need a better web browser to see this.'); }
+  }
+  else { alert('You need a better web browser to see this.'); }
 }
 
 // TODO:

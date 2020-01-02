@@ -33,7 +33,6 @@ var canvasUtil;
 
 
 function setupArrays() {
-
   rad = 0.9*sep;
 
   x0 = new Array(width/sep + 3);
@@ -92,7 +91,7 @@ function draw() {
     setupArrays();
   }
 
-  if (mode == 0) { // vectors of boudned length
+  if (mode == 0) { // vectors of bounded length
     for (var i = 0 - sep; i <= width + sep; i = i + sep) {
       for (var j = 0 - sep; j <= height + sep; j = j + sep) {
         var dist = Math.sqrt( (i-x)*(i-x) + (j-y)*(j-y) );
@@ -105,8 +104,7 @@ function draw() {
         canvasUtil.drawCircle(i, j, 2, color, 1);
       }
     }
-  }
-  else if (mode == 1) { // vectors that remember their last direction (when outside range of mouse)
+  } else if (mode == 1) { // vectors that remember their last direction (when outside range of mouse)
     for (var i=0; i < width/sep + 3; i++) {
       for (var j=0; j < height/sep + 3; j++) {
         var color = "";
@@ -146,14 +144,10 @@ function draw() {
         canvasUtil.drawLine(x0[i][j], y0[i][j], p_x[i][j], p_y[i][j], color, 1);
       }
     }
-  }
-  else {
-
+  } else {
     grav = mode - 2;  // gravity on if mode = 3, off if mode = 2
-
     for (var i=0; i < width/sep + 3; i++) {
       for (var j=0; j < height/sep + 3; j++) {
-
         // forces from the mouse and gravity
         r_squared[i][j] = (p_x[i][j]-x)*(p_x[i][j]-x) + (p_y[i][j]-y)*(p_y[i][j]-y);
         a_x[i][j] = G*(M/r_squared[i][j])*(x-p_x[i][j])*away;
@@ -196,28 +190,20 @@ function ev_mousemove (ev) {
 
 
 function init() {
-
-  // get the canvas element using the DOM
   canvas = document.getElementById("canvas");
   canvas.width = width;
   canvas.height = height;
-
-  // Make sure we don't execute when canvas isn't supported
   if (canvas.getContext){
-    // use getContext to use the canvas for drawing
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
-    // Attach the mousemove event handler.
     canvas.addEventListener('mousemove', ev_mousemove, false);
 
     x0 = width/2;
     y0 = height/2;
-
-    // set up arrays
     setupArrays();
 
-    // call the drawing function
     return setInterval(draw, 10);
-  }
-  else { alert('You need a better web browser to see this.'); }
+  } else { 
+		alert('You need a better web browser to see this.');
+	}
 }
