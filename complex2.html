@@ -9,7 +9,7 @@
   <script type="text/javascript" src="js/range.js"></script>
   <script type="text/javascript" src="js/timer.js"></script>
   <script type="text/javascript" src="js/slider.js"></script>
-	<script type="text/javascript" src="js/canvasUtil.js"></script>
+  <script type="text/javascript" src="js/canvasUtil.js"></script>
 </head>
 
 <body onLoad="init();">
@@ -408,44 +408,44 @@ window.onresize = function () {
 
 
 class Complex {
-	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-	}
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
 
   plus(w) {
-		let newX = this.x + w.x;
-		let newY = this.y + w.y;
-		return new Complex(newX, newY);
-	}
+    let newX = this.x + w.x;
+    let newY = this.y + w.y;
+    return new Complex(newX, newY);
+  }
 
-	times(w) {
-		let newX = this.x * w.x - this.y * w.y;
-		let newY = this.x * w.y + this.y * w.x;
-		return new Complex(newX, newY);
-	}
+  times(w) {
+    let newX = this.x * w.x - this.y * w.y;
+    let newY = this.x * w.y + this.y * w.x;
+    return new Complex(newX, newY);
+  }
 
   scale(a) {
-		let newX = a * this.x;
-		let newY = a * this.y;
-		return new Complex(newX, newY);
-	}
+    let newX = a * this.x;
+    let newY = a * this.y;
+    return new Complex(newX, newY);
+  }
 
-	inverse() {
-		return this.scale(1.0 / this.modulusSq());
-	}
+  inverse() {
+    return this.scale(1.0 / this.modulusSq());
+  }
 
-	negative() {
-		return new Complex( -1.0 * this.x, -1.0 * this.y);
-	}
+  negative() {
+    return new Complex( -1.0 * this.x, -1.0 * this.y);
+  }
 
-	bar() {
-		return new Complex(this.x, -1.0 * this.y);
-	}
+  bar() {
+    return new Complex(this.x, -1.0 * this.y);
+  }
 
-	divide(w) {
-		return this.times(w.inverse());
-	}
+  divide(w) {
+    return this.times(w.inverse());
+  }
 
   pow(n) { // n >= 1
     let w = this;
@@ -455,13 +455,13 @@ class Complex {
     return w;
   }
 
-	modulusSq() {
-		return this.times(this.bar()).x;
-	}
+  modulusSq() {
+    return this.times(this.bar()).x;
+  }
 
-	modulus() {
-		return Math.sqrt(this.modulusSq());
-	}
+  modulus() {
+    return Math.sqrt(this.modulusSq());
+  }
 
   isZero() {
     if (this.x == 0.0 && this.y == 0.0) {
@@ -474,8 +474,8 @@ class Complex {
   toString(n) {
     let m = n ? n : 3;
     let sign = (this.y >= 0.0) ? "+" : "-";
-		return `${this.x.toFixed(m)} ${sign} ${Math.abs(this.y).toFixed(m)}*i`;
-	}
+    return `${this.x.toFixed(m)} ${sign} ${Math.abs(this.y).toFixed(m)}*i`;
+  }
 
   static exp0(z) {
     return new Complex(Math.exp(z.x) * Math.cos(z.y), Math.exp(z.x) * Math.sin(z.y));
@@ -523,53 +523,53 @@ class Complex {
 }
 
 class ComplexMesh {
-	constructor(numRows, numCols, xMin, xMax, yMin, yMax) {
-		this.numRows = numRows;
-		this.numCols = numCols;
-		this.xMin = xMin;
-		this.xMax = xMax;
-		this.yMin = yMin;
-		this.yMax = yMax;
+  constructor(numRows, numCols, xMin, xMax, yMin, yMax) {
+    this.numRows = numRows;
+    this.numCols = numCols;
+    this.xMin = xMin;
+    this.xMax = xMax;
+    this.yMin = yMin;
+    this.yMax = yMax;
     this.nodes = []; // double array of complex numbers representing nodes of the mesh
     this.imageNodes = []; // images of the nodes under a mapping
-	}
+  }
 
   toString() {
     let s = [this.numRows, this.numCols, this.xMin, this.xMax, this.yMin, this.yMax].join(', ')
     return `${s}; domain mesh: ${this.nodes.length}; image mesh: ${this.imageNodes.length}`;
   }
 
-	populateNodes() {
-		var deltaX = (this.xMax - this.xMin) / (this.numRows - 1);
+  populateNodes() {
+    var deltaX = (this.xMax - this.xMin) / (this.numRows - 1);
     var deltaY = (this.yMax - this.yMin) / (this.numCols - 1);
-		let nodes = [];
-		for (let i=0; i<this.numRows; i++) {
-			let row = [];
-			for (let j=0; j<this.numCols; j++) {
-				let x = this.xMin + i * deltaX;
-				let y = this.yMin + j * deltaY;
-				let z = new Complex(x, y);
+    let nodes = [];
+    for (let i=0; i<this.numRows; i++) {
+      let row = [];
+      for (let j=0; j<this.numCols; j++) {
+        let x = this.xMin + i * deltaX;
+        let y = this.yMin + j * deltaY;
+        let z = new Complex(x, y);
         //domainCanvasUtil.println(`at (${i}, ${j}) created ${z.toString()} from ${x} and ${y}`);
-				row.push(z);
-			}
-			nodes.push(row);
-		}
-		this.nodes = nodes;
+        row.push(z);
+      }
+      nodes.push(row);
+    }
+    this.nodes = nodes;
   }
 
   apply(f, a, b, c, d) { // f: Complex -> Complex
-		let imageNodes = [];
-		for (let i=0; i<this.numRows; i++) {
-			let row = [];
-			for (let j=0; j<this.numCols; j++) {
+    let imageNodes = [];
+    for (let i=0; i<this.numRows; i++) {
+      let row = [];
+      for (let j=0; j<this.numCols; j++) {
         let w = f(this.nodes[i][j], a, b, c, d);
-				row.push(w);
+        row.push(w);
         //domainCanvasUtil.println(`at (${i}, ${j}) mapped ${this.nodes[i][j].toString()} to ${w.toString()}`);
-			}
-			imageNodes.push(row);
-		}
-		this.imageNodes = imageNodes;
-	}
+      }
+      imageNodes.push(row);
+    }
+    this.imageNodes = imageNodes;
+  }
 
   drawMeshes() {
     // assumes that both meshes have been populated
@@ -643,7 +643,7 @@ function drawAxes() {
 
 function draw() {
     domainCanvasUtil.clearText();
-		domainCanvasUtil.clearCanvas("white");
+    domainCanvasUtil.clearCanvas("white");
     imageCanvasUtil.clearCanvas("white");
     drawAxes();
 
@@ -726,11 +726,11 @@ function actualToSlider(s_min, s_max, a_min, a_max, a_val) {
 
 function init() {
   domainCanvas = document.getElementById("domain_canvas");
-	domainCanvas.width = WIDTH;
-	domainCanvas.height = HEIGHT;
+  domainCanvas.width = WIDTH;
+  domainCanvas.height = HEIGHT;
   imageCanvas = document.getElementById("image_canvas");
-	imageCanvas.width = WIDTH;
-	imageCanvas.height = HEIGHT;
+  imageCanvas.width = WIDTH;
+  imageCanvas.height = HEIGHT;
   if (domainCanvas.getContext && imageCanvas.getContext){
     domainCtx = domainCanvas.getContext('2d');
     imageCtx = imageCanvas.getContext('2d');
