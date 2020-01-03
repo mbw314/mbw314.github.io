@@ -1,119 +1,124 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html>
 <head>
-<title>Complex Mappings</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link type="text/css" rel="StyleSheet" href="css/winclassic.css" />
-	<script type="text/javascript" src="js/range.js"></script>
-	<script type="text/javascript" src="js/timer.js"></script>
-	<script type="text/javascript" src="js/slider.js"></script>	
+<title>Michael Bradford Williams - Complex Mappings</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link type="text/css" rel="StyleSheet" href="css/winclassic.css" />
+  <script type="text/javascript" src="js/range.js"></script>
+  <script type="text/javascript" src="js/timer.js"></script>
+  <script type="text/javascript" src="js/slider.js"></script>
+  <script type="text/javascript" src="js/canvasUtil.js"></script>
 </head>
 
-<body onLoad="drawSomething();">
+<body onLoad="init();">
 
 <div class="middle">
 <table>
-	<tr>
-		<td><canvas id="canvas1" width="500" height="500"></canvas></td>
-		<td><canvas id="canvas" width="500" height="500"></canvas></td>
-	</tr>
+  <tr>
+    <td><canvas id="domain_canvas" width="500" height="500"></canvas></td>
+    <td><canvas id="image_canvas" width="500" height="500"></canvas></td>
+  </tr>
 </table>
 </div>
 
 
 <div class="middle">
-<table border="1" cell-padding="0">	
-	<tr>
-		<td>Domain: [a,b] x [c,d]</td>	
-		<td align="right"><p>a:</p></td>
-		<td><div class="slider" id="domASlider" tabIndex="1"><input class="slider-input" id="domASliderInput"/></div></td>
-		<td> </td>
-		<td align="right"><p>b:</p></td>
-		<td><div class="slider" id="domBSlider" tabIndex="1"><input class="slider-input" id="domBSliderInput"/></div></td>
-		<td> </td>				
-		<td align="right"><p>c:</p></td>
-		<td><div class="slider" id="domCSlider" tabIndex="1"><input class="slider-input" id="domCSliderInput"/></div></td>		
-		<td> </td>				
-		<td align="right"><p>d:</p></td>
-		<td><div class="slider" id="domDSlider" tabIndex="1"><input class="slider-input" id="domDSliderInput"/></div></td>		
-	</tr>
+<table border="1" cell-padding="0">
+  <tr>
+    <td>Domain: [a,b] x [c,d]</td>
+    <td align="right"><p>a:</p></td>
+    <td><div class="slider" id="domASlider" tabIndex="1"><input class="slider-input" id="domASliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>b:</p></td>
+    <td><div class="slider" id="domBSlider" tabIndex="1"><input class="slider-input" id="domBSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>c:</p></td>
+    <td><div class="slider" id="domCSlider" tabIndex="1"><input class="slider-input" id="domCSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>d:</p></td>
+    <td><div class="slider" id="domDSlider" tabIndex="1"><input class="slider-input" id="domDSliderInput"/></div></td>
+  </tr>
 </table>
-<table border="1" cell-padding="0">	
-	<tr>
-		<td>Viewing Windows: [a,b] x [c,d]</td>
-		<td align="right"><p>a:</p></td>
-		<td><div class="slider" id="ranASlider" tabIndex="1"><input class="slider-input" id="ranASliderInput"/></div></td>
-		<td> </td>
-		<td align="right"><p>b:</p></td>
-		<td><div class="slider" id="ranBSlider" tabIndex="1"><input class="slider-input" id="ranBSliderInput"/></div></td>
-		<td> </td>				
-		<td align="right"><p>c:</p></td>
-		<td><div class="slider" id="ranCSlider" tabIndex="1"><input class="slider-input" id="ranCSliderInput"/></div></td>		
-		<td> </td>				
-		<td align="right"><p>d:</p></td>
-		<td><div class="slider" id="ranDSlider" tabIndex="1"><input class="slider-input" id="ranDSliderInput"/></div></td>		
-	</tr>
+<table border="1" cell-padding="0">
+  <tr>
+    <td>Viewing Windows: [a,b] x [c,d]</td>
+    <td align="right"><p>a:</p></td>
+    <td><div class="slider" id="ranASlider" tabIndex="1"><input class="slider-input" id="ranASliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>b:</p></td>
+    <td><div class="slider" id="ranBSlider" tabIndex="1"><input class="slider-input" id="ranBSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>c:</p></td>
+    <td><div class="slider" id="ranCSlider" tabIndex="1"><input class="slider-input" id="ranCSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>d:</p></td>
+    <td><div class="slider" id="ranDSlider" tabIndex="1"><input class="slider-input" id="ranDSliderInput"/></div></td>
+  </tr>
 </table>
-<table border="1" cell-padding="0">	
-	<tr>	
-		<td>Mesh size: m x n</td>
-		<td align="right"><p>m:</p></td>
-		<td><div class="slider" id="meshMSlider" tabIndex="1"><input class="slider-input" id="meshMSliderInput"/></div></td>
-		<td> </td>
-		<td align="right"><p>n:</p></td>
-		<td><div class="slider" id="meshNSlider" tabIndex="1"><input class="slider-input" id="meshNSliderInput"/></div></td>		
-	</tr>
+<table border="1" cell-padding="0">
+  <tr>
+    <td>Mesh size: m x n</td>
+    <td align="right"><p>m:</p></td>
+    <td><div class="slider" id="meshMSlider" tabIndex="1"><input class="slider-input" id="meshMSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>n:</p></td>
+    <td><div class="slider" id="meshNSlider" tabIndex="1"><input class="slider-input" id="meshNSliderInput"/></div></td>
+  </tr>
 </table>
 <form name="controls">
-<table border="1" cell-padding="0">	
-	<tr>
-		<td>Mapping type: </td>
-		<td colspan="10">Polynomial (Az^3 + Bz^2 + Cz + D)<input type="radio" name="mapping" value="pol" checked="yes">
-			Mobius ( Az+B/Cz+D )<input type="radio" name="mapping" value="mob">
-			Exponential (A exp(Bz+C) + D)<input type="radio" name="mapping" value="exp"></td>
-		<td><input type="button" name="defaults" value="Apply" onClick="drawSomething();"></td>
-		<td><input type="button" name="defaults" value="Reset" onClick="refresh();"></td>
-	</tr>		
+<table border="1" cell-padding="0">
+  <tr>
+    <td>Mapping type: </td>
+    <td colspan="10">Polynomial (Az^3 + Bz^2 + Cz + D)<input type="radio" name="mapping" value="pol" checked="yes">
+      Mobius ( Az+B/Cz+D)<input type="radio" name="mapping" value="mob">
+      Exponential (A exp(Bz+C) + D)<input type="radio" name="mapping" value="exp"></td>
+    <td><input type="button" name="defaults" value="Apply" onClick="draw();"></td>
+    <td><input type="button" name="defaults" value="Reset" onClick="refresh();"></td>
+  </tr>
 </table>
 </form>
-<table border="1" cell-padding="0">	
-	<tr>
-		<td>Mapping parameters</td>
-		<td align="right"><p>Re(A):</p></td>
-		<td><div class="slider" id="parASlider" tabIndex="1"><input class="slider-input" id="parASliderInput"/></div></td>
-		<td> </td>
-		<td align="right"><p>Re(B):</p></td>
-		<td><div class="slider" id="parBSlider" tabIndex="1"><input class="slider-input" id="parBSliderInput"/></div></td>
-		<td> </td>				
-		<td align="right"><p>Re(C):</p></td>
-		<td><div class="slider" id="parCSlider" tabIndex="1"><input class="slider-input" id="parCSliderInput"/></div></td>		
-		<td> </td>				
-		<td align="right"><p>Re(D):</p></td>
-		<td><div class="slider" id="parDSlider" tabIndex="1"><input class="slider-input" id="parDSliderInput"/></div></td>		
-	</tr>	
-	<tr>
-		<td></td>
-		<td align="right"><p>Im(A):</p></td>
-		<td><div class="slider" id="parAimSlider" tabIndex="1"><input class="slider-input" id="parAimSliderInput"/></div></td>
-		<td> </td>
-		<td align="right"><p>Im(B):</p></td>
-		<td><div class="slider" id="parBimSlider" tabIndex="1"><input class="slider-input" id="parBimSliderInput"/></div></td>
-		<td> </td>				
-		<td align="right"><p>Im(C):</p></td>
-		<td><div class="slider" id="parCimSlider" tabIndex="1"><input class="slider-input" id="parCimSliderInput"/></div></td>		
-		<td> </td>				
-		<td align="right"><p>Im(D):</p></td>
-		<td><div class="slider" id="parDimSlider" tabIndex="1"><input class="slider-input" id="parDimSliderInput"/></div></td>		
-	</tr>		
+<table border="1" cell-padding="0">
+  <tr>
+    <td>Mapping parameters</td>
+    <td align="right"><p>Re(A):</p></td>
+    <td><div class="slider" id="parASlider" tabIndex="1"><input class="slider-input" id="parASliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>Re(B):</p></td>
+    <td><div class="slider" id="parBSlider" tabIndex="1"><input class="slider-input" id="parBSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>Re(C):</p></td>
+    <td><div class="slider" id="parCSlider" tabIndex="1"><input class="slider-input" id="parCSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>Re(D):</p></td>
+    <td><div class="slider" id="parDSlider" tabIndex="1"><input class="slider-input" id="parDSliderInput"/></div></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td align="right"><p>Im(A):</p></td>
+    <td><div class="slider" id="parAimSlider" tabIndex="1"><input class="slider-input" id="parAimSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>Im(B):</p></td>
+    <td><div class="slider" id="parBimSlider" tabIndex="1"><input class="slider-input" id="parBimSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>Im(C):</p></td>
+    <td><div class="slider" id="parCimSlider" tabIndex="1"><input class="slider-input" id="parCimSliderInput"/></div></td>
+    <td> </td>
+    <td align="right"><p>Im(D):</p></td>
+    <td><div class="slider" id="parDimSlider" tabIndex="1"><input class="slider-input" id="parDimSliderInput"/></div></td>
+  </tr>
 </table>
 
 <script type="text/javascript">
 
-var ctx;
-var width = 600;
-var height = 600; 
+var domainCtx;
+var imageCtx;
+var WIDTH = 500;
+var HEIGHT = 500;
+var domainCanvasUtil;
+var imageCanvasUtil;
+var mesh;
 
 // domain variables
 var domA_default = -1;
@@ -136,7 +141,7 @@ var domD = domD_default;
 var domD_min = 0;
 var domD_max = 5;
 
-// range variables
+// image variables
 var ranA_default = -2;
 var ranA = ranA_default;
 var ranA_min = -10;
@@ -199,618 +204,550 @@ var parDim_min = -5;
 var parDim_max = 5;
 
 // mesh variables
-var meshM_default = 25;
+var meshM_default = 30;
 var meshM = meshM_default;
 var meshM_min = 2;
 var meshM_max = 75;
 
-var meshN_default = 25;
+var meshN_default = 30;
 var meshN = meshN_default;
 var meshN_min = 2;
 var meshN_max = 75;
 
-var type = 0;
-
-// nodes
-var nodesX;
-var nodesY;
-var nodesFX;
-var nodesFY;
-
 var slider_min = 0;
 var slider_max = 100;
-
-var line_count = 0;
 
 
 // domain controls
 var domASl = new Slider(document.getElementById("domASlider"), document.getElementById("domASliderInput"));
 domASl.setMinimum(slider_min);
 domASl.setMaximum(slider_max);
-domASl.setValue(actualToSlider(domASl.getMinimum(),domASl.getMaximum(),domA_min,domA_max,domA_default));
+domASl.setValue(actualToSlider(domASl.getMinimum(), domASl.getMaximum(), domA_min, domA_max, domA_default));
 
 var domBSl = new Slider(document.getElementById("domBSlider"), document.getElementById("domBSliderInput"));
 domBSl.setMinimum(slider_min);
 domBSl.setMaximum(slider_max);
-domBSl.setValue(actualToSlider(domBSl.getMinimum(),domBSl.getMaximum(),domB_min,domB_max,domB_default));
+domBSl.setValue(actualToSlider(domBSl.getMinimum(), domBSl.getMaximum(), domB_min, domB_max, domB_default));
 
 var domCSl = new Slider(document.getElementById("domCSlider"), document.getElementById("domCSliderInput"));
 domCSl.setMinimum(slider_min);
 domCSl.setMaximum(slider_max);
-domCSl.setValue(actualToSlider(domCSl.getMinimum(),domCSl.getMaximum(),domC_min,domC_max,domC_default));
+domCSl.setValue(actualToSlider(domCSl.getMinimum(), domCSl.getMaximum(), domC_min, domC_max, domC_default));
 
 var domDSl = new Slider(document.getElementById("domDSlider"), document.getElementById("domDSliderInput"));
 domDSl.setMinimum(slider_min);
 domDSl.setMaximum(slider_max);
-domDSl.setValue(actualToSlider(domDSl.getMinimum(),domDSl.getMaximum(),domD_min,domD_max,domD_default));
+domDSl.setValue(actualToSlider(domDSl.getMinimum(), domDSl.getMaximum(), domD_min, domD_max, domD_default));
 
 domASl.onchange = function () {
-	domA = sliderToActual(domASl.getMinimum(),domASl.getMaximum(),domA_min,domA_max,domASl.getValue());
-	drawSomething();
+  domA = sliderToActual(domASl.getMinimum(), domASl.getMaximum(), domA_min, domA_max, domASl.getValue());
+  draw();
 };
 
 domBSl.onchange = function () {
-	domB = sliderToActual(domBSl.getMinimum(),domBSl.getMaximum(),domB_min,domB_max,domBSl.getValue());
-	drawSomething();
+  domB = sliderToActual(domBSl.getMinimum(), domBSl.getMaximum(), domB_min, domB_max, domBSl.getValue());
+  draw();
 };
 
 domCSl.onchange = function () {
-	domC = sliderToActual(domCSl.getMinimum(),domCSl.getMaximum(),domC_min,domC_max,domCSl.getValue());
-	drawSomething();
+  domC = sliderToActual(domCSl.getMinimum(), domCSl.getMaximum(), domC_min, domC_max, domCSl.getValue());
+  draw();
 };
 
 domDSl.onchange = function () {
-	domD = sliderToActual(domDSl.getMinimum(),domDSl.getMaximum(),domD_min,domD_max,domDSl.getValue());
-	drawSomething();
+  domD = sliderToActual(domDSl.getMinimum(), domDSl.getMaximum(), domD_min, domD_max, domDSl.getValue());
+  draw();
 };
 
-// range controls
+// image controls
 var ranASl = new Slider(document.getElementById("ranASlider"), document.getElementById("ranASliderInput"));
 ranASl.setMinimum(slider_min);
 ranASl.setMaximum(slider_max);
-ranASl.setValue(actualToSlider(ranASl.getMinimum(),ranASl.getMaximum(),ranA_min,ranA_max,ranA_default));
+ranASl.setValue(actualToSlider(ranASl.getMinimum(), ranASl.getMaximum(), ranA_min, ranA_max, ranA_default));
 
 var ranBSl = new Slider(document.getElementById("ranBSlider"), document.getElementById("ranBSliderInput"));
 ranBSl.setMinimum(slider_min);
 ranBSl.setMaximum(slider_max);
-ranBSl.setValue(actualToSlider(ranBSl.getMinimum(),ranBSl.getMaximum(),ranB_min,ranB_max,ranB_default));
+ranBSl.setValue(actualToSlider(ranBSl.getMinimum(), ranBSl.getMaximum(), ranB_min, ranB_max, ranB_default));
 
 var ranCSl = new Slider(document.getElementById("ranCSlider"), document.getElementById("ranCSliderInput"));
 ranCSl.setMinimum(slider_min);
 ranCSl.setMaximum(slider_max);
-ranCSl.setValue(actualToSlider(ranCSl.getMinimum(),ranCSl.getMaximum(),ranC_min,ranC_max,ranC_default));
+ranCSl.setValue(actualToSlider(ranCSl.getMinimum(), ranCSl.getMaximum(), ranC_min, ranC_max, ranC_default));
 
 var ranDSl = new Slider(document.getElementById("ranDSlider"), document.getElementById("ranDSliderInput"));
 ranDSl.setMinimum(slider_min);
 ranDSl.setMaximum(slider_max);
-ranDSl.setValue(actualToSlider(ranDSl.getMinimum(),ranDSl.getMaximum(),ranD_min,ranD_max,ranD_default));
+ranDSl.setValue(actualToSlider(ranDSl.getMinimum(), ranDSl.getMaximum(), ranD_min, ranD_max, ranD_default));
 
 ranASl.onchange = function () {
-	ranA = sliderToActual(ranASl.getMinimum(),ranASl.getMaximum(),ranA_min,ranA_max,ranASl.getValue());
-	drawSomething();
+  ranA = sliderToActual(ranASl.getMinimum(), ranASl.getMaximum(), ranA_min, ranA_max, ranASl.getValue());
+  draw();
 };
 
 ranBSl.onchange = function () {
-	ranB = sliderToActual(ranBSl.getMinimum(),ranBSl.getMaximum(),ranB_min,ranB_max,ranBSl.getValue());
-	drawSomething();
+  ranB = sliderToActual(ranBSl.getMinimum(), ranBSl.getMaximum(), ranB_min, ranB_max, ranBSl.getValue());
+  draw();
 };
 
 ranCSl.onchange = function () {
-	ranC = sliderToActual(ranCSl.getMinimum(),ranCSl.getMaximum(),ranC_min,ranC_max,ranCSl.getValue());
-	drawSomething();
+  ranC = sliderToActual(ranCSl.getMinimum(), ranCSl.getMaximum(), ranC_min, ranC_max, ranCSl.getValue());
+  draw();
 };
 
 ranDSl.onchange = function () {
-	ranD = sliderToActual(ranDSl.getMinimum(),ranDSl.getMaximum(),ranD_min,ranD_max,ranDSl.getValue());
-	drawSomething();
+  ranD = sliderToActual(ranDSl.getMinimum(), ranDSl.getMaximum(), ranD_min, ranD_max, ranDSl.getValue());
+  draw();
 };
-
 
 // parameter controls
 var parASl = new Slider(document.getElementById("parASlider"), document.getElementById("parASliderInput"));
 parASl.setMinimum(slider_min);
 parASl.setMaximum(slider_max);
-parASl.setValue(actualToSlider(parASl.getMinimum(),parASl.getMaximum(),parA_min,parA_max,parA_default));
+parASl.setValue(actualToSlider(parASl.getMinimum(), parASl.getMaximum(), parA_min, parA_max, parA_default));
 
 var parBSl = new Slider(document.getElementById("parBSlider"), document.getElementById("parBSliderInput"));
 parBSl.setMinimum(slider_min);
 parBSl.setMaximum(slider_max);
-parBSl.setValue(actualToSlider(parBSl.getMinimum(),parBSl.getMaximum(),parB_min,parB_max,parB_default));
+parBSl.setValue(actualToSlider(parBSl.getMinimum(), parBSl.getMaximum(), parB_min, parB_max, parB_default));
 
 var parCSl = new Slider(document.getElementById("parCSlider"), document.getElementById("parCSliderInput"));
 parCSl.setMinimum(slider_min);
 parCSl.setMaximum(slider_max);
-parCSl.setValue(actualToSlider(parCSl.getMinimum(),parCSl.getMaximum(),parC_min,parC_max,parC_default));
+parCSl.setValue(actualToSlider(parCSl.getMinimum(), parCSl.getMaximum(), parC_min, parC_max, parC_default));
 
 var parDSl = new Slider(document.getElementById("parDSlider"), document.getElementById("parDSliderInput"));
 parDSl.setMinimum(slider_min);
 parDSl.setMaximum(slider_max);
-parDSl.setValue(actualToSlider(parDSl.getMinimum(),parDSl.getMaximum(),parD_min,parD_max,parD_default));
+parDSl.setValue(actualToSlider(parDSl.getMinimum(), parDSl.getMaximum(), parD_min, parD_max, parD_default));
 
 var parAimSl = new Slider(document.getElementById("parAimSlider"), document.getElementById("parAimSliderInput"));
 parAimSl.setMinimum(slider_min);
 parAimSl.setMaximum(slider_max);
-parAimSl.setValue(actualToSlider(parAimSl.getMinimum(),parAimSl.getMaximum(),parAim_min,parAim_max,parAim_default));
+parAimSl.setValue(actualToSlider(parAimSl.getMinimum(), parAimSl.getMaximum(), parAim_min, parAim_max, parAim_default));
 
 var parBimSl = new Slider(document.getElementById("parBimSlider"), document.getElementById("parBimSliderInput"));
 parBimSl.setMinimum(slider_min);
 parBimSl.setMaximum(slider_max);
-parBimSl.setValue(actualToSlider(parBimSl.getMinimum(),parBimSl.getMaximum(),parBim_min,parBim_max,parBim_default));
+parBimSl.setValue(actualToSlider(parBimSl.getMinimum(), parBimSl.getMaximum(), parBim_min, parBim_max, parBim_default));
 
 var parCimSl = new Slider(document.getElementById("parCimSlider"), document.getElementById("parCimSliderInput"));
 parCimSl.setMinimum(slider_min);
 parCimSl.setMaximum(slider_max);
-parCimSl.setValue(actualToSlider(parCimSl.getMinimum(),parCimSl.getMaximum(),parCim_min,parCim_max,parCim_default));
+parCimSl.setValue(actualToSlider(parCimSl.getMinimum(), parCimSl.getMaximum(), parCim_min, parCim_max, parCim_default));
 
 var parDimSl = new Slider(document.getElementById("parDimSlider"), document.getElementById("parDimSliderInput"));
 parDimSl.setMinimum(slider_min);
 parDimSl.setMaximum(slider_max);
-parDimSl.setValue(actualToSlider(parDimSl.getMinimum(),parDimSl.getMaximum(),parDim_min,parDim_max,parDim_default));
-
+parDimSl.setValue(actualToSlider(parDimSl.getMinimum(), parDimSl.getMaximum(), parDim_min, parDim_max, parDim_default));
 
 parASl.onchange = function () {
-	parA = sliderToActual(parASl.getMinimum(),parASl.getMaximum(),parA_min,parA_max,parASl.getValue());
-	drawSomething();
+  parA = sliderToActual(parASl.getMinimum(), parASl.getMaximum(), parA_min, parA_max, parASl.getValue());
+  draw();
 };
 
 parBSl.onchange = function () {
-	parB = sliderToActual(parBSl.getMinimum(),parBSl.getMaximum(),parB_min,parB_max,parBSl.getValue());
-	drawSomething();
+  parB = sliderToActual(parBSl.getMinimum(), parBSl.getMaximum(), parB_min, parB_max, parBSl.getValue());
+  draw();
 };
 
 parCSl.onchange = function () {
-	parC = sliderToActual(parCSl.getMinimum(),parCSl.getMaximum(),parC_min,parC_max,parCSl.getValue());
-	drawSomething();
+  parC = sliderToActual(parCSl.getMinimum(), parCSl.getMaximum(), parC_min, parC_max, parCSl.getValue());
+  draw();
 };
 
 parDSl.onchange = function () {
-	parD = sliderToActual(parDSl.getMinimum(),parDSl.getMaximum(),parD_min,parD_max,parDSl.getValue());
-	drawSomething();
+  parD = sliderToActual(parDSl.getMinimum(), parDSl.getMaximum(), parD_min, parD_max, parDSl.getValue());
+  draw();
 };
 
 parAimSl.onchange = function () {
-	parAim = sliderToActual(parAimSl.getMinimum(),parAimSl.getMaximum(),parAim_min,parAim_max,parAimSl.getValue());
-	drawSomething();
+  parAim = sliderToActual(parAimSl.getMinimum(), parAimSl.getMaximum(), parAim_min, parAim_max, parAimSl.getValue());
+  draw();
 };
 
 parBimSl.onchange = function () {
-	parBim = sliderToActual(parBimSl.getMinimum(),parBimSl.getMaximum(),parBim_min,parBim_max,parBimSl.getValue());
-	drawSomething();
+  parBim = sliderToActual(parBimSl.getMinimum(), parBimSl.getMaximum(), parBim_min, parBim_max, parBimSl.getValue());
+  draw();
 };
 
 parCimSl.onchange = function () {
-	parCim = sliderToActual(parCimSl.getMinimum(),parCimSl.getMaximum(),parCim_min,parCim_max,parCimSl.getValue());
-	drawSomething();
+  parCim = sliderToActual(parCimSl.getMinimum(), parCimSl.getMaximum(), parCim_min, parCim_max, parCimSl.getValue());
+  draw();
 };
 
 parDimSl.onchange = function () {
-	parDim = sliderToActual(parDimSl.getMinimum(),parDimSl.getMaximum(),parDim_min,parDim_max,parDimSl.getValue());
-	drawSomething();
+  parDim = sliderToActual(parDimSl.getMinimum(), parDimSl.getMaximum(), parDim_min, parDim_max, parDimSl.getValue());
+  draw();
 };
-
 
 // mesh controls
 var meshMSl = new Slider(document.getElementById("meshMSlider"), document.getElementById("meshMSliderInput"));
 meshMSl.setMinimum(slider_min);
 meshMSl.setMaximum(slider_max);
-meshMSl.setValue(actualToSlider(meshMSl.getMinimum(),meshMSl.getMaximum(),meshM_min,meshM_max,meshM_default));
+meshMSl.setValue(actualToSlider(meshMSl.getMinimum(), meshMSl.getMaximum(), meshM_min, meshM_max, meshM_default));
 
 var meshNSl = new Slider(document.getElementById("meshNSlider"), document.getElementById("meshNSliderInput"));
 meshNSl.setMinimum(slider_min);
 meshNSl.setMaximum(slider_max);
-meshNSl.setValue(actualToSlider(meshNSl.getMinimum(),meshNSl.getMaximum(),meshN_min,meshN_max,meshN_default));
+meshNSl.setValue(actualToSlider(meshNSl.getMinimum(), meshNSl.getMaximum(), meshN_min, meshN_max, meshN_default));
 
 meshMSl.onchange = function () {
-	meshM = Math.round(sliderToActual(meshMSl.getMinimum(),meshMSl.getMaximum(),meshM_min,meshM_max,meshMSl.getValue()));
-	drawSomething();
-	//document.outform.output.value = 'meshM = ' + meshM;
+  meshM = Math.round(sliderToActual(meshMSl.getMinimum(), meshMSl.getMaximum(), meshM_min, meshM_max, meshMSl.getValue()));
+  draw();
 };
 
 meshNSl.onchange = function () {
-	meshN = Math.round(sliderToActual(meshNSl.getMinimum(),meshNSl.getMaximum(),meshN_min,meshN_max,meshNSl.getValue()));
-	drawSomething();
+  meshN = Math.round(sliderToActual(meshNSl.getMinimum(), meshNSl.getMaximum(), meshN_min, meshN_max, meshNSl.getValue()));
+  draw();
+};
+
+window.onresize = function () {
+  domASl.recalculate();
 };
 
 
-window.onresize = function () {
-	domASl.recalculate();
+class Complex {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
 
-};	
+  plus(w) {
+    let newX = this.x + w.x;
+    let newY = this.y + w.y;
+    return new Complex(newX, newY);
+  }
 
+  times(w) {
+    let newX = this.x * w.x - this.y * w.y;
+    let newY = this.x * w.y + this.y * w.x;
+    return new Complex(newX, newY);
+  }
 
-function drawSomething() {	
-	// get the canvas element using the DOM
-	var canvas1 = document.getElementById("canvas1");
-	var canvas = document.getElementById("canvas");
+  scale(a) {
+    let newX = a * this.x;
+    let newY = a * this.y;
+    return new Complex(newX, newY);
+  }
 
-	// Make sure we don't execute when canvas isn't supported
-	if (canvas.getContext && canvas1.getContext){
+  inverse() {
+    return this.scale(1.0 / this.modulusSq());
+  }
 
-		// use getContext to use the canvas for drawing
-		ctx1 = canvas1.getContext('2d');
-		ctx = canvas.getContext('2d');
-		//sep = document.getElementById("spacing").value;
-		
-		//width = window.outerWidth - 50;
-		//height = window.outerHeight - 250;
-		
-		//canvas.width = width;
-		//canvas.height = height;						
-							
-		//draw backgrounds
-		ctx1.fillStyle = 'rgb(200,200,200)';		
-		ctx1.fillRect(0,0,width,height);			
-		
-		ctx.fillStyle = 'rgb(200,200,200)';		
-		ctx.fillRect(0,0,width,height);				
-		
-		// create the arrays that hold the vertices (domain and image)
-		nodesX = new Array(meshM+1);
-		nodesY = new Array(meshM+1);
-		nodesFX = new Array(meshM+1);
-		nodesFY = new Array(meshM+1);
-		
-		var delX = (domB-domA)/meshM;
-		var delY = (domD-domC)/meshN;		
-		
-		for (var i = 0; i <= meshM; i++) {
-			nodesX[i] = new Array(meshN+1);
-			nodesY[i] = new Array(meshN+1);
-			nodesFX[i] = new Array(meshN+1);
-			nodesFY[i] = new Array(meshN+1);
-		
-			for(var j = 0; j <= meshN; j++) {
-				nodesX[i][j] = domA + delX*i;
-				nodesY[i][j] = domC + delY*j;
-				
-				nodesFX[i][j] = domA + delX*i;
-				nodesFY[i][j] = domC + delY*j;			   				  
-			}			
-		}
-		
-		//which mapping to use
-		for (var i=0; i < document.controls.mapping.length; i++) {
-			if (document.controls.mapping[i].checked) {
-				type = document.controls.mapping[i].value;				
-			}
-		}
-				
-		transformNodes();
-		//drawNodes();		
-		//drawGrid();
-		drawVectors();
-		
-		//document.outform.output.value = 'meshM = ' + meshM + ', meshN = ' + meshN;
+  negative() {
+    return new Complex( -1.0 * this.x, -1.0 * this.y);
+  }
 
-	}
-}		
+  bar() {
+    return new Complex(this.x, -1.0 * this.y);
+  }
 
-function drawNodes() {
+  divide(w) {
+    return this.times(w.inverse());
+  }
 
-	for(var i = 0; i <= meshM; i++) {
-		for(var j = 0; j <= meshN; j++) {
-		
-			// draw the domain
-			circleDom(spaceToScreenX(nodesX[i][j]),
-				   spaceToScreenY(nodesY[i][j]),
-				   3,
-				   'rgb(0,0,0)');	
-			// draw the image
-			circleImg(spaceToScreenX(nodesFX[i][j]),
-				   spaceToScreenY(nodesFY[i][j]),
-				   3,//*(nodesFX[i][j]*nodesFX[i][j]+nodesFY[i][j]*nodesFY[i][j]), // cute circles
-				   'rgb(0,0,0)');
-			
-		}
-	}
+  pow(n) { // n >= 1
+    let w = this;
+    for (let i=1; i<n; i++) {
+      w = w.times(this);
+    }
+    return w;
+  }
+
+  modulusSq() {
+    return this.times(this.bar()).x;
+  }
+
+  modulus() {
+    return Math.sqrt(this.modulusSq());
+  }
+
+  isZero() {
+    if (this.x == 0.0 && this.y == 0.0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  toString(n) {
+    let m = n ? n : 3;
+    let sign = (this.y >= 0.0) ? "+" : "-";
+    return `${this.x.toFixed(m)} ${sign} ${Math.abs(this.y).toFixed(m)}*i`;
+  }
+
+  static exp0(z) {
+    return new Complex(Math.exp(z.x) * Math.cos(z.y), Math.exp(z.x) * Math.sin(z.y));
+  }
+
+  static exp(z, a, b, c, d) {
+    let w = b.times(z).plus(c);
+    return a.times(Complex.exp0(w)).plus(d);
+  }
+
+  static expStr(a, b, c, d) {
+    return `f(z) = (${a.toString()}) * Exp((${b.toString()}) * z + (${c.toString()})) + (${d.toString()})`;
+  }
+
+  static poly(z, a, b, c, d) {
+    let deg3 = a.times(z.pow(3));
+    let deg2 = b.times(z.pow(2));
+    let deg1 = c.times(z);
+    return deg3.plus(deg2).plus(deg1).plus(d);
+  }
+
+  static polyStr(a, b, c, d) {
+    return `f(z) = (${a.toString()}) z^3 + (${b.toString()}) z^2 + (${c.toString()}) z + (${d.toString()})`;
+  }
+
+  static mobius(z, a, b, c, d) {
+    let num = a.times(z).plus(b);
+    let denom = c.times(z).plus(d);
+    return num.divide(denom);
+  }
+
+  static mobiusStr(a, b, c, d) {
+    return `f(z) = ((${a.toString()}) z + (${b.toString()})) / ((${c.toString()}) z + (${d.toString()}))`;
+  }
+
+  static drawSegment(z0, z1, util, color, width) {
+    util.drawLine(
+      spaceToScreenX(z0.x),
+      spaceToScreenY(z0.y),
+      spaceToScreenX(z1.x),
+      spaceToScreenY(z1.y),
+      color,
+      width)
+  }
 }
 
-function drawVectors() {
+class ComplexMesh {
+  constructor(numRows, numCols, xMin, xMax, yMin, yMax) {
+    this.numRows = numRows;
+    this.numCols = numCols;
+    this.xMin = xMin;
+    this.xMax = xMax;
+    this.yMin = yMin;
+    this.yMax = yMax;
+    this.nodes = []; // double array of complex numbers representing nodes of the mesh
+    this.imageNodes = []; // images of the nodes under a mapping
+  }
 
-	for(var i = 0; i <= meshM; i++) {
-		for(var j = 0; j <= meshN; j++) {
-						
-			var c = 'rgb(' +  Math.round(i*255/meshM) + ',' + 0 + ',' +  Math.round(j*255/meshN) + ')';					
-									
-			if( i+1 <= meshM ) {			
-				drawLineDom(spaceToScreenX(nodesX[i][j]),
-						    spaceToScreenY(nodesY[i][j]),
-						    spaceToScreenX(nodesX[i+1][j]),
-						    spaceToScreenY(nodesY[i+1][j]),
-						    c);
-			
-				drawLineImg(spaceToScreenX(nodesFX[i][j]),
-						    spaceToScreenY(nodesFY[i][j]),
-						    spaceToScreenX(nodesFX[i+1][j]),
-						    spaceToScreenY(nodesFY[i+1][j]),
-						    c);
-			}			
-			if( j+1 <= meshN ) {
-				drawLineDom(spaceToScreenX(nodesX[i][j]),
-						    spaceToScreenY(nodesY[i][j]),
-						    spaceToScreenX(nodesX[i][j+1]),
-						    spaceToScreenY(nodesY[i][j+1]),
-						    c);
-						 
-				drawLineImg(spaceToScreenX(nodesFX[i][j]),
-						    spaceToScreenY(nodesFY[i][j]),
-						    spaceToScreenX(nodesFX[i][j+1]),
-						    spaceToScreenY(nodesFY[i][j+1]),
-						    c);
-			}		
-		}
-	}	
-}
+  toString() {
+    let s1 = `#rows: ${this.numRows}; #cols: ${this.numCols}`;
+    let s2 = `xMin: ${this.xMin}; xMax: ${this.xMax}; yMin: ${this.yMin}; yMax: ${this.yMax}`;
+    let s3 = `domain mesh: ${this.nodes.length}; image mesh: ${this.imageNodes.length}`;
+    return [s1, s2, s3].join('\n');
+  }
 
-function drawGrid() {
+  populateNodes() {
+    var deltaX = (this.xMax - this.xMin) / (this.numRows - 1);
+    var deltaY = (this.yMax - this.yMin) / (this.numCols - 1);
+    let nodes = [];
+    for (let i=0; i<this.numRows; i++) {
+      let row = [];
+      for (let j=0; j<this.numCols; j++) {
+        let x = this.xMin + i * deltaX;
+        let y = this.yMin + j * deltaY;
+        let z = new Complex(x, y);
+        //domainCanvasUtil.println(`at (${i}, ${j}) created ${z.toString()} from ${x} and ${y}`);
+        row.push(z);
+      }
+      nodes.push(row);
+    }
+    this.nodes = nodes;
+  }
 
-	for(var i = 0; i <= meshM; i++) {
-		for(var j = 0; j <= meshN; j++) {
-						
-			var c = 'rgb(' +  Math.round(i*255/meshM) + ',' + 0 + ',' +  Math.round(j*255/meshN) + ')';					
-									
-			if( i+1 <= meshM ) {			
-				drawLineDom(spaceToScreenX(nodesX[i][j]),
-						    spaceToScreenY(nodesY[i][j]),
-						    spaceToScreenX(nodesX[i+1][j]),
-						    spaceToScreenY(nodesY[i+1][j]),
-						    c);
-			
-				drawLineImg(spaceToScreenX(nodesFX[i][j]),
-						    spaceToScreenY(nodesFY[i][j]),
-						    spaceToScreenX(nodesFX[i+1][j]),
-						    spaceToScreenY(nodesFY[i+1][j]),
-						    c);
-			}			
-			if( j+1 <= meshN ) {
-				drawLineDom(spaceToScreenX(nodesX[i][j]),
-						    spaceToScreenY(nodesY[i][j]),
-						    spaceToScreenX(nodesX[i][j+1]),
-						    spaceToScreenY(nodesY[i][j+1]),
-						    c);
-						 
-				drawLineImg(spaceToScreenX(nodesFX[i][j]),
-						    spaceToScreenY(nodesFY[i][j]),
-						    spaceToScreenX(nodesFX[i][j+1]),
-						    spaceToScreenY(nodesFY[i][j+1]),
-						    c);
-			}		
-		}
-	}	
+  apply(f, a, b, c, d) { // f: Complex -> Complex
+    let imageNodes = [];
+    for (let i=0; i<this.numRows; i++) {
+      let row = [];
+      for (let j=0; j<this.numCols; j++) {
+        let w = f(this.nodes[i][j], a, b, c, d);
+        row.push(w);
+        //domainCanvasUtil.println(`at (${i}, ${j}) mapped ${this.nodes[i][j].toString()} to ${w.toString()}`);
+      }
+      imageNodes.push(row);
+    }
+    this.imageNodes = imageNodes;
+  }
+
+  drawMeshes() {
+    // assumes that both meshes have been populated
+    for (let i=0; i<this.numRows; i++) {
+      for (let j=0; j<this.numCols; j++) {
+        let color = `rgb(${i * 255 / this.numRows}, 0, ${j * 255 / this.numCols})`;
+        if (i+1 < this.numRows) {
+          Complex.drawSegment(this.nodes[i][j], this.nodes[i + 1][j], domainCanvasUtil, color, 1);
+          Complex.drawSegment(this.imageNodes[i][j], this.imageNodes[i + 1][j], imageCanvasUtil, color, 1);
+        }
+        if (j+1 < this.numCols) {
+          Complex.drawSegment(this.nodes[i][j], this.nodes[i][j + 1], domainCanvasUtil, color, 1);
+          Complex.drawSegment(this.imageNodes[i][j], this.imageNodes[i][j + 1], imageCanvasUtil, color, 1);
+        }
+      }
+    }
+  }
 }
 
 
-function transformNodes() {
-						
-	if(type == 'pol') {  //polynomial
-				
-		document.outform.output.value = 'polynomial: ' + 'f(z) = (' 
-                        + Math.round(parA*100)/100 + ' + i' + Math.round(parAim*100)/100 + ') z^3 + ('
-			+ Math.round(parB*100)/100 + ' + i' + Math.round(parBim*100)/100 + ') z^2 + ('
-			+ Math.round(parC*100)/100 + ' + i' + Math.round(parCim*100)/100 + ') z + ('
-			+ Math.round(parD*100)/100 + ' + i' + Math.round(parDim*100)/100 + ')' + "\n" 
-			+ 'domain: [' + Math.round(domA*100)/100 + ',' + Math.round(domB*100)/100 + ']x[' 
-			  	      + Math.round(domC*100)/100 + ',' + Math.round(domD*100)/100 + ']';
+function getF() {
+  let type = "poly";
+  for (var i=0; i < document.controls.mapping.length; i++) {
+    if (document.controls.mapping[i].checked) {
+      type = document.controls.mapping[i].value;
+    }
+  }
+  if (type == "poly") {
+    return [Complex.poly, Complex.polyStr];
+  } else if (type == "mob") {
+    return [Complex.mobius, Complex.mobiusStr];
+  } else if (type == "exp") {
+    return [Complex.exp, Complex.expStr];
+  }
+  return [Complex.poly, Complex.polyStr];
+}
 
-		for(var i = 0; i <= meshM; i++) {
-			for(var j = 0; j <= meshN; j++) {
-			
-				var x = nodesX[i][j];
-				var y = nodesY[i][j];
 
-				nodesFX[i][j] = parD + parC*x + parB*x*x + parA*x*x*x - parCim*y - 2*parBim*x*y 
-								- 3*parAim*x*x*y - parB*y*y - 3*parA*x*y*y + parAim*y*y*y;		
-				nodesFY[i][j] = parDim + parCim*x + parBim*x*x + parAim*x*x*x + parC*y + 2*parB*x*y 
-									+ 3*parA*x*x*y - parBim*y*y - 3*parAim*x*y*y - parA*y*y*y;	
-			}
-		}
-	}
-	else if(type == 'mob') { //mobius
+function drawAxes() {
+  let c = "rgb(200,200,200)";
+  domainCanvasUtil.drawLine(
+    spaceToScreenX(ranA),
+    spaceToScreenY(0),
+    spaceToScreenX(ranB),
+    spaceToScreenY(0),
+    c,
+    1);
+  domainCanvasUtil.drawLine(
+    spaceToScreenX(0),
+    spaceToScreenY(ranC),
+    spaceToScreenX(0),
+    spaceToScreenY(ranD),
+    c,
+    1);
+  imageCanvasUtil.drawLine(
+    spaceToScreenX(ranA),
+    spaceToScreenY(0),
+    spaceToScreenX(ranB),
+    spaceToScreenY(0),
+    c,
+    1);
+  imageCanvasUtil.drawLine(
+    spaceToScreenX(0),
+    spaceToScreenY(ranC),
+    spaceToScreenX(0),
+    spaceToScreenY(ranD),
+    c,
+    1);
+}
 
-		document.outform.output.value = 'mobius: ' + 'f(z) = (' 
-                        + Math.round(parA*100)/100 + ' + i' + Math.round(parAim*100)/100 + ') z + ('
-			+ Math.round(parB*100)/100 + ' + i' + Math.round(parBim*100)/100 + ') / ('
-			+ Math.round(parC*100)/100 + ' + i' + Math.round(parCim*100)/100 + ') z + ('
-			+ Math.round(parD*100)/100 + ' + i' + Math.round(parDim*100)/100 + ')' + "\n" 
-			+ 'domain: [' + Math.round(domA*100)/100 + ',' + Math.round(domB*100)/100 + ']x[' 
-			  	      + Math.round(domC*100)/100 + ',' + Math.round(domD*100)/100 + ']';
-					    
-		for(var i = 0; i <= meshM; i++) {
-			for(var j = 0; j <= meshN; j++) {
-			
-				var x = nodesX[i][j];
-				var y = nodesY[i][j];
-			
-				var W = parA*x - parAim*y + parB;
-				var X = parAim*x + parA*y + parBim;
-				var Y = parC*x - parCim*y + parD;
-				var Z = parCim*x + parC*y + parDim;
 
-				var d = Y*Y + Z*Z;				
-				
-				nodesFX[i][j] = (W*Y+X*Z)/d;
-				nodesFY[i][j] = (X*Y-W*Z)/d;
-			}
-		}	
-	}
-	else if(type == 'exp') { //exponential
+function draw() {
+    domainCanvasUtil.clearText();
+    domainCanvasUtil.clearCanvas("white");
+    imageCanvasUtil.clearCanvas("white");
+    drawAxes();
 
-		document.outform.output.value = 'exponential: ' + 'f(z) = (' 
-                        + Math.round(parA*100)/100 + ' + i' + Math.round(parAim*100)/100 + ') exp [('
-			+ Math.round(parB*100)/100 + ' + i' + Math.round(parBim*100)/100 + ') z + ('
-			+ Math.round(parC*100)/100 + ' + i' + Math.round(parCim*100)/100 + ') ] + ('
-			+ Math.round(parD*100)/100 + ' + i' + Math.round(parDim*100)/100 + ')' + "\n" 
-			+ 'domain: [' + Math.round(domA*100)/100 + ',' + Math.round(domB*100)/100 + ']x[' 
-			  	      + Math.round(domC*100)/100 + ',' + Math.round(domD*100)/100 + ']';
-			
-		for(var i = 0; i <= meshM; i++) {
-			for(var j = 0; j <= meshN; j++) {
-			
-				var x = nodesX[i][j];
-				var y = nodesY[i][j];
-			
-				var s = parB*x - parBim*y + parC;
-				var t = parBim*x + parB*y + parCim-5+5;
-								
-				nodesFX[i][j] = parA*Math.exp(s)*Math.cos(t) - parAim*Math.exp(s)*Math.sin(t) + parD;
-				nodesFY[i][j] = parA*Math.exp(s)*Math.sin(t) - parAim*Math.exp(s)*Math.cos(t) + parDim;				
-			}
-		}
-	}
+    let a = new Complex(parA, parAim);
+    let b = new Complex(parB, parBim);
+    let c = new Complex(parC, parCim);
+    let d = new Complex(parD, parDim);
+    let domStr = `domain: [${domA.toFixed(2)}, ${domB.toFixed(2)}] x [${domC.toFixed(2)}, ${domD.toFixed(2)}]`;
+    let viewStr = `viewing: [${ranA.toFixed(2)}, ${ranB.toFixed(2)}] x [${ranC.toFixed(2)}, ${ranD.toFixed(2)}]`;
+
+    mesh =  new ComplexMesh(meshM, meshN, domA, domB, domC, domD);
+    let [f, fStr] = getF();
+    mesh.populateNodes();
+    mesh.apply(f, a, b, c, d);
+    mesh.drawMeshes();
+    domainCanvasUtil.println(domStr);
+    domainCanvasUtil.println(viewStr);
+    domainCanvasUtil.println(fStr(a, b, c, d));
 }
 
 
 // converts space coordinates to window coordinates, for the x coordinate
-function spaceToScreenX(x) {	
-	return width*(x - ranA)/(ranB - ranA);	
+function spaceToScreenX(x) {
+  return WIDTH * (x - ranA) / (ranB - ranA);
 }
 
 // converts space coordinates to window coordinates, for the y coordinate
 function spaceToScreenY(y) {
-	return height*(ranD - y)/(ranD - ranC);
-}
-
-
-function drawLineImg(x0,y0,x1,y1,c) {
-	ctx.beginPath();
-	ctx.strokeStyle = c;
-	ctx.moveTo(x0,y0);
-	ctx.lineTo(x1,y1);
-	ctx.closePath();
-	ctx.stroke();	
-}
-
-function drawLineDom(x0,y0,x1,y1,c) {
-	ctx1.beginPath();
-	ctx1.strokeStyle = c;
-	ctx1.moveTo(x0,y0);
-	ctx1.lineTo(x1,y1);
-	ctx1.closePath();
-	ctx1.stroke();		
-}
-
-function circleDom(x,y,r,c) {
-	ctx1.fillStyle = c;
-	ctx1.beginPath();
-	ctx1.arc(x, y, r, 0, Math.PI*2, true);
-	ctx1.closePath();
-	ctx1.fill();
-}
-
-function circleImg(x,y,r,c) {
-	ctx.strokeStyle = c;
-	ctx.beginPath();
-	ctx.arc(x, y, r, 0, Math.PI*2, true);
-	ctx.closePath();
-	ctx.stroke();
+  return HEIGHT * (ranD - y) / (ranD - ranC);
 }
 
 
 function refresh() {
-
-	amp = ampSl.getValue();
-	amp_last = amp;
-
-	amp_inc = ampIncSl.getValue();
-
-	per = perSl.getValue();
-	per_last = per;
-
-	per_inc = perIncSl.getValue();
-
-	phase = phaseSl.getValue();
-	phase_last = phase;
-
-	phase_inc = phaseIncSl.getValue();
-
-	sep = sepSl.getValue();
-
-	x_last = 0;
-	y_last = 0;	
-	
-	/*
-	document.outform.output.value = 'refreshed: ' 
-									+ 'amp = '       + Math.round(amp) 
-									+ ', amp_inc = ' + amp_inc 
-									+ ', per = '     + Math.round(per) 
-									+ ', per_inc = ' + per_inc 
-									+ ', phase = '   + Math.round(phase)
-									+ ', sep = '     + Math.round(sep);
-	*/
-	drawSomething();
-}
-
-function defaults() {
-
-	amp = amp_default;
-	amp_last = amp;
-
-
-	ampSl.setValue(actualToSlider(ampSl.getMinimum(),ampSl.getMaximum(),amp_min,amp_max,amp_default));
-
-	
-	/*
-	document.outform.output.value = 'refreshed: ';
-									
-	*/
-	//drawSomething();
+  domA = domA_default;
+  domB = domB_default;
+  domC = domC_default;
+  domD = domD_default;
+  ranA = ranA_default;
+  ranB = ranB_default;
+  ranC = ranC_default;
+  ranD = ranD_default;
+  parA = parA_default;
+  parB = parB_default;
+  parC = parC_default;
+  parD = parD_default;
+  parAim = parAim_default;
+  parBim = parBim_default;
+  parCim = parCim_default;
+  parDim = parDim_default;
+  meshM = meshM_default;
+  meshN = meshN_default;
+  draw();
 }
 
 
+function sliderToActual(s_min, s_max, a_min, a_max, s_val) {
+  //a = s_min
+  //b = s_max
+  //x = s_val
+  //c = a_min
+  //d = a_max
+  //y = a_val
 
+  //y = (d-c)*(x-a)/(b-a) + c;
+  return (a_max - a_min) * (s_val - s_min) / (s_max - s_min) + a_min;
+}
 
-function drawLine(x0,y0,x1,y1,c) {
-	ctx.beginPath();
-	ctx.strokeStyle = c;
-	ctx.moveTo(x0,y0);
-	ctx.lineTo(x1,y1);
-	ctx.closePath();
-	ctx.stroke();	
+function actualToSlider(s_min, s_max, a_min, a_max, a_val) {
+  //a = s_min
+  //b = s_max
+  //x = s_val
+  //c = a_min
+  //d = a_max
+  //y = a_val
+
+  //x = (b-a)*(y-c)/(d-c) + a;
+  return (s_max - s_min) * (a_val - a_min) / (a_max - a_min) + s_min;
 }
 
 
-function drawPoint(x,y,c) {
-	ctx.fillStyle = c;
-	ctx.fillRect(x,y,1,1);		
+function init() {
+  domainCanvas = document.getElementById("domain_canvas");
+  domainCanvas.width = WIDTH;
+  domainCanvas.height = HEIGHT;
+  imageCanvas = document.getElementById("image_canvas");
+  imageCanvas.width = WIDTH;
+  imageCanvas.height = HEIGHT;
+  if (domainCanvas.getContext && imageCanvas.getContext){
+    domainCtx = domainCanvas.getContext('2d');
+    imageCtx = imageCanvas.getContext('2d');
+    domainCanvasUtil = new CanvasUtil(domainCtx, WIDTH, HEIGHT, document.outform.output);
+    imageCanvasUtil = new CanvasUtil(imageCtx, WIDTH, HEIGHT);
+    draw();
+  }
 }
-
-function sliderToActual(s_min,s_max,a_min,a_max,s_val) { 
-
-	//a = s_min
-	//b = s_max
-	//x = s_val
-	
-	//c = a_min
-	//d = a_max
-	//y = a_val
-
-	//y = (d-c)*(x-a)/(b-a) + c;
-	
-	return (a_max - a_min)*(s_val - s_min)/(s_max - s_min) + a_min;		
-}
-
-function actualToSlider(s_min,s_max,a_min,a_max,a_val) {
-	
-	//a = s_min
-	//b = s_max
-	//x = s_val
-	
-	//c = a_min
-	//d = a_max
-	//y = a_val	
-	
-	//x = (b-a)*(y-c)/(d-c) + a;
-	
-	return (s_max - s_min)*(a_val - a_min)/(a_max - a_min) + s_min;
-}	
-
 
 </script>
 </div>
 
-<form name="outform">   
-<textarea rows="2" cols="100" name="output"></textarea>    
-</form>   
+<form name="outform">
+<textarea rows="3" cols="100" name="output"></textarea>
+</form>
 
 </body>
 </html>
