@@ -535,8 +535,10 @@ class ComplexMesh {
   }
 
   toString() {
-    let s = [this.numRows, this.numCols, this.xMin, this.xMax, this.yMin, this.yMax].join(', ')
-    return `${s}; domain mesh: ${this.nodes.length}; image mesh: ${this.imageNodes.length}`;
+    let s1 = `#rows: ${this.numRows}; #cols: ${this.numCols}`;
+    let s2 = `xMin: ${this.xMin}; xMax: ${this.xMax}; yMin: ${this.yMin}; yMax: ${this.yMax}`;
+    let s3 = `domain mesh: ${this.nodes.length}; image mesh: ${this.imageNodes.length}`;
+    return [s1, s2, s3].join('\n');
   }
 
   populateNodes() {
