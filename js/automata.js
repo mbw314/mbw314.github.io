@@ -128,8 +128,6 @@ class CellularAutomaton {
     this.numStates = this.states.length;
     this.width = width;
     this.cellMappings = cellMappings; // array of functions (i, j) -> f(i, j) that indicate which cells to use as input for the automata rule
-    //canvasUtil.println(states);
-    //canvasUtil.println(cellMappings);
     this.automata = new AbstractAutomatonRule(states.length, cellMappings.length);
     this.numInitialRows = numInitialRows;
     this.currentRows; // matrix of states (indexes of states array) for rows needed to apply the automata rule
@@ -155,8 +153,6 @@ class CellularAutomaton {
       }
     }
     this.currentRows = rows;
-    //canvasUtil.println(rows);
-    //canvasUtil.println(`initialized ${this.currentRows.length} rows with ${this.width} columns`);
   }
 
   getNewRow() {
@@ -164,9 +160,6 @@ class CellularAutomaton {
     let i = this.currentRows.length;
     let row = [];
     for (let j=0; j < this.width; j++) {
-      // let inputIndices = this.cellMappings.map(f => f(i, j));
-      // //console.log(inputIndices);
-      // let inputs = inputIndices.map(indices => this.currentRows[indices[0].mod(this.width)][indices[1].mod(this.width)]);
       let inputs =  this.cellMappings
         .map(f => f(i, j))
         .map(indices => this.currentRows[indices[0].mod(this.width)][indices[1].mod(this.width)]);
@@ -199,7 +192,16 @@ class CellularAutomaton {
     let t1 =(new Date()).getTime();
     //canvasUtil.println(`generated color matrix in ${t1 - t0} milliseconds`);
     colorMatrix = new ColorMatrix(rows, this.states);
-    return colorMatrix;
+  }
+
+  iterateColorMatrix() {
+    // perform an iteration on the existing ColorMatrix
+    let t0 =(new Date()).getTime();
+    let newRow = this.iterate();
+    let temp = colorMatrix.matrix.shift();
+    colorMatrix.matrix = colorMatrix.matrix.concat([newRow]);
+    let t1 =(new Date()).getTime();
+    //canvasUtil.println(`generated color matrix in ${t1 - t0} milliseconds`);
   }
 }
 
@@ -215,7 +217,8 @@ function drawNew(numColors, cellConfigKey, initialRowsStyle, magKey) {
   //canvasUtil.println(`drawNew with numColors = ${numColors}; cellConfig = ${cellConfig}; initialRowsStyle = ${initialRowsStyle}; numInitialRows = ${numInitialRows}; magnification = ${magnification}; gridWidth = ${gridWidth}; gridHeight = ${gridHeight}`);
   ca = new CellularAutomaton(colors.slice(0, numColors), gridWidth, numInitialRows, cellConfig);
   ca.initialize(initialRowsStyle);
-  ca.fillColorMatrix(gridHeight).draw(magnification);
+  ca.fillColorMatrix(gridHeight);
+  colorMatrix.draw(magnification);
 }
 
 
@@ -228,7 +231,8 @@ function refresh(initialRowsStyle, magKey) {
   //canvasUtil.println(`refresh with initialRowsStyle = ${initialRowsStyle}; cellConfig = ${cellConfig}; magnification = ${magnification}; gridWidth = ${gridWidth}; gridHeight = ${gridHeight}`);
   ca.width = gridWidth;
   ca.initialize(initialRowsStyle);
-  ca.fillColorMatrix(gridHeight).draw(magnification);
+  ca.fillColorMatrix(gridHeight);
+  colorMatrix.draw(magnification);
 }
 
 
@@ -240,29 +244,14 @@ function pauseDrawing() {
 }
 
 
-function draw2(timeStamp) {
-  if (paused) {
-    //return 0;
-    requestAnimationFrame(draw);
-  }
-  var msPassed = timeStamp - oldTimeStamp;
-  oldTimeStamp = timeStamp;
-  if (msPassed > 50) {
-    canvasUtil.clearCanvas();
-    ca.fillColorMatrix(gridHeight).draw(magnification);
-    //requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
-}
-
 function draw() {
   if (paused) {
     return 0;
   }
   canvasUtil.clearCanvas();
-  ca.fillColorMatrix(gridHeight).draw(magnification);
+  ca.iterateColorMatrix();
+  colorMatrix.draw(magnification);
 }
-
 
 
 function init() {
@@ -273,8 +262,7 @@ function init() {
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     canvasUtil.clearCanvas();
-    return setInterval(draw, 1);
-    //requestAnimationFrame(draw2);
+    return setInterval(draw, 50);
   } else {
     alert('You need a better web browser to see this.');
   }
