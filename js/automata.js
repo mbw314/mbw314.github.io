@@ -1,324 +1,281 @@
-
-// variables
-var n;            // number of colors
-var width;    // width of image
-var height;     // height of image
-var mag;      // magnification
-//var zoomed;     // zoomed in or not
-var centered;   // centered or not (random)
-var ref = 0;   // refreshing or not
-var style = 0;
-var time0 = 0;
-var time1 = 0;
-var firstrows = 1;
-
-var rule = new Array(); // holds the rule
-var storedLines = new Array(); // holds the first firstline lines, depending on the style
-var curLine = new Array();  // holds the current line's colors
-var colorList = new Array(); //holds all the colors that are to be used
-var canvas;
 var ctx;
+var canvas;
+var WIDTH = 750;
+var HEIGHT = 750;
+let paused = true;
+let ca; // cellular automaton object
+var gridHeight;
+var magnification;
+var colorMatrix;
+
+var oldTimeStamp = 0;
+
+const magnifications = {
+  '1x': 1,
+  '2x': 2,
+  '3x': 3,
+  '5x': 5,
+  '10x': 10,
+};
+
+const firstRowsStyles = {
+  "RANDOM": "RANDOM",
+  "CENTERED": "CENTERED"
+}
+
+const cellConfigs = {
+  "TWO_ABOVE": [
+    (i, j) => [i - 1, j],
+    (i, j) => [i - 1, j + 1],
+  ],
+  "THREE_ABOVE": [
+    (i, j) => [i - 1, j - 1],
+    (i, j) => [i - 1, j],
+    (i, j) => [i - 1, j + 1],
+  ],
+  "FIVE_ABOVE": [
+    (i, j) => [i - 1, j - 2],
+    (i, j) => [i - 1, j - 1],
+    (i, j) => [i - 1, j],
+    (i, j) => [i - 1, j - 1],
+    (i, j) => [i - 1, j - 2],
+  ],
+  "THREE_AND_ONE_ABOVE": [
+    (i, j) => [i - 1, j - 1],
+    (i, j) => [i - 1, j],
+    (i, j) => [i - 1, j + 1],
+    (i, j) => [i - 2, j],
+  ],
+  "THREE_AND_THREE_ABOVE": [
+    (i, j) => [i - 1, j - 1],
+    (i, j) => [i - 1, j],
+    (i, j) => [i - 1, j + 1],
+    (i, j) => [i - 2, j - 1],
+    (i, j) => [i - 2, j],
+    (i, j) => [i - 2, j + 1],
+  ]
+}
+
+const cellConfigRowNums = {
+  "TWO_ABOVE": 1,
+  "THREE_ABOVE": 1,
+  "FIVE_ABOVE": 1,
+  "THREE_AND_ONE_ABOVE": 2,
+  "THREE_AND_THREE_ABOVE": 2
+}
+
+const colors = ['black', 'white', 'red', 'blue', 'green', 'purple'];
+
+function range(n) {
+  return [...Array(n).keys()];
+}
+
+Number.prototype.mod = function(n) {
+    return ((this % n) +n ) % n;
+};
 
 
-function drawPixel(i, j ,c) {
-  // don't draw the last line (which is overlap)
-  if (j < (height / mag)) {
-    ctx.fillStyle = colorList[c];
-    ctx.fillRect(mag * i, mag * j, mag, mag);
+class AbstractAutomatonRule {
+  // enumeration of mapping from a tuple of numInputs states to one state
+  // a mappings is stored as an array of states, indexed by the base-numStates values of the inputs
+  constructor(numStates, numInputs) {
+    this.numStates = numStates;
+    this.numInputs = numInputs;
+    this.rule = this.randomRule();
+  }
+
+  randomRule() {
+    return range(Math.pow(this.numStates, this.numInputs))
+      .map(k => Math.round(Math.random() * this.numStates + 1) % this.numStates);
+  }
+
+  evaluate(inputs) {
+    // inputs: array of states of length numInputs
+    // treat inputs elements as digits of base-numStates number, which maps to index of rule
+    let index = range(inputs.length)
+      .map(i => inputs[i] * Math.pow(this.numStates, i))
+      .reduce((a, b) => a + b, 0);
+    return this.rule[index];
   }
 }
 
 
-function setRule(i) {
-  // create the array for the rule, depending on which style we're drawing
-  if (i == 0) { //typical 3 boxes in row above current box
-    rule = new Array(Math.pow(n, 3));
-    //alert("setRule with i = " + i);
-  } else if (i == 1) { // 2 boxes in row above current box
-    rule = new Array(Math.pow(n, 2));
-    //alert("setRule with i = " + i);
-  } else if (i == 2) { // 5 boxes in row above current box
-    rule = new Array(Math.pow(n, 5));
-    //alert("setRule with i = " + i);
-  }  else if (i == 3) { // 4 boxes, three in row above, one two rows above
-    rule = new Array(Math.pow(n, 4));
-  } else if (i == 4) { // 6 boxes, three in row above, three in row two above
-    rule = new Array(Math.pow(n, 6));
+class ColorMatrix {
+  // represents an image that can be drawn on the canvas
+  constructor(matrix, colors) {
+    this.matrix = matrix; // double array of integers (=indices of colors array)
+    this.colors = colors; // array of color strings
+    this.numRows = matrix.length;
+    this.numCols = matrix[0].length;
+    //canvasUtil.println(`created new ColorMatrix with size ${this.numRows} x ${this.numCols} and ${this.colors.length} colors`);
   }
 
-  // fill the array randomly
-  for (var k=0; k < rule.length; k++) {
-    rule[k] = Math.round(Math.random()*n+1)%n;
-  }
-  //alert("made a rule array of length " + rule.length);
-
-  // display the rule in the textbox
-  document.outform.output.value = "Rule: ";
-  for (var k=0; k < rule.length; k++) {
-    document.outform.output.value += rule[k];
-  }
-}
-
-function makeRows() { // make firstrows rows
-  //alert("making first " + firstrows + " row(s)");
-  // set up the double array to hold the first lines that are stored throughout the algorithm
-  storedLines = new Array(width / mag);
-  for (var i=0; i < storedLines.length; i++) {
-    storedLines[i] = new Array(firstrows);
-  }
-
-  for (var i = 0; i < firstrows; i++) {  //for each of the rows in question...
-    if (centered == 0) {  // centered rows
-      for (var k=0; k < (width / mag); k++) {
-        storedLines[k][i] = 0;
-        drawPixel(k, i ,0);
+  draw(mag) {
+    //canvasUtil.println(`filling color matrix of size ${this.numRows} x ${this.numCols} at magnification ${mag}x`);
+    for (let i=0; i < this.numRows; i++) {
+      for (let j=0; j < this.numCols; j++) {
+        canvasUtil.drawRect(mag * j, mag * i, mag, mag, this.colors[this.matrix[i][j]]);
       }
-      storedLines[Math.round((width / mag) / 2)][i] = 1;
-      drawPixel(Math.round((width / mag)/2), i, 1);
-    }
-    else{ // random rows
-      var temp = 0;
-      for (var k=0; k < (width / mag); k++) {
-        temp = Math.round(Math.random()*n+1)%n; //random integer between 0 and #colors-1
-        for (var c = 0; c < n; c++) {
-          if (temp == c) {
-            storedLines[k][i] = c;
-            drawPixel(k, i ,c);
-          }
-        }
-      }
     }
   }
 }
 
-function drawAutomata(colors, sty, magn, fst, wth, hgt, scr, ref){
-  //alert("drawAutomata called with colors = " + colors.value + ", sty = " + sty.value + ", mag = " + magn.value + ", first line = " + fst.value + ", width = " + wth.value + ", height = " + hgt.value + ", scrolling = " + scr + " , refresh = " + ref);
-  var date0 = new Date();
-  time0 = date0.getTime();
 
+class CellularAutomaton {
+  // encapsulates data needed to store visualize a cellular automaton
+  constructor(states, width, numInitialRows, cellMappings) {
+    this.states = states; // array of states e.g., colors
+    this.numStates = this.states.length;
+    this.width = width;
+    this.cellMappings = cellMappings; // array of functions (i, j) -> f(i, j) that indicate which cells to use as input for the automata rule
+    //canvasUtil.println(states);
+    //canvasUtil.println(cellMappings);
+    this.automata = new AbstractAutomatonRule(states.length, cellMappings.length);
+    this.numInitialRows = numInitialRows;
+    this.currentRows; // matrix of states (indexes of states array) for rows needed to apply the automata rule
+  }
+
+  initialize(style) {
+    //canvasUtil.println(`initialing ${this.numInitialRows} row(s) with ${this.width} columns`);//; currently have ${this.currentRows.length} rows`);
+    let rows = [];
+    if (style == firstRowsStyles.RANDOM) {
+      for (let r=0; r < this.numInitialRows; r++) {
+        //this.currentRows[r]
+        let row = range(this.width)
+          .map(k => Math.round(Math.random() * this.numStates + 1) % this.numStates);
+        rows.push(row);
+        //canvasUtil.println(`made this new row: ${row}`);
+      }
+    } else if (style == firstRowsStyles.CENTERED) {
+      let row = range(this.width).map(k => 0);
+      row[Math.round(this.width / 2)] = 1;
+      for (let r=0; r < this.numInitialRows; r++) {
+        rows.push(row);
+        //canvasUtil.println(`made this new row: ${row}`);
+      }
+    }
+    this.currentRows = rows;
+    //canvasUtil.println(rows);
+    //canvasUtil.println(`initialized ${this.currentRows.length} rows with ${this.width} columns`);
+  }
+
+  getNewRow() {
+    // apply the automata rule to the current rows of the grid, obtaining a new row
+    let i = this.currentRows.length;
+    let row = [];
+    for (let j=0; j < this.width; j++) {
+      // let inputIndices = this.cellMappings.map(f => f(i, j));
+      // //console.log(inputIndices);
+      // let inputs = inputIndices.map(indices => this.currentRows[indices[0].mod(this.width)][indices[1].mod(this.width)]);
+      let inputs =  this.cellMappings
+        .map(f => f(i, j))
+        .map(indices => this.currentRows[indices[0].mod(this.width)][indices[1].mod(this.width)]);
+      //console.log(inputs);
+      let newState = this.automata.evaluate(inputs);
+      row.push(newState);
+    }
+    return row;
+  }
+
+  iterate() {
+    // get a new row and update the current rows of the grid
+    let newRow = this.getNewRow();
+    if (this.numInitialRows == 1) {
+      this.currentRows = [newRow];
+    } else {
+      let temp = this.currentRows.shift();
+      this.currentRows = this.currentRows.concat([newRow]);
+    }
+    return newRow;
+  }
+
+  fillColorMatrix(numRows) {
+    // produce full ColorMatrix from the current system
+    let t0 =(new Date()).getTime();
+    let rows = this.currentRows;
+    for (let i=this.currentRows.length; i < numRows; i++) {
+      rows.push(this.iterate());
+    }
+    let t1 =(new Date()).getTime();
+    //canvasUtil.println(`generated color matrix in ${t1 - t0} milliseconds`);
+    colorMatrix = new ColorMatrix(rows, this.states);
+    return colorMatrix;
+  }
+}
+
+
+function drawNew(numColors, cellConfigKey, initialRowsStyle, magKey) {
+  // create a new automaton with given parameters, and draw it
+  canvasUtil.clearCanvas();
+  magnification = magnifications[magKey];
+  let gridWidth = WIDTH / magnification;
+  gridHeight = HEIGHT / magnification;
+  let numInitialRows = cellConfigRowNums[cellConfigKey];
+  let cellConfig = cellConfigs[cellConfigKey];
+  //canvasUtil.println(`drawNew with numColors = ${numColors}; cellConfig = ${cellConfig}; initialRowsStyle = ${initialRowsStyle}; numInitialRows = ${numInitialRows}; magnification = ${magnification}; gridWidth = ${gridWidth}; gridHeight = ${gridHeight}`);
+  ca = new CellularAutomaton(colors.slice(0, numColors), gridWidth, numInitialRows, cellConfig);
+  ca.initialize(initialRowsStyle);
+  ca.fillColorMatrix(gridHeight).draw(magnification);
+}
+
+
+function refresh(initialRowsStyle, magKey) {
+  // keep the current automaton rule, but update some image parameters, and draw it
+  canvasUtil.clearCanvas();
+  magnification = magnifications[magKey];
+  let gridWidth = WIDTH / magnification;
+  gridHeight = HEIGHT / magnification;
+  //canvasUtil.println(`refresh with initialRowsStyle = ${initialRowsStyle}; cellConfig = ${cellConfig}; magnification = ${magnification}; gridWidth = ${gridWidth}; gridHeight = ${gridHeight}`);
+  ca.width = gridWidth;
+  ca.initialize(initialRowsStyle);
+  ca.fillColorMatrix(gridHeight).draw(magnification);
+}
+
+
+function pauseDrawing() {
+  paused = !paused;
+  if (!paused) {
+    requestAnimationFrame(draw);
+  }
+}
+
+
+function draw2(timeStamp) {
+  if (paused) {
+    //return 0;
+    requestAnimationFrame(draw);
+  }
+  var msPassed = timeStamp - oldTimeStamp;
+  oldTimeStamp = timeStamp;
+  if (msPassed > 50) {
+    canvasUtil.clearCanvas();
+    ca.fillColorMatrix(gridHeight).draw(magnification);
+    //requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+function draw() {
+  if (paused) {
+    return 0;
+  }
+  canvasUtil.clearCanvas();
+  ca.fillColorMatrix(gridHeight).draw(magnification);
+}
+
+
+
+function init() {
   canvas = document.getElementById("canvas");
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
-    canvas.width = wth.value;
-    canvas.height = hgt.value;
-
-    // if refreshing, leave n, the actual colors, the style, and the rule the same, update others
-    if (ref != 0) {
-      n = colors.value; //number of colors
-      style = sty.value; //the style
-
-      // set up (random) color list
-      for (var k=0; k<n; k++) {
-        colorList[k] = 'rgb(' + Math.floor(Math.random()*256) + ','
-                  + Math.floor(Math.random()*256) + ','
-                  + Math.floor(Math.random()*256) + ')';
-      }
-
-      // make the array for the rule, filled randomly, according to the right style
-      setRule(style);
-    }
-
-    // variables
-    mag = magn.value; //magnification level
-    width = wth.value;
-    height = hgt.value;
-    centered = fst.value;  // first line centered/random
-
-    // set up array
-    curLine = new Array(width / mag);
-
-    // how many first rows are being drawn?
-    if (style == 0 || style == 1 || style == 2) {
-      firstrows = 1;
-    //alert("firstrows = " + firstrows);
-    } else if (style == 3 || style == 4) {
-      firstrows = 2;
-    //alert("firstrows = " + firstrows);
-    }
-
-    // set up the first rows, depending on the style
-    makeRows();
-
-    //fill the rest
-
-    // which style is it?
-    if (style == 0) { //three boxes in row above
-      //alert("first style/0");
-      for (var j=firstrows; j <= (height / mag); j++) {  // j = rows
-        for (var i=0; i < (width / mag); i++) { // i = columns
-          // cycle through all the rules
-          for (var k=0; k < n; k++) { // first box
-            for (var l=0; l < n; l++) { // second box
-              for (var m=0; m < n; m++) { // third box
-                if (storedLines[(i-1+(width / mag))%(width / mag)][0] == k &&
-                                storedLines[i][0] == l &&
-                  storedLines[(i+1+(width / mag))%(width / mag)][0] == m) {
-                  //which rule was it?  as filling a
-                  // cube: total levels + total rows + partial row
-                  curLine[i] = rule[n*n*k + n*l + m];
-                  drawPixel(i, j, rule[n*n*k + n*l + m]);
-                }
-              }
-            }
-          }
-        }
-
-        // move up the rows
-        for (var t=0; t<firstrows-1; t++) {
-          for (var s=0; s < width / mag; s++) {
-            storedLines[s][t] = storedLines[s][t+1];
-          }
-        }
-        for (var s=0; s < width / mag; s++) {
-          storedLines[s][firstrows-1] = curLine[s];
-        }
-      }
-    }
-    else if (style == 1) { //two boxes above
-      //alert("second style/1");
-      for (var j=firstrows; j <= (height / mag); j++) {  // j = rows
-        for (var i=0; i < (width / mag); i++) { // i = columns
-          // cycle through all the rules
-          for (var k=0; k < n; k++) { // first box
-            for (var l=0; l < n; l++) { // second box
-              if (storedLines[(i-1+(width / mag))%(width / mag)][0] == k && storedLines[i][0] == l) {
-                //which rule was it?  as filling a square:
-                // total rows + partial row
-                curLine[i] = rule[n*k + l];
-                drawPixel(i, j ,rule[n*k + l]);
-              }
-            }
-          }
-        }
-
-        // move up the rows
-        for (var t=0; t<firstrows-1; t++) {
-          for (var s=0; s < width / mag; s++) {
-            storedLines[s][t] = storedLines[s][t+1];
-          }
-        }
-        for (var s=0; s < width / mag; s++) {
-          storedLines[s][firstrows-1] = curLine[s];
-        }
-      }
-    }
-    else if (style == 2) { //three boxes in row above
-      //alert("third style/2");
-      for (var j=firstrows; j <= (height / mag); j++) {  // j = rows
-        for (var i=0; i < (width / mag); i++) { // i = columns
-          // cycle through all the rules
-          for (var k=0; k < n; k++) { // first box
-            for (var l=0; l < n; l++) { // second box
-              for (var m=0; m < n; m++) { // third box
-                for (var p=0; p < n; p++) { // fourth box
-                  for (var q=0; q < n; q++) { // fifth box
-                    if (storedLines[(i-2+(width / mag))%(width / mag)][0] == k &&
-                      storedLines[(i-1+(width / mag))%(width / mag)][0] == l &&
-                                    storedLines[i][0] == m &&
-                      storedLines[(i+1+(width / mag))%(width / mag)][0] == p &&
-                      storedLines[(i+2+(width / mag))%(width / mag)][0] == q) {
-                      //which rule was it?  as filling a
-                      // 5-d cube: total levels + total rows + partial row + etc...
-                      curLine[i] = rule[n*n*n*n*k + n*n*n*l + n*n*m + n*p + q];
-                      drawPixel(i, j, rule[n*n*n*n*k + n*n*n*l + n*n*m + n*p + q]);
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        // move up the rows
-        for (var t=0; t<firstrows-1; t++) {
-          for (var s=0; s < width / mag; s++) {
-            storedLines[s][t] = storedLines[s][t+1];
-          }
-        }
-        for (var s=0; s < width / mag; s++) {
-          storedLines[s][firstrows-1] = curLine[s];
-        }
-      }
-    }
-    else if (style == 3) { //three boxes in row above, plus one box two rows above
-      //alert("fourth style/3");
-      for (var j=firstrows; j <= (height / mag); j++) {  // j = rows
-        for (var i=0; i < (width / mag); i++) { // i = columns
-          // cycle through all the rules
-          for (var k=0; k < n; k++) { // first box
-            for (var l=0; l < n; l++) { // second box
-              for (var m=0; m < n; m++) { // third box
-                for (var p=0; p < n; p++) { // fourth box
-                  if (storedLines[(i-1+(width / mag))%(width / mag)][1] == k &&
-                                  storedLines[i][1] == l &&
-                    storedLines[(i+1+(width / mag))%(width / mag)][1] == m &&
-                                  storedLines[i][0] == p) {                                                                                                  //which rule was it?  as filling a
-                    // 4d-cube: total levels + total rows + partial row
-                    curLine[i] = rule[n*n*n*k + n*n*l + n*m + p];
-                    drawPixel(i,j,rule[n*n*n*k + n*n*l + n*m + p]);
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        // move up the rows
-        for (var t=0; t<firstrows-1; t++) {
-          for (var s=0; s < width / mag; s++) {
-            storedLines[s][t] = storedLines[s][t+1];
-          }
-        }
-        for (var s=0; s < width / mag; s++) {
-          storedLines[s][firstrows-1] = curLine[s];
-        }
-      }
-    }
-    else if (style == 4) { //three boxes in row above, plus one box two rows above
-      //alert("fourth style/4");
-      for (var j=firstrows; j <= (height / mag); j++) {  // j = rows
-        for (var i=0; i < (width / mag); i++) { // i = columns
-          // cycle through all the rules
-          for (var k=0; k < n; k++) { // first box
-            for (var l=0; l < n; l++) { // second box
-              for (var m=0; m < n; m++) { // third box
-                for (var p=0; p < n; p++) { // fourth box
-                  for (var q=0; q < n; q++) { // fifth box
-                    for (var r=0; r < n; r++) { // sixth box
-                      if (storedLines[(i-1+(width / mag))%(width / mag)][1] == k &&
-                                      storedLines[i][1] == l &&
-                        storedLines[(i+1+(width / mag))%(width / mag)][1] == m &&
-                        storedLines[(i-1+(width / mag))%(width / mag)][0] == p &&
-                                      storedLines[i][0] == q &&
-                        storedLines[(i+1+(width / mag))%(width / mag)][0] == r) {                                                                                                  //which rule was it?  as filling a
-                        // 6d-cube: total levels + total rows + partial row
-                        curLine[i] = rule[n*n*n*n*n*k + n*n*n*n*l + n*n*n*m + n*n*p + n*q + r];
-                        drawPixel(i, j, rule[n*n*n*n*n*k + n*n*n*n*l + n*n*n*m + n*n*p + n*q + r]);
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        // move up the rows
-        for (var t=0; t<firstrows-1; t++) {
-          for (var s=0; s < width / mag; s++) {
-            storedLines[s][t] = storedLines[s][t+1];
-          }
-        }
-        for (var s=0; s < width / mag; s++) {
-          storedLines[s][firstrows-1] = curLine[s];
-        }
-      }
-    }
-
-    var date1 = new Date();
-    time1 = date1.getTime();
-    var delta_t = time1 - time0;
-    document.outform.output.value += '\n' + "Drawing completed in " + delta_t + " milliseconds.";
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
+    canvasUtil.clearCanvas();
+    return setInterval(draw, 1);
+    //requestAnimationFrame(draw2);
+  } else {
+    alert('You need a better web browser to see this.');
   }
-  else { alert('You need a better web browser to see this.'); }
 }

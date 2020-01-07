@@ -7,10 +7,11 @@
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/automata.js"></script>
 </head>
 
-<body onload="drawAutomata(parameters.colors,parameters.style,parameters.mag,parameters.first,parameters.width,parameters.height,1,1);">
+<body onload="init(); drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);">
 
 <div class="container">
 
@@ -29,20 +30,10 @@
 
 <h2>Cellular Automata</h2>
 
-<!--<p>I ported the <a href="./automata.html">java applet</a> to javascript, so that it works in a webpage using the HTML <a
-href="http://en.wikipedia.org/wiki/Canvas_(HTML_element)">canvas element</a>.  It doesn't have as many features as the
-original version (yet?), and the rules and colors are both randomized, but it seems to work.</p>-->
-
 <p>See <a href="./automata.html">this page</a> for more information about what this program is all about.</p>
 
 <p>Click "Draw New" to begin with a random rule and random colors.  "Refresh Current" will keep the same rule and the same colors from the previous drawing (but any change in the number of colors is ignored), but adjust the other options if they have been changed.  "Reset" returns the form elements to their defaults, but doesn't redraw the image.  The text box below gives the rule that was used to draw the picture (according to my previous convention for describing rules), and the time it took to draw it.</p>
 
-<p>Warning: the speed of this program is rather slow.  Therefore I don't recommend
-setting Magnification = 1, or making the image too large, unless you don't mind waiting.</p>
-
-<p>You'll need a modern browser to view the app. It has been tested in <a
-href="http://www.mozilla.com/firefox/">Firefox</a> (Windows/Linux) and <a
-href="http://www.google.com/chrome">Chrome</a> (Windows).</p>
 
 </div>
 
@@ -54,25 +45,25 @@ href="http://www.google.com/chrome">Chrome</a> (Windows).</p>
 <tr>
 	<td colspan="1" align="right">Number of colors:</td>
 	<td colspan="1" align="right">
-	    <select name="colors">
-    		<option value="2" selected="selected">2</option>
-		<option value="3">3</option>
-		<option value="4">4</option>
-		<option value="5">5</option>
-		<option value="6">6</option>
+	    <select name="num_colors">
+    		<option value="2">2</option>
+    		<option value="3" selected="selected">3</option>
+    		<option value="4">4</option>
+    		<option value="5">5</option>
+    		<option value="6">6</option>
 	    </select>
 	</td>
 </tr>
 
 <tr>
-	<td colspan="1" align="right">Style:</td>
+	<td colspan="1" align="right">Input cell configuration:</td>
 	<td colspan="1" align="right">
-	    <select name="style">
-    		<option value="0" selected="selected">three above</option>
-		<option value="1">two above</option>
-		<option value="2">five above</option>
-		<option value="3">three above, one above those</option>
-		<option value="4">three above, three above those</option>
+	    <select name="cell_config">
+		    <option value="TWO_ABOVE">two above</option>
+        <option value="THREE_ABOVE" selected="selected">three above</option>
+		    <option value="FIVE_ABOVE">five above</option>
+		    <option value="THREE_AND_ONE_ABOVE">three above, one above those</option>
+		    <option value="THREE_AND_THREE_ABOVE">three above, three above those</option>
 	    </select>
 	</td>
 </tr>
@@ -80,9 +71,9 @@ href="http://www.google.com/chrome">Chrome</a> (Windows).</p>
 <tr>
 	<td colspan="1" align="right">First Line:</td>
 	<td colspan="1" align="right">
-	    <select name="first">
-		<option value="0" selected="selected">Centered</option>
-		<option value="1">Random</option>
+	    <select name="first_rows_style">
+		    <option value="CENTERED">Centered</option>
+		    <option value="RANDOM" selected="selected">Random</option>
 	    </select>
 	</td>
 </tr>
@@ -90,64 +81,12 @@ href="http://www.google.com/chrome">Chrome</a> (Windows).</p>
 <tr>
 	<td colspan="1" align="right">Magnification:</td>
 	<td colspan="1" align="right">
-	    <select name="mag">
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="5" selected="selected">5</option>
-		<option value="10">10</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="1" align="right">Width:</td>
-	<td colspan="1" align="right">
-	    <select name="width">
-    		<option value="200">200</option>
-		<option value="250">250</option>
-		<option value="300">300</option>
-		<option value="350">350</option>
-		<option value="400">400</option>
-		<option value="450">450</option>
-		<option value="500">500</option>
-		<option value="550">550</option>
-		<option value="600">600</option>
-		<option value="650">650</option>
-		<option value="700">700</option>
-		<option value="750" selected="selected">750</option>
-		<option value="800">800</option>
-		<option value="850">850</option>
-		<option value="900">900</option>
-		<option value="950">950</option>
-		<option value="1000">1000</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="1" align="right">Height:</td>
-	<td colspan="1" align="right">
-	    <select name="height">
-    		<option value="50">50</option>
-		<option value="100">100</option>
-		<option value="150">150</option>
-		<option value="200">200</option>
-		<option value="250" selected="selected">250</option>
-		<option value="300">300</option>
-		<option value="350">350</option>
-		<option value="400">400</option>
-		<option value="450">450</option>
-		<option value="500">500</option>
-		<option value="550">550</option>
-		<option value="600">600</option>
-		<option value="650">650</option>
-		<option value="700">700</option>
-		<option value="750">750</option>
-		<option value="800">800</option>
-		<option value="850">850</option>
-		<option value="900">900</option>
-		<option value="950">950</option>
-		<option value="1000">1000</option>
+	    <select name="magnification">
+		    <option value="1x">1x</option>
+		    <option value="2x">2x</option>
+        <option value="3x">3x</option>
+		    <option value="5x" selected="selected">5x</option>
+		    <option value="10x">10x</option>
 	    </select>
 	</td>
 </tr>
@@ -155,22 +94,12 @@ href="http://www.google.com/chrome">Chrome</a> (Windows).</p>
 <tr>
 	<td colspan="2" align="center">
 	    <input type="button" name="draw" value="Draw New"
-		onClick="drawAutomata(parameters.colors,
-				      parameters.style,
-				      parameters.mag,
-				      parameters.first,
-				      parameters.width,
-				      parameters.height, 1, 1);" />
-
-	     <input type="button" name="refresh" value="Refresh Current"
-		onClick="drawAutomata(parameters.colors,
-				      parameters.style,
-				      parameters.mag,
-				      parameters.first,
-				      parameters.width,
-				      parameters.height, 1, 0);" />
-
-	     <input type="reset" name="resetButton" value="Reset" />
+        onClick="drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);" />
+	    <input type="button" name="refresh_current" value="Refresh Current Rule"
+        onClick="refresh(parameters.first_rows_style.value, parameters.magnification.value);" />
+      <input type="button" name="pause" value="Pause Scrolling"
+       onClick="pauseDrawing();" />
+      <input type="reset" name="resetButton" value="Reset" />
 	</td>
 </tr>
 </table>
