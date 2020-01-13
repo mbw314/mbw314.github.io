@@ -7,8 +7,8 @@
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
-  <script language="JavaScript" type="text/javascript" src="./js/vectors.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/vectors.js"></script>
 </head>
 
 <body onload="init();">
@@ -47,7 +47,7 @@ in <a href="http://www.google.com/chrome">Chrome</a>.</p> </div>
 					<option value="0" selected>constant attractor force</option>
 					<option value="1">bounded force + remembering vectors</option>
 					<option value="2">gravity-like force</option>
-					<option value="3">gravity-like force with global gravity</option>
+					<!--<option value="3">gravity-like force with global gravity</option>-->
 				</select></td>
 				<td> </td>
 			<td><p>Direction:</p></td>
@@ -58,7 +58,8 @@ in <a href="http://www.google.com/chrome">Chrome</a>.</p> </div>
 				<td> </td>
 			<td><p>Spacing:</p></td>
 			<td><select id="separation">
-					<option value="25">25</option>
+          <option value="15">15</option>
+          <option value="25">25</option>
 					<option value="50" selected>50</option>
 					<option value="75">75</option>
 					<option value="125">125</option>
@@ -87,6 +88,13 @@ in <a href="http://www.google.com/chrome">Chrome</a>.</p> </div>
 			<td><p>y-coordinate:</p></td>
 			<td><input id="y-coord" size="4" /></td>
 		</tr>
+    <tr>
+      <td>
+        <form name="outform" action="#">
+          <textarea rows="25" cols="80" name="output"></textarea>
+        </form>
+      </td>
+    </tr>
 	</table>
 </div>
 

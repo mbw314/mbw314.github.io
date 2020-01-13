@@ -224,10 +224,10 @@ function init(){
     posYlast[0] = HEIGHT/2;//Math.round(Math.random()*HEIGHT);
     posXcur[0] = ds[0]*Math.cos(theta[0]) + posXlast[0];
     posYcur[0] = ds[0]*Math.sin(theta[0]) + posYlast[0];
-    color[0] =  'rgb(' + r0 + ',' + g0 + ',' + b0 + ')';  //"rgb(0,0,0)";
+    color[0] = Color.colorString(r0, g0, b0);
     bias[0] = 1;
 
-    ctx.fillStyle = 'rgb(' + r_bg + ',' + g_bg + ',' + b_bg + ')';
+    ctx.fillStyle = Color.colorString(r_bg, g_bg, b_bg);
     ctx.fillRect(0, 0, width, height);
 
     // call the drawing function
@@ -240,7 +240,6 @@ function init(){
 
 
 function draw() {
-
   if (stop == false) {
     if (Math.random() < split_prob && N < N_MAX) {
       splitting = true;
@@ -274,12 +273,12 @@ function draw() {
 
         //document.outform.output.value = 'N = ' + N + ', (r,g,b) = (' + r + ',' + g + ',' + b + ')';
 
-        color[N-1] = 'rgb(' + r + ',' + g + ',' + b + ')';
+        color[N-1] = Color.colorString(r, g, b);
 
-        bias[N-1] = -1*bias[i];
-        theta[i]   = Math.PI/3;
-        theta[N-1] = -1*theta[i];
-        ds[N-1] = Math.random()*ds_avg + ds_var;
+        bias[N-1] = -1 * bias[i];
+        theta[i] = Math.PI / 3;
+        theta[N-1] = -1 * theta[i];
+        ds[N-1] = Math.random() * ds_avg + ds_var;
 
         posXlast[N-1] = posXlast[i];
         posYlast[N-1] = posYlast[i];
@@ -287,8 +286,8 @@ function draw() {
         posXcur[N-1] = posXcur[i];
         posYcur[N-1] = posYcur[i]
 
-        var dispX1 = (posXcur[i] - posXlast[i])*Math.cos(theta[i]) - (posYcur[i] - posYlast[i])*Math.sin(theta[i]);
-        var dispY1 = (posXcur[i] - posXlast[i])*Math.sin(theta[i]) + (posYcur[i] - posYlast[i])*Math.cos(theta[i]);
+        var dispX1 = (posXcur[i] - posXlast[i]) * Math.cos(theta[i]) - (posYcur[i] - posYlast[i]) * Math.sin(theta[i]);
+        var dispY1 = (posXcur[i] - posXlast[i]) * Math.sin(theta[i]) + (posYcur[i] - posYlast[i]) * Math.cos(theta[i]);
 
         var norm1 = ds[i] / Math.sqrt(dispX1 * dispX1 + dispY1 * dispY1);
 
