@@ -65,7 +65,6 @@ const cellConfigRowNums = {
   "THREE_AND_THREE_ABOVE": 2
 }
 
-//const colors = ['black', 'white', 'red', 'blue', 'green', 'purple'];
 
 function range(n) {
   return [...Array(n).keys()];
