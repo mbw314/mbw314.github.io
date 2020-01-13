@@ -577,7 +577,7 @@ class ComplexMesh {
     // assumes that both meshes have been populated
     for (let i=0; i<this.numRows; i++) {
       for (let j=0; j<this.numCols; j++) {
-        let color = `rgb(${i * 255 / this.numRows}, 0, ${j * 255 / this.numCols})`;
+        let color = Color.colorString(i * 255 / this.numRows, 0, j * 255 / this.numCols);
         if (i+1 < this.numRows) {
           Complex.drawSegment(this.nodes[i][j], this.nodes[i + 1][j], domainCanvasUtil, color, 1);
           Complex.drawSegment(this.imageNodes[i][j], this.imageNodes[i + 1][j], imageCanvasUtil, color, 1);
@@ -611,7 +611,7 @@ function getF() {
 
 
 function drawAxes() {
-  let c = "rgb(200,200,200)";
+  let c = Color.colorString(200, 200, 200);
   domainCanvasUtil.drawLine(
     spaceToScreenX(ranA),
     spaceToScreenY(0),

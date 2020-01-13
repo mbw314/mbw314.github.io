@@ -1,35 +1,3 @@
-class Color {
-  constructor(red, green, blue) {
-    this.r = red;
-    this.g = green;
-    this.b = blue;
-  }
-
-  static interpolate(c0, c1, t) {
-    // if a color is a point in [0, 255] x [0, 255] x [0, 255], parametrize a line segment
-    // between two colors by [0, 1], that is, c(t) = t * c1 + (1 - t) * c0,
-    // and find the color c(t) at given parameter t.
-    let r = (t * c1.r + (1.0 - t) * c0.r) % 256;
-    let g = (t * c1.g + (1.0 - t) * c0.g) % 256;
-    let b = (t * c1.b + (1.0 - t) * c0.b) % 256;
-    return new Color(r, g, b);
-  }
-
-  static getColorLookup(c0, c1, n) {
-    let lookup = [];
-    for (let i = 0; i < n; i++) {
-      let c = Color.interpolate(c0, c1, i / (n - 1));
-      lookup.push(c.toString());
-    }
-    lookup.push('rgb(0, 0, 0)');
-    return lookup;
-  }
-
-  toString() {
-    return `rgb(${this.r.toFixed(3)}, ${this.g.toFixed(3)}, ${this.b.toFixed(3)})`;
-  }
-}
-
 const X_MIN = -2.0;
 const X_MAX = 1.0;
 const Y_MIN = -1.5
@@ -66,7 +34,7 @@ class MandelbrotSet {
     this.scale_factor = scale_factor;
     this.color0 = color0;
     this.color1 = color1;
-    this.color_lookup = Color.getColorLookup(color0, color1, max_iterations);
+    this.color_lookup = this.getColorLookup(color0, color1, max_iterations);
     //this.color_lookup.forEach(c => println(c.toString()));
   }
 
@@ -77,6 +45,16 @@ class MandelbrotSet {
   f(x, y, c_x, c_y) {
     // the update function
     return [x * x - y * y + c_x, 2 * x * y + c_y];
+  }
+
+  getColorLookup(c0, c1, n) {
+    let lookup = [];
+    for (let i = 0; i < n; i++) {
+      let c = Color.interpolate(c0, c1, i / (n - 1));
+      lookup.push(c.toString());
+    }
+    lookup.push('rgb(0, 0, 0)');
+    return lookup;
   }
 
   draw(ctx) {

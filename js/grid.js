@@ -28,6 +28,8 @@ var data5; // c for dot,  c for line
 var count = 0;
 
 
+
+
 function addLine(x0, y0, x1, y1, c) {
   type.length++;
   data1.length++;
@@ -71,11 +73,11 @@ function addDot(x, y, r, c) {
 
 function draw() {
   if (count < type.length) {
-    if (type[count] == "dot")
+    if (type[count] == "dot") {
       canvasUtil.drawDisk(data1[count], data2[count], data3[count], data5[count]);
-    else
+    } else {
       canvasUtil.drawLine(data1[count], data2[count], data3[count], data4[count], data5[count], 1);
-
+    }
     count++;
   }
 }
@@ -83,15 +85,15 @@ function draw() {
 
 function firstPoints() {
   // draw a line from a random point
-  x0 = Math.round(Math.random()*(WIDTH/sep));
-  y0 = Math.round(Math.random()*(HEIGHT/sep));
+  x0 = Math.round(Math.random() * (WIDTH / sep));
+  y0 = Math.round(Math.random() * (HEIGHT / sep));
 
   // check to make sure it's ok to draw the first point
   if (0 < x0 && x0 < Math.round(WIDTH/sep) &&
          0 < y0 && y0 < Math.round(HEIGHT/sep)) {  //inside the bounds
 
     if (dots[x0][y0] == 0) {	// spot is empty
-      addDot(x0 * sep, y0 * sep, dotRad, "rgb(0,255,0)");
+      addDot(x0 * sep, y0 * sep, dotRad, "green");
       dots[x0][y0] = 1;
       dotsLeft = dotsLeft - 1;
 
@@ -128,8 +130,8 @@ function firstPoints() {
             canGoAhead = 0;
             canTurnRight = 0;
 
-            addLine(x0*sep, y0*sep, x1*sep, y1*sep, "rgb(255,255,255)");
-            addDot(x1*sep, y1*sep, dotRad, "rgb(255,255,255)");
+            addLine(x0*sep, y0*sep, x1*sep, y1*sep, "white");
+            addDot(x1*sep, y1*sep, dotRad, "white");
             dotsLeft = dotsLeft - 1;
             dots[x1][y1] = 1;
 
@@ -178,10 +180,10 @@ function moveToNext(d) {
 
     if (dots[x2][y2] == 0) {
 
-      addDot(x2*sep, y2*sep, dotRad, "rgb(255,255,255)");
+      addDot(x2*sep, y2*sep, dotRad, "white");
       dotsLeft = dotsLeft - 1;
       dots[x2][y2] = 1;
-      addLine(x1*sep, y1*sep, x2*sep, y2*sep, "rgb(255,255,255)");
+      addLine(x1*sep, y1*sep, x2*sep, y2*sep, "white");
 
       x0 = x1;
       y0 = y1;
@@ -236,7 +238,7 @@ function init(){
     for (var i=0; i<dots.length; i++) {
       for (var j=0; j<dots[i].length; j++) {
         dots[i][j] = 0;
-        if (j > 0 && i > 0) canvasUtil.drawDisk(i * sep, j * sep, tempRad, "rgb(0,0,0)");
+        if (j > 0 && i > 0) canvasUtil.drawDisk(i * sep, j * sep, tempRad, "black");
       }
     }
 
@@ -253,7 +255,7 @@ function init(){
     // draw reference dots
     for (var i=1; i<Math.round(WIDTH/sep); i++) {
       for (var j=1; j<Math.round(HEIGHT/sep); j++) {
-        canvasUtil.drawDisk(i*sep, j*sep, tempRad, 'rgb(0,0,0)');
+        canvasUtil.drawDisk(i*sep, j*sep, tempRad, "black");
       }
     }
 
@@ -273,7 +275,7 @@ function init(){
       // "end dot"
       if ( 0 < x1 && x1 < Math.round(WIDTH/sep) &&
         0 < y1 && y1 < Math.round(HEIGHT/sep) ) {
-        addDot(x1*sep, y1*sep, dotRad, "rgb(255,0,0)");
+        addDot(x1*sep, y1*sep, dotRad, "red");
       }
     }
 

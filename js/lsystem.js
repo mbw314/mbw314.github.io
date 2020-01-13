@@ -1,123 +1,17 @@
+const WIDTH = 750;
+const HEIGHT = 750;
+
+var canvas;
+var ctx;
+var canvasUtil;
+var sysDrawer;
+
 class Pen {
+  // a component of a Turtle
   constructor(width, color, is_on) {
     this.width = width; // positive int
     this.color = color; // string
     this.is_on = is_on; // Boolean
-  }
-}
-
-
-class Point {
-  constructor(x, y) {
-    this.x = x; // float
-    this.y = y; // float
-  }
-
-  translate(dir, dist) { // vec2d and float
-    let unit_dir = dir.scale(1 / dir.norm());
-    let new_x = this.x + unit_dir.x * dist;
-    let new_y = this.y + unit_dir.y * dist;
-    return new Point(new_x, new_y);
-  }
-
-  toString() {
-    return ['(', this.x.toFixed(3), ', ', this.y.toFixed(3), ')'].join('');
-  }
-
-  distance(p) {
-    return Math.sqrt((this.x - p.x) * (this.x - p.x) + (this.y - p.y) * (this.y - p.y));
-  }
-
-  scale(a) {
-    return new Vec2D(a * this.x, a * this.y);
-  }
-
-  static centroid(points) { // list of Point objects
-    let centroid_x = 0.0;
-    let centroid_y = 0.0;
-    for (let i in points) {
-      centroid_x += points[i].x;
-      centroid_y += points[i].y;
-      //console.log('new centroid vals: ' + centroid_x + ', ' + centroid_y);
-    }
-    return new Point(centroid_x / points.length, centroid_y / points.length);
-  }
-}
-
-
-class LineSegment {
-  constructor(initial, terminal, width, color) {
-    this.p0 = initial // Point
-    this.p1 = terminal // Point
-    this.width = width // int
-    this.color = color // string
-  }
-
-  draw(ctx) { // canvas context
-    //console.log(this.toString());
-    ctx.strokeStyle = this.color;
-    ctx.lineWidth = this.width;
-    ctx.beginPath();
-    ctx.moveTo(this.p0.x, this.p0.y);
-    ctx.lineTo(this.p1.x, this.p1.y);
-    ctx.closePath();
-    ctx.stroke();
-  }
-
-  toString() {
-    return [
-      this.p0.toString(), '->', this.p1.toString(),
-      '; color =', this.color,
-      '; width =', this.width].join(' ');
-  }
-
-  getMidpoint() {
-    let x = (this.p0.x + this.p1.x) / 2.0;
-    let y = (this.p0.y + this.p1.y) / 2.0;
-    return new Point(x, y);
-  }
-
-  scale(a) {
-    this.p0 = this.p0.scale(a);
-    this.p1 = this.p1.scale(a);
-  }
-
-  translate(dir, dist) {
-    this.p0 = this.p0.translate(dir, dist);
-    this.p1 = this.p1.translate(dir, dist);
-  }
-}
-
-
-class Vec2D extends Point {
-  constructor(x, y) {
-    super(x, y);
-  }
-
-  plus(v) {
-    return new Vec2D(this.x + v.x, this.y + v.y);
-  }
-
-  minus(v) {
-    return new Vec2D(this.x - v.x, this.y - v.y);
-  }
-
-  rotate(theta) { // radians
-    let new_x = this.x * Math.cos(theta) - this.y * Math.sin(theta);
-    let new_y = this.x * Math.sin(theta) + this.y * Math.cos(theta);
-    return new Vec2D(new_x, new_y);
-  }
-
-  norm() {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
-  }
-
-  dot(v) {
-    return this.x * v.x + this.y * v.y;
-  }
-
-  toString() {
-    return ['(', this.x.toFixed(3), ', ', this.y.toFixed(3), ')'].join('')
   }
 }
 
@@ -141,9 +35,9 @@ class Turtle {
     [this.pos, this.dir, this.pen, this.dist] = this.stack.pop();
   }
 
-  draw(ctx) {
+  draw() {
     for (let i in this.segments) {
-      this.segments[i].draw(ctx);
+      this.segments[i].draw(canvasUtil);
     }
   }
 
@@ -217,12 +111,12 @@ class Turtle {
 class LSystem {
   // TODO: can we get by with just a map of rules, so alphabet is represented by the keys?
   constructor(variables, constants, rules) {
-    [this.variables, this.constants] = this.validate_alphabet(variables, constants);
-    this.rules = this.validate_rules(rules); // map of char -> string
+    [this.variables, this.constants] = this.validateAlphabet(variables, constants);
+    this.rules = this.validateRules(rules); // map of char -> string
     this.word = []; // char array representing current word
   }
 
-  is_valid_word(word) {
+  isValidWord(word) {
     let cs = word.split('');
     for (let i in cs) {
       if (!this.variables.has(cs[i]) && !this.constants.has(cs[i])) {
@@ -233,19 +127,19 @@ class LSystem {
     return true;
   }
 
-  set_variables_and_constants(variables, constants) {
-    [this.variables, this.constants] = this.validate_alphabet(variables, constants);
+  setVariablesAndConstants(variables, constants) {
+    [this.variables, this.constants] = this.validateAlphabet(variables, constants);
     //println('set variables and constants');
     //println(this.variables);
   }
 
-  set_rules(rules) {
-    this.rules = this.validate_rules(rules);
+  setRules(rules) {
+    this.rules = this.validateRules(rules);
     //println('set new rules:');
     //println(rules.toString());
   }
 
-  validate_alphabet(variables, constants) {
+  validateAlphabet(variables, constants) {
     let var_set = new Set(variables);
     let const_set = new Set(constants);
     for (let i in var_set) {
@@ -256,12 +150,12 @@ class LSystem {
     return [var_set, const_set];
   }
 
-  validate_rules(rules) {
+  validateRules(rules) {
     for (let c in rules) {
       if (!this.variables.has(c)) {
         throw new Error(`bad character ${c} in rule set`);
       }
-      if (!this.is_valid_word(rules[c])) {
+      if (!this.isValidWord(rules[c])) {
         throw new Error(`bad word ${c} -> ${rules[c]} in rule set`);
       }
     }
@@ -277,9 +171,9 @@ class LSystem {
     return this.word;
   }
 
-  set_word(word) {
+  setWord(word) {
     // validate and store a new axiom word
-    if (this.is_valid_word(word)) {
+    if (this.isValidWord(word)) {
       this.word = word.split('');
       //console.log('Set new axiom word: ' + w0);
       //println('Set new axiom word: ' + w0);
@@ -352,7 +246,7 @@ class LSystemDrawer {
   // connect an LSystem and a Turtle in order to render the L-System to a canvas
   constructor(spec) {
     this.sys = new LSystem(spec.variables, spec.constants, spec.rules);
-    this.sys.set_word(spec.axiom);
+    this.sys.setWord(spec.axiom);
     this.turtle = new Turtle(pos0, dir0, pen0);
     //this.dist = dist0;
     this.angle = spec.angle;
@@ -366,10 +260,10 @@ class LSystemDrawer {
   }
 
   //draw_iteration(ctx) {
-  draw(ctx) {
+  draw() {
     let time0 = (new Date()).getTime();
     // translate the L-System string into sequence of Turtle drawing instructions
-    clear_canvas();
+    canvasUtil.clearCanvas();
     //let word = this.sys.iterate();
     let word = this.sys.word;
     //console.log(word);
@@ -406,16 +300,10 @@ class LSystemDrawer {
     }
     this.turtle.recenterPoints(WIDTH, HEIGHT);
     //this.turtle.printSegments();
-    this.turtle.draw(ctx);
+    this.turtle.draw();
     let time1 = (new Date()).getTime();
-    println(`drew iteration ${this.iteration} with ${this.turtle.segments.length} line segments in ${(time1 - time0) / 1000.0} seconds`);
+    canvasUtil.println(`drew iteration ${this.iteration} with ${this.turtle.segments.length} line segments in ${(time1 - time0) / 1000.0} seconds`);
     this.iteration += 1;
-
-    // let test_set = new Set();
-    // for (let i in this.turtle.segments) {
-    //   test_set.add(this.turtle.segments[i]);
-    // }
-    // println(`testing storing segements in a set: length = ${test_set.size}`);
   }
 }
 
@@ -602,30 +490,6 @@ const default_actions = {
 };
 
 
-WIDTH = 750;
-HEIGHT = 750;
-
-var canvas;
-var ctx;
-var sysDrawer;
-
-function println(msg) {
-  document.outform.output.value += msg + '\n';
-  console.log(msg);
-}
-
-function clear_text() {
-  document.outform.output.value = "";
-}
-
-function clear_canvas() {
-  ctx.fillStyle = "#FFFFFF";
-  ctx.beginPath();
-  ctx.rect(0, 0, WIDTH, HEIGHT);
-  ctx.closePath();
-  ctx.fill();
-}
-
 function draw_iteration() {
   // draw another iteration of the current LSystem when the 'draw next iteration' button is pressed
   sysDrawer.iterate();
@@ -635,13 +499,13 @@ function draw_iteration() {
 
 function load_example(ex) {
   // load the selected example when the 'load example' button is pressed
-  clear_text();
+  canvasUtil.clearText();
   let spec = new LSystemSpec(Object.assign({'name': ex}, examples[ex]));
-  console.log(spec.toString());
-  println(spec.toString());
+  //console.log(spec.toString());
+  canvasUtil.println(spec.toString());
   sysDrawer = new LSystemDrawer(spec);
   //sysDrawer.draw_iteration(ctx);
-  sysDrawer.draw(ctx);
+  sysDrawer.draw();
 }
 
 function init() {
@@ -650,6 +514,7 @@ function init() {
   canvas.height = HEIGHT;
   if (canvas.getContext) {
     ctx = canvas.getContext('2d');
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     load_example('ex1');
   }
 }

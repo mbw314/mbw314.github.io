@@ -6,6 +6,7 @@ let paused = true;
 let ca; // cellular automaton object
 var gridHeight;
 var magnification;
+var colors;
 var colorMatrix;
 
 var oldTimeStamp = 0;
@@ -64,14 +65,14 @@ const cellConfigRowNums = {
   "THREE_AND_THREE_ABOVE": 2
 }
 
-const colors = ['black', 'white', 'red', 'blue', 'green', 'purple'];
+//const colors = ['black', 'white', 'red', 'blue', 'green', 'purple'];
 
 function range(n) {
   return [...Array(n).keys()];
 }
 
 Number.prototype.mod = function(n) {
-    return ((this % n) +n ) % n;
+    return ((this % n) + n) % n;
 };
 
 
@@ -184,7 +185,7 @@ class CellularAutomaton {
 
   fillColorMatrix(numRows) {
     // produce full ColorMatrix from the current system
-    let t0 =(new Date()).getTime();
+    let t0 = (new Date()).getTime();
     let rows = this.currentRows;
     for (let i=this.currentRows.length; i < numRows; i++) {
       rows.push(this.iterate());
@@ -215,6 +216,7 @@ function drawNew(numColors, cellConfigKey, initialRowsStyle, magKey) {
   let numInitialRows = cellConfigRowNums[cellConfigKey];
   let cellConfig = cellConfigs[cellConfigKey];
   //canvasUtil.println(`drawNew with numColors = ${numColors}; cellConfig = ${cellConfig}; initialRowsStyle = ${initialRowsStyle}; numInitialRows = ${numInitialRows}; magnification = ${magnification}; gridWidth = ${gridWidth}; gridHeight = ${gridHeight}`);
+  colors = range(6).map(i => Color.random());
   ca = new CellularAutomaton(colors.slice(0, numColors), gridWidth, numInitialRows, cellConfig);
   ca.initialize(initialRowsStyle);
   ca.fillColorMatrix(gridHeight);
@@ -262,7 +264,7 @@ function init() {
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     canvasUtil.clearCanvas();
-    return setInterval(draw, 50);
+    return setInterval(draw, 20);
   } else {
     alert('You need a better web browser to see this.');
   }
