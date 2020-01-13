@@ -96,7 +96,6 @@ var canvasUtil;
 var ensemble;
 var paused = false;
 
-var COLOR = "rgb(255,255,255)";
 const ATTRACTOR_COLOR = "black";
 
 var SPEED_MAX = 20;
@@ -104,11 +103,11 @@ var ACC_MAX = 1;
 var PARTICLE_MASS_MAX = 5;
 
 var NUM_PARTICLES_MIN = 1;
-var NUM_PARTICLES = 1;
+var NUM_PARTICLES = 2;
 var NUM_PARTICLES_MAX = 10;
 
 var NUM_ATTRACTORS_MIN = 1;
-var NUM_ATTRACTORS = 1;
+var NUM_ATTRACTORS = 2;
 var NUM_ATTRACTORS_MAX = 5;
 
 var TAIL = 10;
@@ -153,61 +152,49 @@ function refreshAttractors() {
 }
 
 class Attractor {
-  constructor(x, y, mass, color) {
-    this.x = x;
-    this.y = y;
+  constructor(pos, mass, color) {
+    this.pos = pos;
     this.mass = mass;
     this.color = color;
   }
 
   toString() {
-    return `attractor: pos = (${this.x.toFixed(3)}, ${this.y.toFixed(3)}); mass = ${this.mass.toFixed(3)}`;
+    return `attractor: pos = ${this.pos.toString()}; mass = ${this.mass.toFixed(3)}`;
   }
 
   draw() {
-    canvasUtil.drawDisk(this.x, this.y, Math.sqrt(this.mass), this.color);
+    canvasUtil.drawDisk(this.pos.x, this.pos.y, Math.sqrt(this.mass), this.color);
   }
 
   static makeRandom(n) {
     let attractors = [];
     for (let i=0; i<n; i++) {
-      // let x = WIDTH / 2.0;  //(Math.random() * WIDTH + 1) % WIDTH; //random integer between 0 and WIDTH-1
-      // let y = HEIGHT / 2.0; //(Math.random() * HEIGHT + 1) % HEIGHT; //random integer between 0 and HEIGHT-1
-      // let mass  = 1000; //(Math.random() * ATT_MASS_MOD + 1) % ATT_MASS_MOD + ATT_MASS_MIN; //random integer
-
-      let mid_x = WIDTH / 2.0;
-      let mid_y = HEIGHT / 2.0;
-      let x = Math.random() * (WIDTH * 0.5) + WIDTH * 0.25; //(Math.random() * WIDTH + 1) % WIDTH; //random integer between 0 and WIDTH-1
-      let y = Math.random() * (HEIGHT * 0.5) + HEIGHT * 0.25;  //Math.random() * HEIGHT + 1) % HEIGHT; //random integer between 0 and HEIGHT-1
-      let mass = Math.random() * (ATT_MASS_MOD + 1) + ATT_MASS_MIN; //(Math.random() * ATT_MASS_MOD + 1) % ATT_MASS_MOD + ATT_MASS_MIN; //random integer
-
-      attractors.push(new Attractor(x, y, mass, ATTRACTOR_COLOR));
+      let x = Math.random() * (WIDTH * 0.5) + WIDTH * 0.25;
+      let y = Math.random() * (HEIGHT * 0.5) + HEIGHT * 0.25;
+      let pos = new Vec2D(x, y);
+      let mass = Math.random() * (ATT_MASS_MOD + 1) + ATT_MASS_MIN;
+      attractors.push(new Attractor(pos, mass, ATTRACTOR_COLOR));
     }
     return attractors;
   }
 }
 
 class Particle {
-  constructor(x, y, v_x, v_y, a_x, a_y, mass, color, tail_len) {
-    // TODO: refactor to use a Point or Vector object for position, velocity, acceleration
-
-    // each position is an array holding (at most) the previous TAIL_MAX positions
+  constructor(pos, vel, acc, mass, color, tail_len) {
+    // position is an array holding (at most) the previous TAIL_MAX positions
     // the most recent position is first in the array
-    this.xs = new Array(TAIL).fill(x);
-    this.ys = new Array(TAIL).fill(y);
-    this.v_x = v_x;
-    this.v_y = v_y;
-    this.a_x = a_x;
-    this.a_y = a_y;
+    this.ps = new Array(TAIL).fill(pos);
+    this.vel = vel;
+    this.acc = acc;
     this.mass = mass;
     this.color = color;
     this.tail_len = tail_len;
   }
 
   toString() {
-    let p = `pos = (${this.xs[0].toFixed(3)}, ${this.ys[0].toFixed(3)})`;
-    let v = `vel = (${this.v_x.toFixed(3)}, ${this.v_y.toFixed(3)})`;
-    let a = `acc = (${this.a_x.toFixed(3)}, ${this.a_y.toFixed(3)})`;
+    let p = `pos = ${this.ps[0].toString()}`;
+    let v = `vel = ${this.vel.toString()}`;
+    let a = `acc = ${this.acc.toString()}`;
     let m = `mass = ${this.mass.toFixed(3)}`;
     return "particle: " + [p, v, a, m].join('; ');
   }
@@ -219,7 +206,7 @@ class Particle {
     ctx.fillStyle = this.color;
     for (let j=0; j<this.tail_len; j++) {
       let radius = 2 * this.mass * (this.tail_len - j) / this.tail_len;
-      ctx.arc(this.xs[j], this.ys[j], radius, 0, 2 * Math.PI, true)
+      ctx.arc(this.ps[j].x, this.ps[j].y, radius, 0, 2 * Math.PI, true);
     }
     ctx.closePath();
     ctx.fill();
@@ -228,33 +215,17 @@ class Particle {
   static makeRandom(n) {
     let particles = [];
     for (let i=0; i<n; i++) {
-      // fill position and velocity randomly
-      // let pos_x = WIDTH / 2.0; //(Math.random() * WIDTH + 1) % WIDTH; //random integer between 0 and WIDTH-1
-      // let pos_y = HEIGHT / 5.0; //(Math.random() * HEIGHT + 1) % HEIGHT; //random integer between 0 and WIDTH-1
-      // // random velocity
-      // let vel_x = -12.0; //2 * Math.random() - 1.0;
-      // let vel_y = 0.0; //2 * Math.random() - 1.0;
-      // // no initial acceleration
-      // let acc_x = 0.0;
-      // let acc_y = 0.0;
-      // // random mass
-      // let mass = 5.0; //(Math.random() * 4 + 1) % 4 + 1; //random integer between 1 and 4
-
-      let pos_x = Math.random() * (WIDTH + 1);
-      let pos_y = Math.random() * (HEIGHT + 1);
+      let pos = new Vec2D(Math.random() * (WIDTH + 1), Math.random() * (HEIGHT + 1));
       // random velocity vector: random angle and speed
       let theta = Math.random() * 2 * Math.PI;
       let speed = Math.random() * SPEED_MAX / 10;
-      let vel_x = speed * Math.cos(theta);
-      let vel_y = speed * Math.sin(theta);
+      let vel = new Vec2D(speed * Math.cos(theta), speed * Math.sin(theta))
       // no initial acceleration
-      let acc_x = 0.0;
-      let acc_y = 0.0;
+      let acc = new Vec2D(0.0, 0.0);
       // random mass and color
       let mass = Math.random() * PARTICLE_MASS_MAX + 1;
-      let color = `rgb(${Math.random() * 256}, ${Math.random() * 256}, ${Math.random() * 256})`;
-
-      particles.push(new Particle(pos_x, pos_y, vel_x, vel_y, acc_x, acc_y, mass, color, TAIL));
+      let color = Color.random();
+      particles.push(new Particle(pos, vel, acc, mass, color, TAIL));
     }
     return particles;
   }
@@ -299,80 +270,50 @@ class Ensemble {
   updateState() {
     // update each position, velocity, acceleration
     for (let i=0; i<NUM_PARTICLES; i++) {
-      // TODO: what is going on here?
-      //let G = 1 / (10 * Math.pow(10, -1 * G_POW / 5));
       let G = Math.pow(10, G_POW / 5);
+      this.particles[i].acc = new Vec2D(0.0, 0.0);
 
-      // reset accelerations
-      this.particles[i].a_x = 0.0;
-      this.particles[i].a_y = 0.0;
-
-      // update acceleration using forces from the attractors
+      // update acceleration using forces from the attractors and (optionally) other particles
       for (let j=0; j<NUM_ATTRACTORS; j++) {
-        let r_x = this.particles[i].xs[0] - this.attractors[j].x;
-        let r_y = this.particles[i].ys[0] - this.attractors[j].y;
-        //canvasUtil.println(`diff: (${r_x}, ${r_y})`);
-        let r_squared = r_x * r_x + r_y * r_y;
-        // law of graviation
-        this.particles[i].a_x += -1.0 * r_x * G * this.attractors[j].mass / Math.pow(r_squared, 1.5);
-        this.particles[i].a_y += -1.0 * r_y * G * this.attractors[j].mass / Math.pow(r_squared, 1.5);
+        let r = this.particles[i].ps[0].minus(this.attractors[j].pos);
+        this.particles[i].acc = r.scale(-1.0 * G * this.attractors[j].mass / Math.pow(r.normSq(), 1.5)).plus(this.particles[i].acc);
       }
 
       if (document.getElementById("massive").value == 0) {
-        // forces from the other particles
         for (var j=0; j<NUM_PARTICLES; j++) {
           if (j != i) {
-            let r_x = this.particles[i].xs[0] - this.particles[j].xs[0];
-            let r_y = this.particles[i].ys[0] - this.particles[j].ys[0];
-            let r_squared = r_x * r_x + r_y * r_y;
-            this.particles[i].a_x += -1.0 * r_x * G * this.particles[j].mass / Math.pow(r_squared, 1.5);
-            this.particles[i].a_y += -1.0 * r_y * G * this.particles[j].mass / Math.pow(r_squared, 1.5);
+            let r = this.particles[i].ps[0].minus(this.particles[j].ps[0]);
+            this.particles[i].acc = r.scale(-1.0 * G * this.particles[j].mass / Math.pow(r.normSq(), 1.5)).plus(this.particles[i].acc);
           }
         }
       }
 
-      // if norm of acceleraton is too high, rescale the acceleraton vector to have appropriate length
-      let acc_norm = Math.sqrt(this.particles[i].a_x * this.particles[i].a_x + this.particles[i].a_y * this.particles[i].a_y);
-      //canvasUtil.println(`new acceleration norm = ${acc_norm}`);
-      if (acc_norm > ACC_MAX) {
-        this.particles[i].a_x *= ACC_MAX / acc_norm;
-        this.particles[i].a_y *= ACC_MAX / acc_norm;
+      // bound acceleration
+      let accNorm = this.particles[i].acc.norm();
+      if (accNorm > ACC_MAX) {
+        this.particles[i].acc = this.particles[i].acc.scale(ACC_MAX / accNorm);
       }
-      //canvasUtil.println(`new acceleration = (${this.particles[i].a_x}, ${this.particles[i].a_y})`);
 
-      // update velocity
-      // if speed is too high, rescale the veclocity vector to have appropriate length
-      this.particles[i].v_x += this.particles[i].a_x;
-      this.particles[i].v_y += this.particles[i].a_y;
-      let speed = Math.sqrt(this.particles[i].v_x * this.particles[i].v_x + this.particles[i].v_y * this.particles[i].v_y);
+      // update and bound velocity
+      this.particles[i].vel = this.particles[i].vel.plus(this.particles[i].acc);
+      let speed = this.particles[i].vel.norm();
       if (speed > SPEED_MAX) {
-        this.particles[i].v_x *= SPEED_MAX / speed;
-        this.particles[i].v_y *= SPEED_MAX / speed;
+        this.particles[i].vel = this.particles[i].vel.scale(SPEED_MAX / speed);
       }
-      //speed = Math.sqrt(this.particles[i].v_x * this.particles[i].v_x + this.particles[i].v_y * this.particles[i].v_y);
-      //canvasUtil.println(`new speed = ${speed})`);
-
-      //canvasUtil.println(`new velocity = (${this.particles[i].v_x}, ${this.particles[i].v_y})`);
 
       // if keeping the particles inside the canvas...
       if (document.getElementById("confine").value == 0) {
-        if (this.particles[i].xs[0] + this.particles[i].v_x > WIDTH || this.particles[i].xs[0] + this.particles[i].v_x < 0) {
-          this.particles[i].v_x *= -1.0;
+        if (this.particles[i].ps[0].x + this.particles[i].vel.x > WIDTH || this.particles[i].ps[0].x + this.particles[i].vel.x < 0) {
+          this.particles[i].vel.x *= -1.0;
         }
-        if (this.particles[i].ys[0] + this.particles[i].v_y > HEIGHT || this.particles[i].ys[0] + this.particles[i].v_y < 0) {
-          this.particles[i].v_y *= -1.0;;
+        if (this.particles[i].ps[0].y + this.particles[i].vel.y > HEIGHT || this.particles[i].ps[0].y + this.particles[i].vel.y < 0) {
+          this.particles[i].vel.y *= -1.0;;
         }
       }
 
-      // get new position
-      let pos_x = this.particles[i].xs[0] + this.particles[i].v_x;
-      let pos_y = this.particles[i].ys[0] + this.particles[i].v_y;
-
-      //canvasUtil.println(`new position = (${pos_x}, ${pos_y})`);
-
-      // keep track of previous positions
-      this.particles[i].xs = [pos_x].concat(this.particles[i].xs.slice(0, TAIL - 1));
-      this.particles[i].ys = [pos_y].concat(this.particles[i].ys.slice(0, TAIL - 1));
+      // get new position, update previous positions
+      let pos = this.particles[i].ps[0].plus(this.particles[i].vel)
+      this.particles[i].ps = [pos].concat(this.particles[i].ps.slice(0, TAIL - 1));
     }
   }
 }
@@ -386,11 +327,6 @@ function draw() {
   ensemble.updateState();
   ensemble.drawAttractors();
   ensemble.drawParticles();
-
-  // ensemble.attractors.slice(0, NUM_ATTRACTORS).forEach(a => a.draw());
-  //ensemble.particles.slice(0, NUM_PARTICLES).forEach(p => p.draw());
-  //canvasUtil.println("drew a frame");
-  //ensemble.particles.slice(0, 1).forEach(p => canvasUtil.println(p.toString()));
 }
 
 
@@ -401,20 +337,7 @@ function init(){
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
-    // set up the particles  and attractors
     ensemble = Ensemble.makeRandom(NUM_PARTICLES_MAX, NUM_ATTRACTORS_MAX);
-    //ensemble.particles.forEach(p => canvasUtil.println(p.toString()));
-    //ensemble.attractors.forEach(a => canvasUtil.println(a.toString()));
-
-    //canvasUtil.println(ensemble.toString());
-
-    //this.ensemble.particles.slice(0, 1).forEach(p => canvasUtil.println(p.toString()));
-    //this.ensemble.attractors.forEach(a => canvasUtil.println(a.toString()));
-    //makeParticles();
-    //makeAttractors();
-
-    // call the drawing function
-    //return setInterval(ensemble.draw, 10);
     return setInterval(draw, 5);
   }
   else {
