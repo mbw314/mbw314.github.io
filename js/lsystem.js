@@ -1,6 +1,5 @@
 const WIDTH = 750;
 const HEIGHT = 750;
-
 var canvas;
 var ctx;
 var canvasUtil;
