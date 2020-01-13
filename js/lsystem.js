@@ -304,12 +304,6 @@ class LSystemDrawer {
     let time1 = (new Date()).getTime();
     canvasUtil.println(`drew iteration ${this.iteration} with ${this.turtle.segments.length} line segments in ${(time1 - time0) / 1000.0} seconds`);
     this.iteration += 1;
-
-    // let test_set = new Set();
-    // for (let i in this.turtle.segments) {
-    //   test_set.add(this.turtle.segments[i]);
-    // }
-    // println(`testing storing segements in a set: length = ${test_set.size}`);
   }
 }
 
@@ -495,25 +489,6 @@ const default_actions = {
   ']': actions.POP_STATE
 };
 
-
-
-//
-// function println(msg) {
-//   document.outform.output.value += msg + '\n';
-//   console.log(msg);
-// }
-
-// function clear_text() {
-//   document.outform.output.value = "";
-// }
-
-// function clear_canvas() {
-//   ctx.fillStyle = "#FFFFFF";
-//   ctx.beginPath();
-//   ctx.rect(0, 0, WIDTH, HEIGHT);
-//   ctx.closePath();
-//   ctx.fill();
-// }
 
 function draw_iteration() {
   // draw another iteration of the current LSystem when the 'draw next iteration' button is pressed

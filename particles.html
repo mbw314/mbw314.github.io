@@ -153,7 +153,7 @@ function refreshAttractors() {
 
 class Attractor {
   constructor(pos, mass, color) {
-    this.pos = pos;
+    this.pos = pos; // Vec2D
     this.mass = mass;
     this.color = color;
   }
@@ -183,9 +183,9 @@ class Particle {
   constructor(pos, vel, acc, mass, color, tail_len) {
     // position is an array holding (at most) the previous TAIL_MAX positions
     // the most recent position is first in the array
-    this.ps = new Array(TAIL).fill(pos);
-    this.vel = vel;
-    this.acc = acc;
+    this.ps = new Array(TAIL).fill(pos); // array of Vec2D
+    this.vel = vel; // Vec2D
+    this.acc = acc; // Vec2D
     this.mass = mass;
     this.color = color;
     this.tail_len = tail_len;
