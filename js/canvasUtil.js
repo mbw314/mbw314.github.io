@@ -102,7 +102,7 @@ class Color {
     let r = Math.floor(Math.random() * 256);
     let g = Math.floor(Math.random() * 256);
     let b = Math.floor(Math.random() * 256);
-    return Color.colorString(r, g, b);
+    return new Color(r, g, b);
   }
 
   toString() {

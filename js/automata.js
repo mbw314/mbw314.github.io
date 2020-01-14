@@ -172,6 +172,7 @@ class CellularAutomaton {
 
   iterate() {
     // get a new row and update the current rows of the grid
+    // TODO: make this more efficient
     let newRow = this.getNewRow();
     if (this.numInitialRows == 1) {
       this.currentRows = [newRow];
@@ -184,6 +185,7 @@ class CellularAutomaton {
 
   fillColorMatrix(numRows) {
     // produce full ColorMatrix from the current system
+    // TODO: make this more efficient
     let t0 = (new Date()).getTime();
     let rows = this.currentRows;
     for (let i=this.currentRows.length; i < numRows; i++) {
@@ -215,7 +217,7 @@ function drawNew(numColors, cellConfigKey, initialRowsStyle, magKey) {
   let numInitialRows = cellConfigRowNums[cellConfigKey];
   let cellConfig = cellConfigs[cellConfigKey];
   //canvasUtil.println(`drawNew with numColors = ${numColors}; cellConfig = ${cellConfig}; initialRowsStyle = ${initialRowsStyle}; numInitialRows = ${numInitialRows}; magnification = ${magnification}; gridWidth = ${gridWidth}; gridHeight = ${gridHeight}`);
-  colors = range(6).map(i => Color.random());
+  colors = range(6).map(i => Color.random().toString());
   ca = new CellularAutomaton(colors.slice(0, numColors), gridWidth, numInitialRows, cellConfig);
   ca.initialize(initialRowsStyle);
   ca.fillColorMatrix(gridHeight);

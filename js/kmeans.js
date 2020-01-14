@@ -1,28 +1,184 @@
-// TODO: refactor to use Point/Vec2D objects
+const WIDTH = 750;
+const HEIGHT = 750;
+let canvas;
+let ctx;
+let canvasUtil;
+let kme; // k-means ensemble
+const NUM_POINTS = 75;
+const POINT_RADIUS = 5;
+const NUM_CLUSTERS = 5;
+const CENTROID_RADIUS = 15;
+const OLD_CENTROID_COLOR = "gray";
 
-var canvas;
-var ctx;
-var WIDTH = 750;
-var HEIGHT = 750;
 
-var m = 50;
-var points = [];
-var clusterIndex = [];
-var pointColor = [];
-var pointRadius = 10;
-var K = 5;
-var centroids = [];
-var centroidColor = [];
-var centroidRadius = 15;
-var tempDist = [];
-var oldCentroids = [];
-var oldCentroidColor = 'gray';
-var centroidLines = [];
-var canvasUtil;
+class KMeansEnsemble {
+  constructor(numPoints, numClusters) {
+    this.numPoints = numPoints;
+    this.pointRadius = POINT_RADIUS;
+    this.numClusters = numClusters;
+    this.centroidRadius = CENTROID_RADIUS;
+    this.points = []; // array of Vec2D
+    this.pointColors = []; // array of string
+    this.centroids = []; // array of Vec2D
+    this.clusterColors = []; // array of string
+    this.clusterIndexes = []; // array of int
+    this.oldCentroids = []; // array of arrays of Vec2D
+    this.oldCentroidColor = OLD_CENTROID_COLOR;
+  }
+
+  toString() {
+    let clusters = `${this.numClusters} centroids: ${this.centroids.map(c => c.toString()).join(', ')}`;
+    let clusterColors = `${this.numClusters} cluster colors: ${this.clusterColors.join(', ')}`;
+    let points = `${this.numPoints} points: ${this.points.map(p => p.toString()).join(', ')}`;
+    return [clusters, clusterColors, points].join('\n');
+  }
+
+  initPoints() {
+    this.points = [];
+    this.clusterIndexes = [];
+    this.pointColors = [];
+    for (let i=0; i<this.numPoints; i++) {
+      this.points.push(new Vec2D(Math.random() * WIDTH, Math.random() * HEIGHT));
+      this.clusterIndexes.push(0);
+      this.pointColors.push("black");
+    }
+  }
+
+  drawPoints() {
+    for (let i=0; i<this.numPoints; i++) {
+      //canvasUtil.println(`drawing point at ${this.points[i].toString()} with color ${this.pointColors[i]}`);
+      canvasUtil.drawDisk(
+        this.points[i].x,
+        this.points[i].y,
+        this.pointRadius,
+        this.pointColors[i]
+      );
+    }
+  }
+
+  initCentroids() {
+    this.centroids = [];
+    this.clusterColors = [];
+    this.oldCentroids = [];
+    for (let k=0; k<this.numClusters; k++) {
+      this.centroids.push(new Vec2D(Math.random() * WIDTH, Math.random() * HEIGHT));
+      let r = Math.round(k * 255 / this.numClusters);
+      let g = Math.round((this.numClusters - k) * 255 / this.numClusters);
+      let b = Math.round(Math.random() * 255);
+      this.clusterColors.push(Color.colorString(r, g, b));
+      this.oldCentroids.push([]);
+    }
+  }
+
+  drawCentroids() {
+    for (let k=0; k<this.numClusters; k++) {
+      //canvasUtil.println(`drawing cluster center ${k+1} of ${this.numClusters} at ${this.centroids[k].toString()} with color ${this.clusterColors[k]}`);
+      canvasUtil.drawCircle(
+        this.centroids[k].x,
+        this.centroids[k].y,
+        this.centroidRadius,
+        this.clusterColors[k],
+        2
+      );
+    }
+  }
+
+  initialize() {
+    canvasUtil.clearCanvas();
+    this.initPoints();
+    this.initCentroids();
+    this.drawPoints();
+    this.drawCentroids();
+  }
+
+  drawConnectors() {
+    for (let k=0; k<this.numClusters; k++) {
+      let cluster = getAllIndexes(this.clusterIndexes, k);
+      for (let j=0; j<cluster.length; j++) {
+        canvasUtil.drawLine(
+          this.centroids[k].x,
+          this.centroids[k].y,
+          this.points[cluster[j]].x,
+          this.points[cluster[j]].y,
+          'black',
+          1
+        );
+      }
+    }
+  }
+
+  drawCentroidPaths() {
+    for (let k=0; k<this.numClusters; k++) {
+      for (let j=0; j<this.oldCentroids[k].length-1; j++) {
+        canvasUtil.drawLine(
+          this.oldCentroids[k][j].x,
+          this.oldCentroids[k][j].y,
+          this.oldCentroids[k][j+1].x,
+          this.oldCentroids[k][j+1].y,
+          this.oldCentroidColor,
+          1
+        );
+
+        canvasUtil.drawCircle(
+          this.oldCentroids[k][j].x,
+          this.oldCentroids[k][j].y,
+          this.centroidRadius / 2,
+          this.oldCentroidColor,
+          1
+        );
+
+      }
+      // optionally draw a segment from the last old centroid the the current one
+      if (this.oldCentroids[k].length > 0) {
+        canvasUtil.drawLine(
+          this.oldCentroids[k][this.oldCentroids[k].length-1].x,
+          this.oldCentroids[k][this.oldCentroids[k].length-1].y,
+          this.centroids[k].x,
+          this.centroids[k].y,
+          this.oldCentroidColor,
+          1
+        );
+      }
+    }
+  }
+
+  iterate() {
+    // step 1: cluster assignment
+    for (let i=0; i<this.numPoints; i++) {
+      // for each data point, find the index of the closest centroid
+      let minDistSq = WIDTH * WIDTH + HEIGHT * HEIGHT; // largest possible distance from a point to a centroid
+      let indexOfClosest = 0;
+      for (let k=0; k<this.numClusters; k++) {
+        let distSq = this.points[i].distanceSq(this.centroids[k]);
+        if (distSq < minDistSq) {
+          indexOfClosest = k;
+          minDistSq = distSq;
+        }
+      }
+      // find index corresponding to smallest distance, color point accordingly
+      this.clusterIndexes[i] = indexOfClosest;
+      this.pointColors[i] = this.clusterColors[this.clusterIndexes[i]];
+    }
+
+    // step 2: centroid movement
+    for (let k=0; k<this.numClusters; k++) {
+      this.oldCentroids[k].push(this.centroids[k]); // keep track of the previous position
+      let cluster = getAllIndexes(this.clusterIndexes, k); // indices of points belonging to cluster k
+      if (cluster.length != 0) {
+        // replace centroid with the cluster average
+        let pointsInCluster = cluster.map(i => this.points[i]);
+        this.centroids[k] = Point.centroid(pointsInCluster);
+      } else {
+        // reassign the centroid randomly
+        this.centroids[k] = new Vec2D(Math.random() * WIDTH, Math.random() * HEIGHT);
+      }
+    }
+  }
+}
 
 
 function indexOfSmallest(a) {
-  var lowest = 0;
+  let lowest = 0;
   for (let i=1; i < a.length; i++) {
     if (a[i] < a[lowest]) {
       lowest = i;
@@ -32,8 +188,8 @@ function indexOfSmallest(a) {
 }
 
 function countInArray(a, i) {
-  var result = 0;
-  for (var o in a) {
+  let result = 0;
+  for (let o in a) {
     if (a[o] == i) {
       result++;
     }
@@ -42,7 +198,7 @@ function countInArray(a, i) {
 }
 
 function getAllIndexes(a, v) {
-  var indexes = [];
+  let indexes = [];
   for (let i = 0; i < a.length; i++) {
     if (a[i] === v) {
       indexes.push(i);
@@ -51,160 +207,18 @@ function getAllIndexes(a, v) {
   return indexes;
 }
 
-
-function kMeansIter() {
-  // step 1: cluster assignment
-  for (let i=0; i<m; i++) {
-    // for each data point, compute distances to all centroids
-    for (let k=0; k<K; k++) {
-      tempDist[k] = (points[i][0] - centroids[k][0]) * (points[i][0] - centroids[k][0])
-          + (points[i][1] - centroids[k][1]) * (points[i][1] - centroids[k][1]);
-    }
-    // find index corresponding to smallest distance
-    clusterIndex[i] = indexOfSmallest(tempDist);
-    //set the color of the data point to the color of the new centroid
-    pointColor[i] = centroidColor[clusterIndex[i]];
-  }
-
-  // step 2: centroid movement
-  let tempX = 0;
-  let tempY = 0;
-  let cluster = [];
-
-  for (let k=0; k<K; k++) {
-    let L = oldCentroids.push([centroids[k][0], centroids[k][1]]);
-    cluster = getAllIndexes(clusterIndex, k);
-    if (cluster.length != 0) {
-      // if the cluster is non-empty, proceed
-      tempX = 0;
-      tempY = 0;
-
-      // calculate mean of all points in given cluster
-      for (var j=0; j < cluster.length; j++) {
-        tempX += points[cluster[j]][0];
-        tempY += points[cluster[j]][1];
-      }
-
-      // move the centroid to this new mean
-      centroids[k][0] = tempX / cluster.length;
-      centroids[k][1] = tempY / cluster.length;
-    } else {
-      // reassign the centroid randomly
-      centroids[k] = [Math.random() * WIDTH, Math.random() * HEIGHT];
-    }
-
-    L = centroidLines.push(
-      [
-        oldCentroids[oldCentroids.length - 1][0],
-        oldCentroids[oldCentroids.length - 1][1],
-        centroids[k][0],
-        centroids[k][1]
-      ]
-    );
-  }
-}
-
-function initPoints(num) {
-  m = num;
-  for (let i=0; i<m; i++) {
-    points[i] = [Math.random() * WIDTH, Math.random() * HEIGHT];
-    clusterIndex[i] = 0;
-    pointColor[i] = [0, 0, 0];
-  }
-}
-
-function initCentroids(num) {
-  K = num;
-  for (let k=0; k<K; k++) {
-    centroids[k] = [Math.random() * WIDTH, Math.random() * HEIGHT];
-    centroidColor[k] = [
-      Math.round(k * 255 / K),
-      Math.round((K - k) * 255 / K),
-      Math.round(Math.random() * 255)];
-  }
-}
-
-function drawPoints() {
-  for (let i=0; i<m; i++) {
-    canvasUtil.drawDisk(
-      points[i][0],
-      points[i][1],
-      pointRadius,
-      Color.colorString(pointColor[i][0], pointColor[i][1], pointColor[i][2])
-    );
-  }
-}
-
-function drawCentroids() {
-  for (let k=0; k<K; k++) {
-    canvasUtil.drawCircle(
-      centroids[k][0],
-      centroids[k][1],
-      centroidRadius,
-      Color.colorString(centroidColor[k][0], centroidColor[k][1], centroidColor[k][2]),
-      1
-    );
-  }
-
-  for (let j=0; j<oldCentroids.length; j++) {
-    canvasUtil.drawCircle(
-      oldCentroids[j][0],
-      oldCentroids[j][1],
-      centroidRadius/2,
-      oldCentroidColor,
-      1
-    );
-  }
-}
-
-function drawCentroidPaths() {
-  for (let j=0; j<centroidLines.length; j++) {
-    canvasUtil.drawLine(
-      centroidLines[j][0],
-      centroidLines[j][1],
-      centroidLines[j][2],
-      centroidLines[j][3],
-      oldCentroidColor,
-      1
-    );
-  }
-}
-
-function drawConnectors() {
-  let cluster = [];
-  for (let k=0; k<K; k++) {
-    cluster = getAllIndexes(clusterIndex, k);
-    for (let j=0; j<cluster.length; j++) {
-      canvasUtil.drawLine(
-        centroids[k][0],
-        centroids[k][1],
-        points[cluster[j]][0],
-        points[cluster[j]][1],
-        'black',
-        1
-      );
-    }
-  }
-}
-
-
 function refreshData() {
   canvasUtil.clearCanvas();
-  oldCentroids = [];
-  centroidLines = [];
-  initPoints(m);
-  drawPoints();
-  initCentroids(K);
-  drawCentroids();
+  kme.initialize();
 }
 
 function iterate() {
   canvasUtil.clearCanvas();
-  kMeansIter();
-  drawConnectors();
-  drawCentroids();
-  drawCentroidPaths();
-  drawPoints();
+  kme.iterate();
+  kme.drawConnectors();
+  kme.drawCentroids();
+  kme.drawCentroidPaths();
+  kme.drawPoints();
 }
 
 function init() {
@@ -213,9 +227,11 @@ function init() {
   canvas.height = HEIGHT;
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
-    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
-    canvasUtil.clearCanvas();
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
+    kme = new KMeansEnsemble(NUM_POINTS, NUM_CLUSTERS);
     refreshData();
   }
-  else { alert('You need a better web browser to see this.'); }
+  else {
+    alert('You need a better web browser to see this.');
+  }
 }
