@@ -1,90 +1,59 @@
+const WIDTH = 750;
+const HEIGHT = 750;
+let canvas;
+let ctx;
 
-var iter = 0;
-var scheme = 0;
-var x0 = 375;
-var y0 = 375;
-var r0 = 375;
-var theta = Math.PI;
-var c = new Array(3) //an array of three integers (mod 256) to represent a color
-var ctx;
+const MAX_ITER = 10;
+const x0 = WIDTH / 2;
+const y0 = HEIGHT / 2;
+const r0 = WIDTH / 2;
+const THETA = Math.PI;
+const WHITE = new Color(0, 0, 0);
+const BLACK = new Color(255, 255, 255);
+var n = 0;
+let baseColor;
 
-var c0;
-var c1;
-var c2;
-
-
-function setColors(j, step) {
-  if (scheme == 0) {
-    c[0] = Math.floor(Math.random() * 256);
-    c[1] = Math.floor(Math.random() * 256);
-    c[2] = Math.floor(Math.random() * 256);
-  }
-  else if (scheme == 1) {
-    if(step < Math.pow(2, j-1)) { // gets darker
-      c[0] = Math.floor(c0 * (1 - Math.sin((j/iter) * (Math.PI/2))));
-      c[1] = Math.floor(c1 * (1 - Math.sin((j/iter) * (Math.PI/2))));
-      c[2] = Math.floor(c2 * (1 - Math.sin((j/iter) * (Math.PI/2))));
-    } else { // gets lighter
-      c[0] = Math.floor(c0 * Math.sin((j/iter) * (Math.PI/2)));
-      c[1] = Math.floor(c1 * Math.sin((j/iter) * (Math.PI/2)));
-      c[2] = Math.floor(c2 * Math.sin((j/iter) * (Math.PI/2)));
-    }
+function getColor(n, step) {
+  if (step < Math.pow(2, n-1)) { // gets darker in left half
+    return Color.interpolate(baseColor, BLACK, n / MAX_ITER);
+  } else { // gets lighter in right half
+    return Color.interpolate(baseColor, WHITE, n / MAX_ITER);
   }
 }
 
+function refreshData() {
+  n = 0;
+  baseColor = Color.random();
+  canvasUtil.clearCanvas();
+  canvasUtil.clearText();
+  canvasUtil.drawDisk(x0, y0, r0, "black"); // black background disk
+  this.iterate();
+}
 
-function drawShape(){
+function iterate() {
+  canvasUtil.println(`iteration ${n}`);
+  let numCircles = Math.pow(2, n);
+  for(i=0; i<numCircles; i++) { //there are 2^n semicircles drawn at each iteration
+    var r = r0 / numCircles;
+    var x = x0 - r0 + r + 2 * i * r;
+    var clockwise = i % 2 == 1; // clockwise or anticlockwise -- alternate up and down
+    ctx.fillStyle = getColor(n, i).toString();
+    ctx.beginPath();
+    ctx.arc(x, y0, r, 0, THETA, clockwise);
+    ctx.closePath();
+    ctx.fill();
+  }
+  n += 1;
+}
 
-  // get the canvas element using the DOM
-  var canvas = document.getElementById("canvas");
-
-  // Make sure we don't execute when canvas isn't supported
+function init(){
+  canvas = document.getElementById("canvas");
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
   if (canvas.getContext){
-
-    // use getContext to use the canvas for drawing
     ctx = canvas.getContext('2d');
-
-    iter = document.getElementById("iter").value;
-    scheme = document.getElementById("color").value;
-
-    c0 = Math.floor(Math.random() * 156) + 100;
-    c1 = Math.floor(Math.random() * 156) + 100;
-    c2 = Math.floor(Math.random() * 156) + 100;
-
-    // iteration 0
-    // lower half
-    ctx.fillStyle = 'rgb(' + c0 + ',' + c1 + ',' + c2 + ')';
-    ctx.beginPath();
-    ctx.arc(x0, y0, r0, 0, theta, clockwise);
-    ctx.closePath();
-    ctx.fill();
-    // upper half
-    ctx.fillStyle = "rgb(0,0,0)";
-    ctx.beginPath();
-    ctx.arc(x0, y0, r0, 0, theta, !clockwise);
-    ctx.closePath();
-    ctx.fill();
-
-    for(n=1; n<=iter; n++){
-      for(i=0; i<Math.pow(2,n); i++){ //there are 2^n semicircles drawn at each iteration
-        var x = x0-r0 + r0/Math.pow(2,n) + i*r0/Math.pow(2,n-1);
-        var r = r0/Math.pow(2,n);
-        var clockwise = i%2==1 ? false : true; // clockwise or anticlockwise  //alternate up and down
-
-        if(iter == 1 && scheme ==1) {  //unfortunatley have to handle this case separately
-          ctx.fillStyle = 'rgb(' + Math.floor(c0/2) + ',' + Math.floor(c1/2) + ',' + Math.floor(c2/2) + ')';
-        }
-        else {
-          setColors(n,i,scheme);
-          ctx.fillStyle = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
-        }
-
-        ctx.beginPath();
-        ctx.arc(x, y0, r, 0, theta, clockwise);
-        ctx.closePath();
-        ctx.fill();
-      }
-    }
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
+    refreshData();
   }
   else {
     alert('You need a better web browser to see this.');
