@@ -224,7 +224,7 @@ class Particle {
       let acc = new Vec2D(0.0, 0.0);
       // random mass and color
       let mass = Math.random() * PARTICLE_MASS_MAX + 1;
-      let color = Color.random();
+      let color = Color.random().toString();
       particles.push(new Particle(pos, vel, acc, mass, color, TAIL));
     }
     return particles;
@@ -313,6 +313,7 @@ class Ensemble {
 
       // get new position, update previous positions
       let pos = this.particles[i].ps[0].plus(this.particles[i].vel)
+      // TODO: make this more efficient
       this.particles[i].ps = [pos].concat(this.particles[i].ps.slice(0, TAIL - 1));
     }
   }
