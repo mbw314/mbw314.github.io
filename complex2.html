@@ -240,22 +240,46 @@ domDSl.setMaximum(slider_max);
 domDSl.setValue(actualToSlider(domDSl.getMinimum(), domDSl.getMaximum(), domD_min, domD_max, domD_default));
 
 domASl.onchange = function () {
-  domA = sliderToActual(domASl.getMinimum(), domASl.getMaximum(), domA_min, domA_max, domASl.getValue());
+  domA = sliderToActual(
+    domASl.getMinimum(),
+    domASl.getMaximum(),
+    domA_min,
+    domA_max,
+    domASl.getValue()
+  );
   draw();
 };
 
 domBSl.onchange = function () {
-  domB = sliderToActual(domBSl.getMinimum(), domBSl.getMaximum(), domB_min, domB_max, domBSl.getValue());
+  domB = sliderToActual(
+    domBSl.getMinimum(),
+    domBSl.getMaximum(),
+    domB_min,
+    domB_max,
+    domBSl.getValue()
+  );
   draw();
 };
 
 domCSl.onchange = function () {
-  domC = sliderToActual(domCSl.getMinimum(), domCSl.getMaximum(), domC_min, domC_max, domCSl.getValue());
+  domC = sliderToActual(
+    domCSl.getMinimum(),
+    domCSl.getMaximum(),
+    domC_min,
+    domC_max,
+    domCSl.getValue()
+  );
   draw();
 };
 
 domDSl.onchange = function () {
-  domD = sliderToActual(domDSl.getMinimum(), domDSl.getMaximum(), domD_min, domD_max, domDSl.getValue());
+  domD = sliderToActual(
+    domDSl.getMinimum(),
+    domDSl.getMaximum(),
+    domD_min,
+    domD_max,
+    domDSl.getValue()
+  );
   draw();
 };
 
@@ -281,22 +305,46 @@ ranDSl.setMaximum(slider_max);
 ranDSl.setValue(actualToSlider(ranDSl.getMinimum(), ranDSl.getMaximum(), ranD_min, ranD_max, ranD_default));
 
 ranASl.onchange = function () {
-  ranA = sliderToActual(ranASl.getMinimum(), ranASl.getMaximum(), ranA_min, ranA_max, ranASl.getValue());
+  ranA = sliderToActual(
+    ranASl.getMinimum(),
+    ranASl.getMaximum(),
+    ranA_min,
+    ranA_max,
+    ranASl.getValue()
+  );
   draw();
 };
 
 ranBSl.onchange = function () {
-  ranB = sliderToActual(ranBSl.getMinimum(), ranBSl.getMaximum(), ranB_min, ranB_max, ranBSl.getValue());
+  ranB = sliderToActual(
+    ranBSl.getMinimum(),
+    ranBSl.getMaximum(),
+    ranB_min,
+    ranB_max,
+    ranBSl.getValue()
+  );
   draw();
 };
 
 ranCSl.onchange = function () {
-  ranC = sliderToActual(ranCSl.getMinimum(), ranCSl.getMaximum(), ranC_min, ranC_max, ranCSl.getValue());
+  ranC = sliderToActual(
+    ranCSl.getMinimum(),
+    ranCSl.getMaximum(),
+    ranC_min,
+    ranC_max,
+    ranCSl.getValue())
+    ;
   draw();
 };
 
 ranDSl.onchange = function () {
-  ranD = sliderToActual(ranDSl.getMinimum(), ranDSl.getMaximum(), ranD_min, ranD_max, ranDSl.getValue());
+  ranD = sliderToActual(
+    ranDSl.getMinimum(),
+    ranDSl.getMaximum(),
+    ranD_min,
+    ranD_max,
+    ranDSl.getValue()
+  );
   draw();
 };
 
@@ -342,42 +390,90 @@ parDimSl.setMaximum(slider_max);
 parDimSl.setValue(actualToSlider(parDimSl.getMinimum(), parDimSl.getMaximum(), parDim_min, parDim_max, parDim_default));
 
 parASl.onchange = function () {
-  parA = sliderToActual(parASl.getMinimum(), parASl.getMaximum(), parA_min, parA_max, parASl.getValue());
+  parA = sliderToActual(
+    parASl.getMinimum(),
+    parASl.getMaximum(),
+    parA_min,
+    parA_max,
+    parASl.getValue()
+  );
   draw();
 };
 
 parBSl.onchange = function () {
-  parB = sliderToActual(parBSl.getMinimum(), parBSl.getMaximum(), parB_min, parB_max, parBSl.getValue());
+  parB = sliderToActual(
+    parBSl.getMinimum(),
+    parBSl.getMaximum(),
+    parB_min,
+    parB_max,
+    parBSl.getValue()
+  );
   draw();
 };
 
 parCSl.onchange = function () {
-  parC = sliderToActual(parCSl.getMinimum(), parCSl.getMaximum(), parC_min, parC_max, parCSl.getValue());
+  parC = sliderToActual(
+    parCSl.getMinimum(),
+    parCSl.getMaximum(),
+    parC_min,
+    parC_max,
+    parCSl.getValue()
+  );
   draw();
 };
 
 parDSl.onchange = function () {
-  parD = sliderToActual(parDSl.getMinimum(), parDSl.getMaximum(), parD_min, parD_max, parDSl.getValue());
+  parD = sliderToActual(
+    parDSl.getMinimum(),
+    parDSl.getMaximum(),
+    parD_min,
+    parD_max,
+    parDSl.getValue()
+  );
   draw();
 };
 
 parAimSl.onchange = function () {
-  parAim = sliderToActual(parAimSl.getMinimum(), parAimSl.getMaximum(), parAim_min, parAim_max, parAimSl.getValue());
+  parAim = sliderToActual(
+    parAimSl.getMinimum(),
+    parAimSl.getMaximum(),
+    parAim_min,
+    parAim_max,
+    parAimSl.getValue()
+  );
   draw();
 };
 
 parBimSl.onchange = function () {
-  parBim = sliderToActual(parBimSl.getMinimum(), parBimSl.getMaximum(), parBim_min, parBim_max, parBimSl.getValue());
+  parBim = sliderToActual(
+    parBimSl.getMinimum(),
+    parBimSl.getMaximum(),
+    parBim_min,
+    parBim_max,
+    parBimSl.getValue()
+  );
   draw();
 };
 
 parCimSl.onchange = function () {
-  parCim = sliderToActual(parCimSl.getMinimum(), parCimSl.getMaximum(), parCim_min, parCim_max, parCimSl.getValue());
+  parCim = sliderToActual(
+    parCimSl.getMinimum(),
+    parCimSl.getMaximum(),
+    parCim_min,
+    parCim_max,
+    parCimSl.getValue()
+  );
   draw();
 };
 
 parDimSl.onchange = function () {
-  parDim = sliderToActual(parDimSl.getMinimum(), parDimSl.getMaximum(), parDim_min, parDim_max, parDimSl.getValue());
+  parDim = sliderToActual(
+    parDimSl.getMinimum(),
+    parDimSl.getMaximum(),
+    parDim_min,
+    parDim_max,
+    parDimSl.getValue()
+  );
   draw();
 };
 
@@ -698,31 +794,6 @@ function refresh() {
   meshM = meshM_default;
   meshN = meshN_default;
   draw();
-}
-
-
-function sliderToActual(s_min, s_max, a_min, a_max, s_val) {
-  //a = s_min
-  //b = s_max
-  //x = s_val
-  //c = a_min
-  //d = a_max
-  //y = a_val
-
-  //y = (d-c)*(x-a)/(b-a) + c;
-  return (a_max - a_min) * (s_val - s_min) / (s_max - s_min) + a_min;
-}
-
-function actualToSlider(s_min, s_max, a_min, a_max, a_val) {
-  //a = s_min
-  //b = s_max
-  //x = s_val
-  //c = a_min
-  //d = a_max
-  //y = a_val
-
-  //x = (b-a)*(y-c)/(d-c) + a;
-  return (s_max - s_min) * (a_val - a_min) / (a_max - a_min) + s_min;
 }
 
 

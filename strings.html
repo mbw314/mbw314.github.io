@@ -14,7 +14,7 @@
   <script type="text/javascript" src="./js/canvasUtil.js"></script>
 </head>
 
- <body onload="init();">
+<body onload="init();">
 
 
 <div class="container">
@@ -79,108 +79,141 @@ larger versions (without the controls): <a href="./strings3.html">one like that 
 
 var canvas;
 var ctx;
-var width = 750;
-var height = 750;
 var WIDTH = 750;
 var HEIGHT = 750;
 var canvasUtil;
 var stop = false;
 
 var N = 1;
-var N_MAX = 200;
-var N_LIMIT = 400;
+var splitLimit = 200;
 
-var ds_avg = 0.75;
-var ds_var = 0.35;
+var dsAvg = 0.75;
+var dsVar = 0.35;
 
-var posXcur;
-var posXlast;
-var posYcur;
-var posYlast;
-var color;
-var ds;
-var theta;
-var bias;
-var bias_prob = 0.05;
+var thingies = [];
+
+var biasProb = 0.05;
 var angle = Math.PI/3;
 
-var splitter = 0;
-var splitting = false;
-var split_prob = 0.035;
+var indexToSplit = 0;
+var canSplit = false;
+var splitProb = 0.035;
 
-var r_bg = 105;
-var g_bg = 105;
-var b_bg = 0;
+const BG_COLOR = new Color(105, 105, 0);
+const BLACK = new Color(0, 0, 0);
+const WHITE = new Color(255, 255, 255);
 
-var r0 = 0;
-var g0 = 0;
-var b0 = 0;
+const SLIDER_MIN = 0;
+const SLIDER_MAX = 50;
 
-var r1 = 255;
-var g1 = 255;
-var b1 = 255;
+const SPLIT_LIMIT_MIN = 1;
+const SPLIT_LIMIT_DEFAULT = 200;
+const SPLIT_LIMIT_MAX = 400;
+
+const SPLIT_PROB_MIN = 0.01;
+const SPLIT_PROB_DEFAULT = 0.03;
+const SPLIT_PROB_MAX = 0.05;
+
+const SPEED_MIN = 0.05;
+const SPEED_DEFAULT = 1.0;
+const SPEED_MAX = 2.5;
+
+const ANGLE_MIN = Math.PI / 12;
+const ANGLE_DEFAULT = Math.PI / 4;
+const ANGLE_MAX = 2 * Math.PI / 3;
 
 var splitSl = new Slider(document.getElementById("splitSlider"), document.getElementById("splitSliderInput"));
-splitSl.setMinimum(0);
-splitSl.setValue(20);
-splitSl.setMaximum(50);
+splitSl.setMinimum(SLIDER_MIN);
+splitSl.setMaximum(SLIDER_MAX);
+splitSl.setValue(
+  actualToSlider(
+    splitSl.getMinimum(),
+    splitSl.getMaximum(),
+    SPLIT_LIMIT_MIN,
+    SPLIT_LIMIT_MAX,
+    SPLIT_LIMIT_DEFAULT
+  )
+);
 
 var splitProbSl = new Slider(document.getElementById("splitProbSlider"), document.getElementById("splitProbSliderInput"));
-splitProbSl.setMinimum(0);
-splitProbSl.setValue(33);
-splitProbSl.setMaximum(50);
+splitProbSl.setMinimum(SLIDER_MIN);
+splitProbSl.setMaximum(SLIDER_MAX);
+splitProbSl.setValue(
+  actualToSlider(
+    splitProbSl.getMinimum(),
+    splitProbSl.getMaximum(),
+    SPLIT_PROB_MIN,
+    SPLIT_PROB_MAX,
+    SPLIT_PROB_DEFAULT
+  )
+);
 
 var speedSl = new Slider(document.getElementById("speedSlider"), document.getElementById("speedSliderInput"));
-speedSl.setMinimum(0);
-speedSl.setValue(15);
-speedSl.setMaximum(50);
+speedSl.setMinimum(SLIDER_MIN);
+speedSl.setMaximum(SLIDER_MAX);
+speedSl.setValue(
+  actualToSlider(
+    speedSl.getMinimum(),
+    speedSl.getMaximum(),
+    SPEED_MIN,
+    SPEED_MAX,
+    SPEED_DEFAULT
+  )
+);
 
 var angleSl = new Slider(document.getElementById("angleSlider"), document.getElementById("angleSliderInput"));
-angleSl.setMinimum(0);
-angleSl.setValue(24);
-angleSl.setMaximum(50);
+angleSl.setMinimum(SLIDER_MIN);
+angleSl.setMaximum(SLIDER_MAX);
+angleSl.setValue(
+  actualToSlider(
+    angleSl.getMinimum(),
+    angleSl.getMaximum(),
+    ANGLE_MIN,
+    ANGLE_MAX,
+    ANGLE_DEFAULT
+  )
+);
 
 splitSl.onchange = function () {
-  var a = splitSl.getMinimum();
-  var b = splitSl.getMaximum();
-  var c = 1
-  var d = N_LIMIT;
-  var x = splitSl.getValue();
-
-  N_MAX = (d-c)*(x-a)/(b-a) + c;
+  splitLimit = sliderToActual(
+    splitSl.getMinimum(),
+    splitSl.getMaximum(),
+    SPLIT_LIMIT_MIN,
+    SPLIT_LIMIT_MAX,
+    splitSl.getValue()
+  );
 };
 
 splitProbSl.onchange = function () {
-  var a = splitProbSl.getMinimum();
-  var b = splitProbSl.getMaximum();
-  var c = 0.001;
-  var d = 0.05;
-  var x = splitProbSl.getValue();
-
-  split_prob = (d-c)*(x-a)/(b-a) + c;
+  splitProb = sliderToActual(
+    splitProbSl.getMinimum(),
+    splitProbSl.getMaximum(),
+    SPLIT_PROB_MIN,
+    SPLIT_PROB_MAX,
+    splitProbSl.getValue()
+  );
 };
 
 speedSl.onchange = function () {
-  var a = speedSl.getMinimum();
-  var b = speedSl.getMaximum();
-  var c = 0.05;
-  var d = 2.5;
-  var x = speedSl.getValue();
-
-  ds_avg = (d-c)*(x-a)/(b-a) + c;
-  ds_var = ds_avg/3;
+  dsAvg = sliderToActual(
+    speedSl.getMinimum(),
+    speedSl.getMaximum(),
+    SPEED_MIN,
+    SPEED_MAX,
+    speedSl.getValue()
+  );
+  dsVar = dsAvg/3;
 };
 
 angleSl.onchange = function () {
-  var a = angleSl.getMinimum();
-  var b = angleSl.getMaximum();
-  var c = Math.PI/12;
-  var d = 2*Math.PI/3;
-  var x = angleSl.getValue();
-
-  angle = (d-c)*(x-a)/(b-a) + c;
+  angle = sliderToActual(
+    angleSl.getMinimum(),
+    angleSl.getMaximum(),
+    ANGLE_MIN,
+    ANGLE_MAX,
+    angleSl.getValue()
+  );
 };
-
 
 window.onresize = function () {
   splitSl.recalculate();
@@ -194,170 +227,137 @@ function stopDrawing() {
 }
 
 
-function init(){
+function draw() {
+  if (stop) {
+    return 0;
+  }
+
+  if (Math.random() < splitProb && N < splitLimit) {
+    canSplit = true;
+    indexToSplit = Math.round(Math.random() * N);
+  }
+  else {
+    canSplit = false;
+  }
+
+  var tempN = N;
+  for (var i=0; i<tempN; i++) {
+    if (canSplit == true && i == indexToSplit) {
+      N++;
+      var t = N / splitLimit;
+      let c = Color.interpolate(BLACK, WHITE, t).toString();
+
+      //make a new thingy: curPos, lastPos, ds, theta, bias, color
+      let newThingy = new Thingy(
+        new Vec2D(thingies[i].curPos.x, thingies[i].curPos.y),
+        new Vec2D(thingies[i].lastPos.x, thingies[i].lastPos.y),
+        Math.random() * dsAvg + dsVar,
+        thingies[i].theta * -1,
+        thingies[i].bias * -1,
+        c
+      )
+      thingies.push(newThingy);
+
+      // update the existing and new thingy
+      thingies[i].update();
+      thingies[N-1].update();
+    }
+    else {
+      thingies[i].setTheta();
+      if (Math.random() < biasProb) {
+        thingies[i].flipBias(); //bias[0] *= -1; // is this an error? should it be bias[i]?
+      }
+      thingies[i].update();
+    }
+    thingies[i].draw();
+  }
+}
+
+class Thingy {
+  constructor(curPos, lastPos, ds, theta, bias, color) {
+    this.curPos = curPos; // Vec2D
+    this.lastPos = lastPos; // Vec2D
+    this.ds = ds;
+    this.theta = theta;
+    this.bias = bias;
+    this.color = color;
+  }
+
+  toString() {
+    return `current position = ${this.curPos.toString()}; previous position = ${this.lastPos.toString()}; ds = ${this.ds.toFixed(3)}; theta = ${this.theta.toFixed(3)}; color = ${this.color}; bias = ${this.bias}`;
+  }
+
+
+  flipBias() {
+    this.bias *= -1;
+  }
+
+  draw() {
+    canvasUtil.drawLine(this.lastPos.x, this.lastPos.y, this.curPos.x, this.curPos.y, this.color, 1);
+  }
+
+  setTheta() {
+    this.theta = this.bias * (Math.random() * angle - angle / 2);
+  }
+
+  update() {
+    // get direction in which to move
+    let dir = this.curPos.minus(this.lastPos).rotate(this.theta).toUnitVector();
+
+    // make sure the new position is inside the canvas
+    if (this.curPos.x + this.ds * dir.x > WIDTH || this.curPos.x + this.ds * dir.x < 0) {
+      dir.x *= -1;
+      this.bias *= -1;
+    }
+    if (this.curPos.y + this.ds * dir.y > HEIGHT || this.curPos.y + this.ds * dir.y < 0) {
+      dir.y *= -1;
+      this.bias *= -1;
+    }
+
+    // update previous position, set new position p0 <- po + dir * ds
+    this.lastPos = this.curPos;
+    this.curPos = this.curPos.plus(dir.scale(this.ds));
+  }
+}
+
+function refreshDrawing() {
+  //canvasUtil.println("refreshing");
+  N = 1;
+
+  indexToSplit = 0;
+  canSplit = false;
+  splitProb = 0.035;
+
+  //make a new thingy: curPos, lastPos, ds, theta, bias, color
+  let ds0 = Math.random() * dsAvg + dsVar;
+  let theta0 = Math.random() * Math.PI * 2
+  let p0 = new Vec2D(WIDTH / 2, HEIGHT / 2);
+  let dir = new Vec2D(Math.cos(theta0), Math.sin(theta0));
+  let thingy = new Thingy(
+    p0.plus(dir.scale(ds0)),
+    p0,
+    ds0,
+    theta0,
+    1,
+    BLACK
+  )
+  thingies = [thingy];
+  canvasUtil.clearCanvas(BG_COLOR.toString());
+}
+
+
+function init() {
   canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
-    // initialize
-    N = 1;
-
-    posXcur = new Array(1);
-    posXlast = new Array(1);
-    posYcur = new Array(1);
-    posYlast = new Array(1);
-    color = new Array(1);
-    ds = new Array(1);
-    theta = new Array(1);
-    bias = new Array(1);
-    bias_prob = 0.05;
-
-    splitter = 0;
-    splitting = false;
-    split_prob = 0.035;
-
-    ds[0] = Math.random()*ds_avg + ds_var;
-    theta[0] = Math.random()*Math.PI*2;
-    posXlast[0] = WIDTH/2;//Math.round(Math.random()*WIDTH);
-    posYlast[0] = HEIGHT/2;//Math.round(Math.random()*HEIGHT);
-    posXcur[0] = ds[0]*Math.cos(theta[0]) + posXlast[0];
-    posYcur[0] = ds[0]*Math.sin(theta[0]) + posYlast[0];
-    color[0] = Color.colorString(r0, g0, b0);
-    bias[0] = 1;
-
-    ctx.fillStyle = Color.colorString(r_bg, g_bg, b_bg);
-    ctx.fillRect(0, 0, width, height);
-
-    // call the drawing function
+    refreshDrawing();
     return setInterval(draw, 10);
   }
   else {
     alert('You need a better web browser to see this.');
-  }
-}
-
-
-function draw() {
-  if (stop == false) {
-    if (Math.random() < split_prob && N < N_MAX) {
-      splitting = true;
-      splitter = Math.round(Math.random()*N);
-    }
-    else splitting = false;
-
-    var tempN = N;
-    for (var i=0; i<tempN; i++) {
-      if (splitting == true && i == splitter) {
-
-        // make arrays longer
-        N++;
-        //document.outform.output.value = 'N = ' + N + ' split_prob = ' + split_prob + ' avg speed = ' + ds_avg + ' angle = ' + angle;
-        posXlast.length++;
-        posYlast.length++;
-        posXcur.length++;
-        posYcur.length++;
-        color.length++;
-        ds.length++;
-        theta.length++;
-        bias.length++;
-
-        // fill in last spots of arrays
-
-        var t = N/N_MAX;
-
-        var r = Math.round(r0*(1-t) + r1*t);  // straight-line
-        var g = Math.round(g0*(1-t) + g1*t);
-        var b = Math.round(b0*(1-t) + b1*t);
-
-        //document.outform.output.value = 'N = ' + N + ', (r,g,b) = (' + r + ',' + g + ',' + b + ')';
-
-        color[N-1] = Color.colorString(r, g, b);
-
-        bias[N-1] = -1 * bias[i];
-        theta[i] = Math.PI / 3;
-        theta[N-1] = -1 * theta[i];
-        ds[N-1] = Math.random() * ds_avg + ds_var;
-
-        posXlast[N-1] = posXlast[i];
-        posYlast[N-1] = posYlast[i];
-
-        posXcur[N-1] = posXcur[i];
-        posYcur[N-1] = posYcur[i]
-
-        var dispX1 = (posXcur[i] - posXlast[i]) * Math.cos(theta[i]) - (posYcur[i] - posYlast[i]) * Math.sin(theta[i]);
-        var dispY1 = (posXcur[i] - posXlast[i]) * Math.sin(theta[i]) + (posYcur[i] - posYlast[i]) * Math.cos(theta[i]);
-
-        var norm1 = ds[i] / Math.sqrt(dispX1 * dispX1 + dispY1 * dispY1);
-
-        if (posXcur[i] + dispX1*norm1 > WIDTH || posXcur[i] + dispX1*norm1 < 0) {
-          dispX1 = -dispX1;
-          bias[i] *= -1;
-        }
-        if (posYcur[i] + dispY1*norm1 > HEIGHT || posYcur[i] + dispY1*norm1 < 0) {
-          dispY1 = -dispY1;
-          bias[i] *= -1;
-        }
-
-        posXlast[i] = posXcur[i];
-        posXcur[i] += dispX1*norm1;
-        posYlast[i] = posYcur[i];
-        posYcur[i] += dispY1*norm1;
-
-        var dispX2 = (posXcur[N-1] - posXlast[N-1])*Math.cos(theta[N-1]) - (posYcur[N-1] - posYlast[N-1])*Math.sin(theta[N-1]);
-        var dispY2 = (posXcur[N-1] - posXlast[N-1])*Math.sin(theta[N-1]) + (posYcur[N-1] - posYlast[N-1])*Math.cos(theta[N-1]);
-
-        var norm2 = ds[N-1]/Math.sqrt( dispX2*dispX2 + dispY2*dispY2 );
-
-        if (posXcur[N-1] + dispX2*norm2 > WIDTH || posXcur[N-1] + dispX2*norm2 < 0) {
-          dispX2 = -dispX2;
-          bias[N-1] *= -1;
-        }
-        if (posYcur[N-1] + dispY2*norm2 > HEIGHT || posYcur[N-1] + dispY2*norm2 < 0) {
-          dispY2 = -dispY2;
-          bias[N-1] *= -1;
-        }
-
-        posXlast[N-1] = posXcur[N-1];
-        posXcur[N-1] += dispX2*norm2;
-        posYlast[N-1] = posYcur[N-1];
-        posYcur[N-1] += dispY2*norm2;
-
-      }
-      else {
-        //theta[i] = bias[i]*(Math.random()*Math.PI/3 - Math.PI/6);
-        theta[i] = bias[i]*(Math.random()*angle - angle/2);
-
-        //document.outform.output.value = 'N = ' + N + ' split_prob = ' + split_prob + ' avg speed = ' + ds_avg + ' angle = ' + angle;
-
-        if (Math.random() < bias_prob) {
-          bias[0] *= -1;
-          //document.outform.output.value += 'bias changed ';
-        }
-
-        var dispX = (posXcur[i] - posXlast[i])*Math.cos(theta[i]) - (posYcur[i] - posYlast[i])*Math.sin(theta[i]);
-        var dispY = (posXcur[i] - posXlast[i])*Math.sin(theta[i]) + (posYcur[i] - posYlast[i])*Math.cos(theta[i]);
-
-        var norm = ds[i]/Math.sqrt( dispX*dispX + dispY*dispY );
-
-        if (posXcur[i] + dispX*norm > WIDTH || posXcur[i] + dispX*norm < 0) {
-          dispX = -dispX;
-          bias[i] *= -1;
-        }
-        if (posYcur[i] + dispY*norm > HEIGHT || posYcur[i] + dispY*norm < 0) {
-          dispY = -dispY;
-          bias[i] *= -1;
-        }
-
-        posXlast[i] = posXcur[i];
-        posXcur[i] += dispX*norm;
-        posYlast[i] = posYcur[i];
-        posYcur[i] += dispY*norm;
-      }
-
-      canvasUtil.drawLine(posXlast[i], posYlast[i], posXcur[i], posYcur[i], color[i], 1);
-    }
   }
 }
 
