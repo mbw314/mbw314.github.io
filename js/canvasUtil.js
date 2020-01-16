@@ -236,4 +236,32 @@ class Vec2D extends Point {
   toUnitVector() {
     return this.scale(1.0 / this.norm());
   }
+
+  static unitVector(theta) {
+    return new Vec2D(Math.cos(theta), Math.sin(theta));
+  }
+}
+
+function sliderToActual(s_min, s_max, a_min, a_max, s_val) {
+  //a = s_min
+  //b = s_max
+  //x = s_val
+  //c = a_min
+  //d = a_max
+  //y = a_val
+
+  //y = (d-c)*(x-a)/(b-a) + c;
+  return (a_max - a_min) * (s_val - s_min) / (s_max - s_min) + a_min;
+}
+
+function actualToSlider(s_min, s_max, a_min, a_max, a_val) {
+  //a = s_min
+  //b = s_max
+  //x = s_val
+  //c = a_min
+  //d = a_max
+  //y = a_val
+
+  //x = (b-a)*(y-c)/(d-c) + a;
+  return (s_max - s_min) * (a_val - a_min) / (a_max - a_min) + s_min;
 }
