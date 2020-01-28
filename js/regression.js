@@ -14,22 +14,31 @@ let re; // RegressionEnsemble object;
 
 
 class LearnableFunction { // single variable
-  constructor(numParams, evalFn, gradientFns) {
+  constructor(numParams, evalFn, gradientFns, stringFn) {
     this.params = range(numParams).map(x => Math.random()); // array of parameters to be learned
     this.evalFn = evalFn; // function that takes a variable and the parameters and evaluates the function
-    this.gradient = gradientFns; // ??
+    this.gradient = gradientFns; // list of same type as evalFn
+    this.stringFn = stringFn; // function to convert params into string representation of function
   }
+
   eval(x) {
     return this.evalFn(x, this.params);
   }
+
   evalWithParams(x, params) {
     return this.evalFn(x, params);
   }
+
   evalGradient(x) {
     return this.gradient.map(g => g(x, this.params));
   }
+
   resetParams() {
     this.params = this.params.map(x => Math.random());
+  }
+
+  toString() {
+    return this.stringFn(this.params);
   }
 }
 
@@ -107,13 +116,14 @@ class RegressionEnsemble {
     }
     this.paramHistory.push(this.f.params);
     this.f.params = newParams;
-    canvasUtil.println(`updated loss: ${loss.toFixed(5)}`);
+    canvasUtil.println(`loss: ${loss.toFixed(5)}; new function: ${this.f.toString()}`);
   }
 }
 
 
 function refreshData() {
   canvasUtil.clearCanvas();
+  canvasUtil.clearText();
   let f = (document.controls.regtype.value == 'linear') ? linearFunction : quadraticFunction;
   f.resetParams();
   let initialParams = (document.controls.regtype.value == 'linear') ? [0.35, 0.3] : [0.35, 0.25, 0.1];
@@ -138,7 +148,9 @@ const linearFunction = new LearnableFunction(
   [
     (x, ps) => 1,
     (x, ps) => x
-  ]);
+  ],
+  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} * x`
+);
 
 const quadraticFunction = new LearnableFunction(
   3,
@@ -147,7 +159,9 @@ const quadraticFunction = new LearnableFunction(
     (x, ps) => 1,
     (x, ps) => x,
     (x, ps) => x * x
-  ]);
+  ],
+  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} * x + ${ps[2].toFixed(5)} * x^2`
+);
 
 function init() {
   canvas = document.getElementById("canvas");
