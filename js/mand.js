@@ -50,7 +50,7 @@ class MandelbrotSet {
   getColorLookup(c0, c1, n) {
     let lookup = [];
     for (let i = 0; i < n; i++) {
-      let c = Color.interpolate(c0, c1, i / (n - 1));
+      let c = Color.interpolate(c0, c1, Math.sqrt(i / (n - 1)));
       lookup.push(c.toString());
     }
     lookup.push('rgb(0, 0, 0)');

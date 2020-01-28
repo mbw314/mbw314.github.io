@@ -136,8 +136,6 @@ class Point {
     return Math.sqrt(this.distanceSq(p));
   }
 
-
-
   scale(a) {
     return new Vec2D(a * this.x, a * this.y);
   }
@@ -264,4 +262,18 @@ function actualToSlider(s_min, s_max, a_min, a_max, a_val) {
 
   //x = (b-a)*(y-c)/(d-c) + a;
   return (s_max - s_min) * (a_val - a_min) / (a_max - a_min) + s_min;
+}
+
+function arrayProduct(xs, ys) {
+  let prod = [];
+  for (let i=0; i<xs.length; i++) {
+    for (let j=0; j<ys.length; j++) {
+      prod.push([xs[i], ys[j]]);
+    }
+  }
+  return prod;
+}
+
+function range(n) {
+  return [...Array(n).keys()];
 }

@@ -10,7 +10,7 @@ const r0 = WIDTH / 2;
 const THETA = Math.PI;
 const WHITE = new Color(0, 0, 0);
 const BLACK = new Color(255, 255, 255);
-var n = 0;
+let n = 0;
 let baseColor;
 
 function getColor(n, step) {
@@ -33,10 +33,10 @@ function refreshData() {
 function iterate() {
   canvasUtil.println(`iteration ${n}`);
   let numCircles = Math.pow(2, n);
-  for(i=0; i<numCircles; i++) { //there are 2^n semicircles drawn at each iteration
-    var r = r0 / numCircles;
-    var x = x0 - r0 + r + 2 * i * r;
-    var clockwise = i % 2 == 1; // clockwise or anticlockwise -- alternate up and down
+  for (i=0; i<numCircles; i++) { //there are 2^n semicircles drawn at each iteration
+    let r = r0 / numCircles;
+    let x = x0 - r0 + r + 2 * i * r;
+    let clockwise = i % 2 == 1; // clockwise or anticlockwise -- alternate up and down
     ctx.fillStyle = getColor(n, i).toString();
     ctx.beginPath();
     ctx.arc(x, y0, r, 0, THETA, clockwise);

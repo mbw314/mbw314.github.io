@@ -69,7 +69,7 @@ class KMeansCentroid {
   }
 }
 
-class KMeansEnsemble2 {
+class KMeansEnsemble {
   constructor() {
     this.points = []; // Array of KMeansPoint objects
     this.centroids = []; // Array of KMeansCentroid objects
@@ -101,6 +101,7 @@ class KMeansEnsemble2 {
     this.numCentroids = numCentroids;
     this.centroids = [];
     for (let k=0; k<numCentroids; k++) {
+      // choose initial position and color randomly
       let p = new Vec2D(Math.random() * WIDTH, Math.random() * HEIGHT);
       let r = Math.round(k * 255 / numCentroids);
       let g = Math.round((numCentroids - k) * 255 / numCentroids);
@@ -192,7 +193,7 @@ function init() {
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
-    kme = new KMeansEnsemble2();
+    kme = new KMeansEnsemble();
     refreshData();
   }
   else {

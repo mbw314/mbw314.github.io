@@ -195,7 +195,7 @@ function init() {
     canvasUtil.clearCanvas();
     let n = 33;
     vf = new VectorField(n, n);
-    sep = WIDTH / n
+    sep = WIDTH / n;
     vf.initialize(WIDTH / n);
     //canvasUtil.println(vf.toString());
     vf.draw();
