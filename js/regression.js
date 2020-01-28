@@ -67,6 +67,12 @@ class RegressionEnsemble {
     this.f.params[0] = yMean;
   }
 
+  draw() {
+    this.drawPoints();
+    this.drawFunctionHistory();
+    this.drawResiduals();
+  }
+
   drawPoints() {
     this.points.forEach(p =>
       canvasUtil.drawDisk(p.x * WIDTH, p.y * HEIGHT, POINT_RADIUS, POINT_COLOR));
@@ -129,17 +135,13 @@ function refreshData() {
   let initialParams = (document.controls.regtype.value == 'linear') ? [0.35, 0.3] : [0.35, 0.25, 0.1];
   re = new RegressionEnsemble(f, M);
   re.initPoints(initialParams);
-  re.drawPoints();
-  re.drawFunctionHistory();
-  re.drawResiduals();
+  re.draw();
 }
 
 function iterate() {
   canvasUtil.clearCanvas();
   re.gradientDescentStep();
-  re.drawPoints();
-  re.drawFunctionHistory();
-  re.drawResiduals();
+  re.draw();
 }
 
 const linearFunction = new LearnableFunction(
