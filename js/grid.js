@@ -1,286 +1,204 @@
-var canvas;
-var ctx;
-var WIDTH = 750;
-var HEIGHT = 750;
-var canvasUtil;
+let canvas;
+let ctx;
+const WIDTH = 750;
+const HEIGHT = 750;
+let canvasUtil;
+let paused = false;
+let grid; // Grid object
+let count = 0; // used for animation
 
-var sep = 50;
-var move = 0;
-var turn = 1;
-var canTurnLeft = 0;
-var canGoAhead = 0;
-var canTurnRight = 0;
-
-var dots;
-var x0,x1,x2,y0,y1,y2;
-var dotRad = 4;
-var tempRad = 3;
-
-var dotsLeft = 0;
-
-var type;  // either dot or line
-var data1; // x for dot, x0 for line
-var data2; // y for dot, y0 for line
-var data3; // r for dot, x1 for line
-var data4; // - for dot, y2 for line
-var data5; // c for dot,  c for line
-
-var count = 0;
+const BG_COLOR = Color.colorString(65, 105, 125);
+const DISK_RADIUS = 4;
+const INITIAL_RADIUS = 2;
+const MIDDLE_RADIUS = 3;
+const INITIAL_DISK_COLOR = 'black';
+const SEGMENT_WIDTH = 1;
+const START_COLOR = Color.colorString(0, 255, 0);
+const MIDDLE_COLOR = 'white';
+const STOP_COLOR = 'red';
+const SEGMENT_COLOR = 'white';
 
 
-
-
-function addLine(x0, y0, x1, y1, c) {
-  type.length++;
-  data1.length++;
-  data2.length++;
-  data3.length++;
-  data4.length++;
-  data5.length++;
-
-  type[type.length-1] = "line";
-  data1[data1.length-1] = x0;
-  data2[data2.length-1] = y0;
-  data3[data3.length-1] = x1;
-  data4[data4.length-1] = y1;
-  data5[data5.length-1] = c;
-}
-
-function addDot(x, y, r, c) {
-  if (type[type.length-1] == "dot" &&
-    data1[data1.length-1] == x &&
-    data2[data2.length-1] == y &&
-    data3[data3.length-1] == r &&
-    data5[data5.length-1] == c) {
+class Disk {
+  constructor(center, radius, color) {
+    this.center = center; // Point
+    this.radius = radius;
+    this.color = color;
   }
-  else {
-    type.length++;
-    data1.length++;
-    data2.length++;
-    data3.length++;
-    data4.length++;
-    data5.length++;
-
-    type[type.length-1] = "dot";
-    data1[data1.length-1] = x;
-    data2[data2.length-1] = y;
-    data3[data3.length-1] = r;
-    data4[data4.length-1] = 0;
-    data5[data5.length-1] = c;
+  draw() {
+    canvasUtil.drawDisk(this.center.x, this.center.y, this.radius, this.color);
   }
 }
 
+class Segment {
+  constructor(p0, p1, color, width) {
+    this.p0 = p0; // Point
+    this.p1 = p1; // Point
+    this.color = color;
+    this.width = width;
+  }
+  draw() {
+    canvasUtil.drawLine(this.p0.x, this.p0.y, this.p1.x, this.p1.y, this.color, this.width);
+  }
+}
+
+class Grid {
+  constructor(numRows, numCols, sepX, sepY) {
+    this.numRows = numRows;
+    this.numCols = numCols;
+    this.sepX = sepX;
+    this.sepY = sepY;
+    this.paths = [[]]; // array of array of Point objects
+    this.objs = [] // array of graphical objects (Disk, Segment) to be animated
+    // availablePositions is a double array of objects {'coords': [i, j, 'avail': 1 or 0}
+    // need to be able do these easily: tell how many are available,
+    // check the status of one, randomly select an open one, and change the status of one
+    this.availablePositions = this.initializeAvailabilePositions();
+  }
+
+  planAnimation() {
+    // convert all paths to list of geometric objects that can be animated
+    for (let i=0; i<this.paths.length; i++) {
+      let len = this.paths[i].length;
+      if (len >= 1) {
+        this.objs.push(new Disk(
+            this.gridToCanvasPt(this.paths[i][0]),
+            DISK_RADIUS,
+            START_COLOR));
+        for (let j=1; j<len; j++) {
+          this.objs.push(new Segment(
+            this.gridToCanvasPt(this.paths[i][j-1]),
+            this.gridToCanvasPt(this.paths[i][j]),
+            MIDDLE_COLOR,
+            SEGMENT_WIDTH));
+          this.objs.push(new Disk(
+            this.gridToCanvasPt(this.paths[i][j]),
+            MIDDLE_RADIUS,
+            MIDDLE_COLOR));
+        }
+        this.objs.push(new Disk(
+          this.gridToCanvasPt(this.paths[i][len-1]),
+          DISK_RADIUS,
+          STOP_COLOR));
+      }
+    }
+  }
+
+  numAvailablePositions() {
+    return this.availablePositions.flat().filter(p => p.avail == 1).length;
+  }
+
+  initializeAvailabilePositions() {
+    let avails = [];
+    for (let i=0; i<this.numRows; i++) {
+      avails.push([]);
+      for (let j=0; j<this.numCols; j++) {
+        let availObj = {coords: [i, j], avail: 1};
+        avails[i].push(availObj);
+      }
+    }
+    return avails;
+  }
+
+  getAvailablePositions() {
+    return this.availablePositions.flat().filter(p => p.avail == 1).map(p => p.coords);
+  }
+
+  gridToCanvas(i, j) {
+    // map grid coordinates onto canvas coordinates
+    return [this.sepX / 2 + i * this.sepX, this.sepY / 2 + j * this.sepY];
+  }
+
+  gridToCanvasPt(p) {
+    return new Point(
+      this.sepX / 2 + p.x * this.sepX,
+      this.sepY / 2 + p.y * this.sepY
+    );
+  }
+
+  drawReferencePoints() {
+    arrayProduct(range(this.numRows), range(this.numCols))
+      .map(t => this.gridToCanvas(t[0], t[1]))
+      .forEach(p => canvasUtil.drawDisk(p[0], p[1], INITIAL_RADIUS, INITIAL_DISK_COLOR));
+  }
+
+  randomInitialPoint() {
+    // select a random initial point for a path from a list of available points
+    let avails = this.getAvailablePositions();
+    if (avails.length > 0) {
+      let [i, j] = avails[Math.floor(Math.random() * avails.length)];
+      this.availablePositions[i][j].avail = 0;
+      return [i, j];
+    }
+  }
+
+  createPaths() {
+    // populate the array of paths
+    let numAvails = this.numAvailablePositions();
+    while (numAvails > 0) {
+      let [i, j] = this.randomInitialPoint();
+      this.paths.push([new Point(i, j)]);
+      let canExtendPath = true; //this.extendSegment();
+      numAvails = this.numAvailablePositions();
+      while (canExtendPath && numAvails > 0) {
+        canExtendPath = this.extendPath();
+      }
+      numAvails = this.numAvailablePositions();
+    }
+  }
+
+  extendPath() {
+    let canContinue = true;
+    let lastPathLength = this.paths[this.paths.length-1].length;
+    let p0 = this.paths[this.paths.length-1][lastPathLength-1];
+
+    // adjacent points
+    let avails = [[p0.x + 1, p0.y], [p0.x, p0.y - 1], [p0.x - 1, p0.y], [p0.x, p0.y + 1]]
+      .filter(p => 0 <= p[0] && p[0] < this.numRows && 0 <= p[1] && p[1] < this.numCols)
+      .filter(p => this.availablePositions[p[0]][p[1]].avail == 1);
+
+    if (avails.length > 0) {
+      let [i1, j1] = avails[Math.floor(Math.random() * avails.length)];
+      this.availablePositions[i1][j1].avail = 0; // make it unavailable
+      this.paths[this.paths.length-1].push(new Point(i1, j1));
+    } else {
+      canContinue = false;
+    }
+    return canContinue;
+  }
+}
+
+
+function pauseDrawing() {
+  paused = !paused;
+}
 
 function draw() {
-  if (count < type.length) {
-    if (type[count] == "dot") {
-      canvasUtil.drawDisk(data1[count], data2[count], data3[count], data5[count]);
-    } else {
-      canvasUtil.drawLine(data1[count], data2[count], data3[count], data4[count], data5[count], 1);
-    }
+  if (paused) {
+    return 0;
+  }
+
+  if (count < grid.objs.length) {
+    grid.objs[count].draw();
     count++;
   }
 }
 
-
-function firstPoints() {
-  // draw a line from a random point
-  x0 = Math.round(Math.random() * (WIDTH / sep));
-  y0 = Math.round(Math.random() * (HEIGHT / sep));
-
-  // check to make sure it's ok to draw the first point
-  if (0 < x0 && x0 < Math.round(WIDTH/sep) &&
-         0 < y0 && y0 < Math.round(HEIGHT/sep)) {  //inside the bounds
-
-    if (dots[x0][y0] == 0) {	// spot is empty
-      addDot(x0 * sep, y0 * sep, dotRad, "green");
-      dots[x0][y0] = 1;
-      dotsLeft = dotsLeft - 1;
-
-      // after first point is drawn, try to draw second...
-
-      // pick a random direction, and change the direction if original doesn't work
-      var dir = Math.round(Math.random()*4)%4;
-      var pickNew = 0;
-      var tries = 0;
-
-      while (pickNew == 0 && tries < 4) {
-        // compute the coordinate of the second point
-        if (dir == 0) { // right
-          x1 = x0 + 1;
-          y1 = y0;
-        } else if (dir == 1) { // up
-          x1 = x0;
-          y1 = y0 - 1;
-        } else if (dir == 2) { // left
-          x1 = x0 - 1;
-          y1 = y0;
-        } else if (dir == 3) { // down
-          x1 = x0;
-          y1 = y0 + 1;
-        }
-        // check to make sure it's ok to draw the second point
-        if (0 < x1 && x1 < Math.round(WIDTH/sep) &&
-          0 < y1 && y1 < Math.round(HEIGHT/sep)) {
-
-          if (dots[x1][y1] == 0) {
-            // reset booleans
-            move = 0;
-            canTurnLeft = 0;
-            canGoAhead = 0;
-            canTurnRight = 0;
-
-            addLine(x0*sep, y0*sep, x1*sep, y1*sep, "white");
-            addDot(x1*sep, y1*sep, dotRad, "white");
-            dotsLeft = dotsLeft - 1;
-            dots[x1][y1] = 1;
-
-            pickNew = 1;
-          } else {
-            dir = (dir+1)%4;
-            tries++;
-          }
-        } else {
-          dir = (dir+1)%4;
-          tries++;
-        }
-      }
-    }
-  }
-}
-
-function moveToNext(d) {
-  if (d == 0) { //turning left
-    // get displacement vector from previous point
-    var delta_x = x1-x0;
-    var delta_y = y1-y0;
-
-    // rotate 3*PI/2, and shift to start at (x1,y1)
-    x2 = Math.round(delta_y  + x1);
-    y2 = Math.round(-1*delta_x + y1);
-  }
-  else if (d == 1) { //go ahead
-    // get displacement from previous point
-    x2 = Math.round(x1 + (x1-x0));
-    y2 = Math.round(y1 + (y1-y0));
-  }
-  else if (d == 2) { //turning right
-    // get displacement vector from previous point
-    var delta_x = x1-x0;
-    var delta_y = y1-y0;
-
-    // rotate PI/2, and shift to start at (x1,y1)
-    x2 = Math.round(-1*delta_y + x1);
-    y2 = Math.round(delta_x  + y1);
-  }
-
-  // check to make sure it's ok to draw it
-  if ( 0 < x2 && x2 < Math.round(WIDTH/sep) &&
-         0 < y2 && y2 < Math.round(HEIGHT/sep) ) {
-
-    if (dots[x2][y2] == 0) {
-
-      addDot(x2*sep, y2*sep, dotRad, "white");
-      dotsLeft = dotsLeft - 1;
-      dots[x2][y2] = 1;
-      addLine(x1*sep, y1*sep, x2*sep, y2*sep, "white");
-
-      x0 = x1;
-      y0 = y1;
-      x1 = x2;
-      y1 = y2;
-
-      canTurnLeft = 0;
-      canGoAhead = 0;
-      canTurnRight = 0;
-    }
-    else {
-      //document.outform.output.value += '\n' + 'already filled';
-      if (d == 0)  //turning left
-        canTurnLeft = 1;
-      else if (d == 1)  //go ahead
-        canGoAhead = 1;
-      else if (d == 2)  //turning right
-        canTurnRight = 1;
-    }
-  }
-  else {
-    //document.outform.output.value += '\n' + 'out of bounds';
-    if (d == 0)  //turning left
-      canTurnLeft = 1;
-    else if (d == 1)  //go ahead
-      canGoAhead = 1;
-    else if (d == 2)  //turning right
-      canTurnRight = 1;
-  }
-}
-
-
-function init(){
-
-  // get the canvas element using the DOM
+function init() {
   canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
-
-  // Make sure we don't execute when canvas isn't supported
   if (canvas.getContext){
-    // use getContext to use the canvas for drawing
     ctx = canvas.getContext('2d');
-    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     sep = document.getElementById("spacing").value;
-
-    // fill the array to keep track of which dots were drawn
-    dots = new Array(Math.round(WIDTH/sep));
-    for (var i=0; i<dots.length; i++) {
-      dots[i] = new Array(Math.round(HEIGHT/sep));
-    }
-    for (var i=0; i<dots.length; i++) {
-      for (var j=0; j<dots[i].length; j++) {
-        dots[i][j] = 0;
-        if (j > 0 && i > 0) canvasUtil.drawDisk(i * sep, j * sep, tempRad, "black");
-      }
-    }
-
-    count = 1;
-
-    // initialize data arrays
-    type  = new Array(1);
-    data1 = new Array(1);
-    data2 = new Array(1);
-    data3 = new Array(1);
-    data4 = new Array(1);
-    data5 = new Array(1);
-
-    // draw reference dots
-    for (var i=1; i<Math.round(WIDTH/sep); i++) {
-      for (var j=1; j<Math.round(HEIGHT/sep); j++) {
-        canvasUtil.drawDisk(i*sep, j*sep, tempRad, "black");
-      }
-    }
-
-    dotsLeft = (Math.round(WIDTH/sep)-1)*(Math.round(HEIGHT/sep)-1);
-
-    // figure everything out!
-    while (dotsLeft > 0) { // keep drawing stuff
-      firstPoints();
-      while (move == 0) {
-        var turn = Math.round(Math.random()*2);  // random interger 0 (Left), 1 (ahead), 2 (right) for the direction to turn
-        moveToNext(turn);
-        if (canTurnLeft == 1 && canGoAhead == 1 && canTurnRight == 1) {
-          move = 1;
-        }
-      }
-
-      // "end dot"
-      if ( 0 < x1 && x1 < Math.round(WIDTH/sep) &&
-        0 < y1 && y1 < Math.round(HEIGHT/sep) ) {
-        addDot(x1*sep, y1*sep, dotRad, "red");
-      }
-    }
-
-    // call the drawing function
-    return setInterval(draw, 25);
+    canvasUtil.clearCanvas(BG_COLOR);
+    grid = new Grid(WIDTH / sep, HEIGHT / sep, sep, sep);
+    grid.drawReferencePoints();
+    grid.createPaths();
+    grid.planAnimation();
+    count = 0;
+    return setInterval(draw, 15);
   } else {
     alert('You need a better web browser to see this.'); }
 }

@@ -29,7 +29,6 @@ var reg_type = "linear";
 
 
 function gdIter() {
-
   alpha = parseFloat(document.controls.learning_rate.value);
 
   var Jlin_temp = 0; //cost function for linear regression
@@ -45,7 +44,6 @@ function gdIter() {
 
   // calculate the gradient of cost
   for(var i=0; i<M; i++) {
-
     // (signed) vertical distance between data point
     // and current regression line: h(x)-y = mx + b - y
     var diff_lin = m[L-1] * x[i] + b[L-1] - y[i];
