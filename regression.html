@@ -90,21 +90,20 @@ href="http://www.google.com/chrome">Chrome</a> (Windows).</p>
 		</td>
 		<td>
 			<form name="controls">
-			Linear<input type="radio" name="regtype" value="linear" onChange="drawAfterChange();" checked="yes">
-			Quadratic<input type="radio" name="regtype" value="quadratic" onChange="drawAfterChange();">
+			Linear<input type="radio" name="regtype" value="linear" checked="yes">
+			Quadratic<input type="radio" name="regtype" value="quadratic">
       Learning Rate
       <select name="learning_rate">
-        <option value="0.001">0.001</option>
-        <option value="0.01">0.01</option>
         <option value="0.1">0.1</option>
+        <option value="0.3">0.3</option>
         <option value="1.0" selected="selected">1.0</option>
+        <option value="1.3">1.3</option>
         <option value="3.0">3.0</option>
-        <option value="10.0">10.0</option>
       </select>
 			</form>
 		</td>
 		<td align="left">
-			<input type="button" name="iterate" value="Iterate" onClick="iterate2();">
+			<input type="button" name="iter" value="Iterate" onClick="iterate();">
 			<input type="button" name="reset" value="Reset" onClick="refreshData();">
 			</form>
 		</td>

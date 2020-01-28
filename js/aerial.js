@@ -38,17 +38,6 @@ class Ridge {
 }
 
 
-// function draw() {
-//
-//   // main drawing code
-//   canvasUtil.clearCanvas();
-//
-//   for (r in ridges) {
-//     ridges[r].draw();
-//   }
-// }
-
-
 function movingAvg(xs, w) {
   let ma = [];
   let padded = range(w-1).map(i => xs[0]).concat(xs);
@@ -57,10 +46,6 @@ function movingAvg(xs, w) {
     ma.push(avg);
   }
   return ma;
-}
-
-function range(n) {
-  return [...Array(n).keys()];
 }
 
 
