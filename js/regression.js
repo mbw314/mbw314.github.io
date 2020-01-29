@@ -5,11 +5,12 @@ const HEIGHT = 750;
 let canvasUtil;
 
 let M = 100;
-const spread = 0.25;
+const spread = 0.2;
 const POINT_COLOR = 'black';
 const POINT_RADIUS = 4;
 const RESIDUAL_COLOR = 'red';
 const RESIDUAL_WIDTH = 1;
+const INITIAL_FN = x => 0.424 + 3.115 * x - 8.575 * x * x + 5.35938 * x * x * x;
 let re; // RegressionEnsemble object;
 
 
@@ -52,12 +53,12 @@ class RegressionEnsemble {
     this.paramHistory = [this.f.params]; // array of learned parameter arays
   }
 
-  initPoints(params) {
+  initPoints(targetFn) {
     // create points near the line y = f(x) (using provided parameters) inside [0, 1] x [0, 1]
     let points = [];
     for (let i=0; i<this.numPoints; i++) {
       let newX = Math.random();
-      let newY = this.f.evalWithParams(newX, params) + (2 * Math.random() - 1) * spread * Math.random();
+      let newY = targetFn(newX) + (2 * Math.random() - 1) * spread * Math.random();
       points.push(new Point(newX, newY));
     }
     this.points = points;
@@ -130,17 +131,14 @@ function refreshData() {
   canvasUtil.clearText();
   let regType = document.controls.regtype.value;
   let f = linearFunction;
-  let initialParams = [0.35, 0.3];
   if (regType == 'quadratic') {
     f = quadraticFunction;
-    initialParams = [0.35, 0.25, 0.1];
   } else if (regType == 'cubic') {
     f = cubicFunction;
-    initialParams = [0.35, 0.25, 0.1, 0.1];
   }
   f.resetParams();
   re = new RegressionEnsemble(f, M);
-  re.initPoints(initialParams);
+  re.initPoints(INITIAL_FN);
   re.draw();
 }
 
