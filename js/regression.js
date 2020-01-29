@@ -90,14 +90,12 @@ class RegressionEnsemble {
       // evenly divide interval [0,255] and step through backwards
       let c = Math.floor((L-i)*256/L);
       for (let x=0; x<WIDTH; x++) {
-        canvasUtil.drawRect(
-          x, this.f.evalWithParams(x / WIDTH, this.paramHistory[i]) * HEIGHT, 1, 1, Color.colorString(c, c, c));
+        canvasUtil.drawRect(x, this.f.evalWithParams(x / WIDTH, this.paramHistory[i]) * HEIGHT, 1, 1, Color.colorString(c, c, c));
       }
     }
     // draw the final line in black
     for (let x=0; x<WIDTH; x++) {
-      canvasUtil.drawRect(
-        x,  this.f.eval(x / WIDTH) * HEIGHT, 1, 1, 'black');
+      canvasUtil.drawRect(x,  this.f.eval(x / WIDTH) * HEIGHT, 1, 1, 'black');
     }
   }
 
