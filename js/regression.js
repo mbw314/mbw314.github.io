@@ -17,7 +17,7 @@ class LearnableFunction { // single variable
   constructor(numParams, evalFn, gradientFns, stringFn) {
     this.params = range(numParams).map(x => Math.random()); // array of parameters to be learned
     this.evalFn = evalFn; // function that takes a variable and the parameters and evaluates the function
-    this.gradient = gradientFns; // list of same type as evalFn
+    this.gradient = gradientFns; // list of same type as evalFn, representing gradient WRT parameters
     this.stringFn = stringFn; // function to convert params into string representation of function
   }
 
@@ -53,7 +53,7 @@ class RegressionEnsemble {
   }
 
   initPoints(params) {
-    // create points near the line y = f(x) inside [0, 1] x [0, 1]
+    // create points near the line y = f(x) (using provided parameters) inside [0, 1] x [0, 1]
     let points = [];
     for (let i=0; i<this.numPoints; i++) {
       let newX = Math.random();
@@ -87,7 +87,7 @@ class RegressionEnsemble {
     let L = this.paramHistory.length;
     // draw all but final line, scaling the color from light to dark
     for (let i=0; i<L; i++) {
-      // evenly divide interval [0,255] and step through backwards
+      // evenly divide interval [0, 255] and step through backwards
       let c = Math.floor((L-i)*256/L);
       for (let x=0; x<WIDTH; x++) {
         canvasUtil.drawRect(x, this.f.evalWithParams(x / WIDTH, this.paramHistory[i]) * HEIGHT, 1, 1, Color.colorString(c, c, c));
@@ -101,26 +101,26 @@ class RegressionEnsemble {
 
   gradientDescentStep() {
     let alpha = parseFloat(document.controls.learning_rate.value);
-    let loss = 0;
-    let lossGradients = this.f.params.map(i => 0);
+    let cost = 0;
+    let costGradients = range(this.numParams).map(i => 0);
 
-    // Loss: L = sum_x (f(x) - y)^2 / 2M
-    // Gradient of Loss: \partial L/\partial theta_j = (1/M) sum_x (f(x) - y) * \partial f/\partial \theta_j(x)
+    // Cost: J = sum_x (f(x) - y)^2 / 2M
+    // Gradient of Cost: \partial J/\partial theta_j = (1/M) sum_x (f(x) - y) * \partial f/\partial \theta_j(x)
     for (let i=0; i<this.numPoints; i++) {
       let residual = this.f.eval(this.points[i].x) - this.points[i].y;
-      loss += residual * residual;
+      cost += residual * residual;
       let fGradients = this.f.evalGradient(this.points[i].x);
       for (let j=0; j<this.numParams; j++) {
-        lossGradients[j] += residual * fGradients[j];
+        costGradients[j] += residual * fGradients[j];
       }
     }
     let newParams = [];
     for (let j=0; j<this.numParams; j++) {
-      newParams.push(this.f.params[j] - alpha * lossGradients[j] / this.points.length);
+      newParams.push(this.f.params[j] - alpha * costGradients[j] / this.numPoints);
     }
     this.paramHistory.push(this.f.params);
     this.f.params = newParams;
-    canvasUtil.println(`loss: ${loss.toFixed(5)}; new function: ${this.f.toString()}`);
+    canvasUtil.println(`cost: ${cost.toFixed(5)}; new function: ${this.f.toString()}`); // technically, 2M * cost
   }
 }
 
@@ -128,9 +128,17 @@ class RegressionEnsemble {
 function refreshData() {
   canvasUtil.clearCanvas();
   canvasUtil.clearText();
-  let f = (document.controls.regtype.value == 'linear') ? linearFunction : quadraticFunction;
+  let regType = document.controls.regtype.value;
+  let f = linearFunction;
+  let initialParams = [0.35, 0.3];
+  if (regType == 'quadratic') {
+    f = quadraticFunction;
+    initialParams = [0.35, 0.25, 0.1];
+  } else if (regType == 'cubic') {
+    f = cubicFunction;
+    initialParams = [0.35, 0.25, 0.1, 0.1];
+  }
   f.resetParams();
-  let initialParams = (document.controls.regtype.value == 'linear') ? [0.35, 0.3] : [0.35, 0.25, 0.1];
   re = new RegressionEnsemble(f, M);
   re.initPoints(initialParams);
   re.draw();
@@ -149,7 +157,7 @@ const linearFunction = new LearnableFunction(
     (x, ps) => 1,
     (x, ps) => x
   ],
-  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} * x`
+  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} x`
 );
 
 const quadraticFunction = new LearnableFunction(
@@ -160,7 +168,19 @@ const quadraticFunction = new LearnableFunction(
     (x, ps) => x,
     (x, ps) => x * x
   ],
-  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} * x + ${ps[2].toFixed(5)} * x^2`
+  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} x + ${ps[2].toFixed(5)} x^2`
+);
+
+const cubicFunction = new LearnableFunction(
+  4,
+  (x, ps) => ps[0] + ps[1] * x + ps[2] * x * x + ps[3] * x * x * x,
+  [
+    (x, ps) => 1,
+    (x, ps) => x,
+    (x, ps) => x * x,
+    (x, ps) => x * x * x
+  ],
+  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} x + ${ps[2].toFixed(5)} x^2 + ${ps[3].toFixed(5)} x^3`
 );
 
 function init() {
