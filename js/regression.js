@@ -3,14 +3,16 @@ let ctx;
 const WIDTH = 750;
 const HEIGHT = 750;
 let canvasUtil;
+let paused = true;
 
-let M = 100;
+let M = 200;
 const spread = 0.2;
 const POINT_COLOR = 'black';
 const POINT_RADIUS = 4;
 const RESIDUAL_COLOR = 'red';
 const RESIDUAL_WIDTH = 1;
-const INITIAL_FN = x => 0.424 + 3.115 * x - 8.575 * x * x + 5.35938 * x * x * x;
+const INITIAL_FN = x => 0.5 * x * x * x - 0.2 * x * x - 0.1 * x + 0.65;
+//x => 0.424 + 3.115 * x - 8.575 * x * x + 5.35938 * x * x * x; //x => 1.5 * x * (1 - x) + 0.25; //x => 0.424 + 3.115 * x - 8.575 * x * x + 5.35938 * x * x * x; ;  //x =>  1.5 * x * (1 - x) + 0.25;//x => 0.29 + 0.47 * x; //
 let re; // RegressionEnsemble object;
 
 
@@ -51,13 +53,16 @@ class RegressionEnsemble {
     this.numPoints = numPoints;
     this.points; // array of Point objects
     this.paramHistory = [this.f.params]; // array of learned parameter arays
+    //this.centerPoint;
+    this.xs = range(WIDTH).map(i => i / WIDTH).map(i => 2 * i - 1); // x values in [-1, 1]
+    this.numIterations = 0;
   }
 
   initPoints(targetFn) {
-    // create points near the line y = f(x) (using provided parameters) inside [0, 1] x [0, 1]
+    // create points near the line y = f(x) (using provided parameters) inside [-1, 1] x [-1, 1]
     let points = [];
     for (let i=0; i<this.numPoints; i++) {
-      let newX = Math.random();
+      let newX = 2 * Math.random() - 1;
       let newY = targetFn(newX) + (2 * Math.random() - 1) * spread * Math.random();
       points.push(new Point(newX, newY));
     }
@@ -74,14 +79,24 @@ class RegressionEnsemble {
     this.drawResiduals();
   }
 
+  mapToCanvas(x, y) {
+    // map x-val from [-1, 1] to [0, WIDTH], map y-val from [0, 1] to [0, HEIGHT] ?
+    return [0.5 * WIDTH * (x + 1), HEIGHT - y * HEIGHT];
+  }
+
   drawPoints() {
-    this.points.forEach(p =>
-      canvasUtil.drawDisk(p.x * WIDTH, p.y * HEIGHT, POINT_RADIUS, POINT_COLOR));
+    this.points.forEach(p => {
+      let [cx, cy] = this.mapToCanvas(p.x, p.y);
+      canvasUtil.drawDisk(cx, cy, POINT_RADIUS, POINT_COLOR)
+    });
   }
 
   drawResiduals() {
-    this.points.forEach(p =>
-      canvasUtil.drawLine(p.x * WIDTH, p.y * HEIGHT, p.x * WIDTH, this.f.eval(p.x) * HEIGHT, RESIDUAL_COLOR, RESIDUAL_WIDTH));
+    this.points.forEach(p => {
+      let [cx0, cy0] = this.mapToCanvas(p.x, p.y);
+      let [cx1, cy1] = this.mapToCanvas(p.x, this.f.eval(p.x));
+      canvasUtil.drawLine(cx0, cy0, cx1, cy1, RESIDUAL_COLOR, RESIDUAL_WIDTH);
+    });
   }
 
   drawFunctionHistory() {
@@ -90,14 +105,16 @@ class RegressionEnsemble {
     for (let i=0; i<L; i++) {
       // evenly divide interval [0, 255] and step through backwards
       let c = Math.floor((L-i)*256/L);
-      for (let x=0; x<WIDTH; x++) {
-        canvasUtil.drawRect(x, this.f.evalWithParams(x / WIDTH, this.paramHistory[i]) * HEIGHT, 1, 1, Color.colorString(c, c, c));
-      }
+      this.xs.map(x => {
+        let [cx, cy] = this.mapToCanvas(x, this.f.evalWithParams(x, this.paramHistory[i]));
+        canvasUtil.drawRect(cx, cy, 1, 1, Color.colorString(c, c, c));
+      });
     }
     // draw the final line in black
-    for (let x=0; x<WIDTH; x++) {
-      canvasUtil.drawRect(x,  this.f.eval(x / WIDTH) * HEIGHT, 1, 1, 'black');
-    }
+    this.xs.map(x => {
+      let [cx, cy] = this.mapToCanvas(x, this.f.eval(x));
+      canvasUtil.drawRect(cx, cy, 1, 1, 'black');
+    });
   }
 
   gradientDescentStep() {
@@ -121,7 +138,9 @@ class RegressionEnsemble {
     }
     this.paramHistory.push(this.f.params);
     this.f.params = newParams;
-    canvasUtil.println(`cost: ${cost.toFixed(5)}; new function: ${this.f.toString()}`); // technically, 2M * cost
+    this.numIterations += 1;
+    canvasUtil.clearText();
+    canvasUtil.println(`iteration ${this.numIterations}: cost = ${cost.toFixed(5)}; new function = ${this.f.toString()}`); // technically, 2M * cost
   }
 }
 
@@ -181,6 +200,20 @@ const cubicFunction = new LearnableFunction(
   ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} x + ${ps[2].toFixed(5)} x^2 + ${ps[3].toFixed(5)} x^3`
 );
 
+function pauseDrawing() {
+  paused = !paused;
+}
+
+
+function draw() {
+  if (paused) {
+    return 0;
+  }
+  canvasUtil.clearCanvas();
+  re.gradientDescentStep();
+  re.draw();
+}
+
 function init() {
   canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
@@ -190,6 +223,7 @@ function init() {
     reg_type = document.controls.regtype.value;
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     refreshData();
+    return setInterval(draw, 50);
   }
   else alert('You need a better web browser to see this.');
 }
