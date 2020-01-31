@@ -1,220 +1,218 @@
+let canvas;
+let ctx;
+const WIDTH = 750;
+const HEIGHT = 750;
+let canvasUtil;
+let paused = true;
 
-var canvas;
-var ctx;
-var WIDTH = 750;
-var HEIGHT = 750;
-var canvasUtil;
-var output_field;
-
-var M = 100;
-var Jlin = [1000000];
-var Jquad = [1000000];
-var x = [];
-var y = [];
-var alpha = 1;
-var t0_init = 0;
-var t1_init = 0;
-var t2_init = 1;
-var spread = 0;
-var m = [];
-var b = [];
-var t0 = [];
-var t1 = [];
-var t2 = [];
-var pointColor = 'black';
-var pointRadius = 5;
-var linear = 1;
-var quadratic = 0;
-var reg_type = "linear";
+let M = 200;
+const spread = 0.2;
+const POINT_COLOR = 'black';
+const POINT_RADIUS = 4;
+const RESIDUAL_COLOR = 'red';
+const RESIDUAL_WIDTH = 1;
+const INITIAL_FN = x => 0.5 * x * x * x - 0.2 * x * x - 0.1 * x + 0.65;
+//x => 0.424 + 3.115 * x - 8.575 * x * x + 5.35938 * x * x * x; //x => 1.5 * x * (1 - x) + 0.25; //x => 0.424 + 3.115 * x - 8.575 * x * x + 5.35938 * x * x * x; ;  //x =>  1.5 * x * (1 - x) + 0.25;//x => 0.29 + 0.47 * x; //
+let re; // RegressionEnsemble object;
 
 
-function gdIter() {
-  alpha = parseFloat(document.controls.learning_rate.value);
-
-  var Jlin_temp = 0; //cost function for linear regression
-  var J_m = 0; //partial derivative of Jlin w.r.t. m
-  var J_b = 0; //partial derivative of Jlin w.r.t. b
-
-  var Jquad_temp = 0; //cost function for quadratic regression
-  var J_2 = 0; //partial derivative of Jquad w.r.t. t2
-  var J_1 = 0; //partial derivative of Jquad w.r.t. t1
-  var J_0 = 0; //partial derivative of Jquad w.r.t. t0
-
-  var L = t2.length; //# of iterations
-
-  // calculate the gradient of cost
-  for(var i=0; i<M; i++) {
-    // (signed) vertical distance between data point
-    // and current regression line: h(x)-y = mx + b - y
-    var diff_lin = m[L-1] * x[i] + b[L-1] - y[i];
-
-    J_m       += diff_lin * x[i];
-    J_b       += diff_lin;
-    Jlin_temp += diff_lin * diff_lin;
-
-    // (signed) vertical distance between data point
-    // and current regression line: h(x)-y = t2 x^2 + t1 x + t0 - y
-    var diff_quad = t2[L-1] * x[i] * x[i] + t1[L-1] * x[i] + t0[L-1] - y[i];
-
-    J_2        += diff_quad * x[i] * x[i];
-    J_1        += diff_quad * x[i];
-    J_0        += diff_quad;
-    Jquad_temp += diff_quad * diff_quad;
+class LearnableFunction { // single variable
+  constructor(numParams, evalFn, gradientFns, stringFn) {
+    this.params = range(numParams).map(x => Math.random()); // array of parameters to be learned
+    this.evalFn = evalFn; // function that takes a variable and the parameters and evaluates the function
+    this.gradient = gradientFns; // list of same type as evalFn, representing gradient WRT parameters
+    this.stringFn = stringFn; // function to convert params into string representation of function
   }
 
-  // update Jlin, m, and b based on the gradient
-  Jlin[L] = Jlin_temp / (2 * M);
-  m[L] = m[L-1] - alpha * J_m / M;
-  b[L] = b[L-1] - alpha * J_b / M;
-
-  // update J, m, and b based on the gradient
-  Jquad[L] = Jquad_temp / (2 * M);
-  t2[L] = t2[L-1] - alpha * J_2 / M;
-  t1[L] = t1[L-1] - alpha * J_1 / M;
-  t0[L] = t0[L-1] - alpha * J_0 / M;
-
-  var loss = 0;
-  if (reg_type == "linear") {
-    loss = Jlin[L];
-  } else {
-    loss = Jquad[L];
+  eval(x) {
+    return this.evalFn(x, this.params);
   }
-  canvasUtil.println(`Iteration ${L}; regression = ${reg_type}; learning rate = ${alpha}; Loss = ${loss.toFixed(5)}`);
+
+  evalWithParams(x, params) {
+    return this.evalFn(x, params);
+  }
+
+  evalGradient(x) {
+    return this.gradient.map(g => g(x, this.params));
+  }
+
+  resetParams() {
+    this.params = this.params.map(x => Math.random());
+  }
+
+  toString() {
+    return this.stringFn(this.params);
+  }
+}
+
+
+class RegressionEnsemble {
+  constructor(f, numPoints) {
+    this.f = f; // LearnableFunction object
+    this.numParams = f.params.length;
+    this.numPoints = numPoints;
+    this.points; // array of Point objects
+    this.paramHistory = [this.f.params]; // array of learned parameter arays
+    //this.centerPoint;
+    this.xs = range(WIDTH).map(i => i / WIDTH).map(i => 2 * i - 1); // x values in [-1, 1]
+    this.numIterations = 0;
+  }
+
+  initPoints(targetFn) {
+    // create points near the line y = f(x) (using provided parameters) inside [-1, 1] x [-1, 1]
+    let points = [];
+    for (let i=0; i<this.numPoints; i++) {
+      let newX = 2 * Math.random() - 1;
+      let newY = targetFn(newX) + (2 * Math.random() - 1) * spread * Math.random();
+      points.push(new Point(newX, newY));
+    }
+    this.points = points;
+    // reinitialize f to the mean of the y-values
+    let yMean = this.points.map(p => p.y).reduce((a, b) => a + b, 0) / this.numPoints;
+    this.f.params = range(this.numParams).map(x => 0);
+    this.f.params[0] = yMean;
+  }
+
+  draw() {
+    this.drawPoints();
+    this.drawFunctionHistory();
+    this.drawResiduals();
+  }
+
+  mapToCanvas(x, y) {
+    // map x-val from [-1, 1] to [0, WIDTH], map y-val from [0, 1] to [0, HEIGHT] ?
+    return [0.5 * WIDTH * (x + 1), HEIGHT - y * HEIGHT];
+  }
+
+  drawPoints() {
+    this.points.forEach(p => {
+      let [cx, cy] = this.mapToCanvas(p.x, p.y);
+      canvasUtil.drawDisk(cx, cy, POINT_RADIUS, POINT_COLOR)
+    });
+  }
+
+  drawResiduals() {
+    this.points.forEach(p => {
+      let [cx0, cy0] = this.mapToCanvas(p.x, p.y);
+      let [cx1, cy1] = this.mapToCanvas(p.x, this.f.eval(p.x));
+      canvasUtil.drawLine(cx0, cy0, cx1, cy1, RESIDUAL_COLOR, RESIDUAL_WIDTH);
+    });
+  }
+
+  drawFunctionHistory() {
+    let L = this.paramHistory.length;
+    // draw all but final line, scaling the color from light to dark
+    for (let i=0; i<L; i++) {
+      // evenly divide interval [0, 255] and step through backwards
+      let c = Math.floor((L-i)*256/L);
+      this.xs.map(x => {
+        let [cx, cy] = this.mapToCanvas(x, this.f.evalWithParams(x, this.paramHistory[i]));
+        canvasUtil.drawRect(cx, cy, 1, 1, Color.colorString(c, c, c));
+      });
+    }
+    // draw the final line in black
+    this.xs.map(x => {
+      let [cx, cy] = this.mapToCanvas(x, this.f.eval(x));
+      canvasUtil.drawRect(cx, cy, 1, 1, 'black');
+    });
+  }
+
+  gradientDescentStep() {
+    let alpha = parseFloat(document.controls.learning_rate.value);
+    let cost = 0;
+    let costGradients = range(this.numParams).map(i => 0);
+
+    // Cost: J = sum_x (f(x) - y)^2 / 2M
+    // Gradient of Cost: \partial J/\partial theta_j = (1/M) sum_x (f(x) - y) * \partial f/\partial \theta_j(x)
+    for (let i=0; i<this.numPoints; i++) {
+      let residual = this.f.eval(this.points[i].x) - this.points[i].y;
+      cost += residual * residual;
+      let fGradients = this.f.evalGradient(this.points[i].x);
+      for (let j=0; j<this.numParams; j++) {
+        costGradients[j] += residual * fGradients[j];
+      }
+    }
+    let newParams = [];
+    for (let j=0; j<this.numParams; j++) {
+      newParams.push(this.f.params[j] - alpha * costGradients[j] / this.numPoints);
+    }
+    this.paramHistory.push(this.f.params);
+    this.f.params = newParams;
+    this.numIterations += 1;
+    canvasUtil.clearText();
+    canvasUtil.println(`iteration ${this.numIterations}: cost = ${cost.toFixed(5)}; new function = ${this.f.toString()}`); // technically, 2M * cost
+  }
 }
 
 
 function refreshData() {
-  // usual starting data
-  m = [0];
-  b = [Math.random()];
-
-  t2 = [0];
-  t1 = [0];
-  t0 = [Math.random()];
-
-  reg_type = document.controls.regtype.value;
-
   canvasUtil.clearCanvas();
-  initPoints(M);
-  drawPoints();
-  drawLines();
+  canvasUtil.clearText();
+  let regType = document.controls.regtype.value;
+  let f = linearFunction;
+  if (regType == 'quadratic') {
+    f = quadraticFunction;
+  } else if (regType == 'cubic') {
+    f = cubicFunction;
+  }
+  f.resetParams();
+  re = new RegressionEnsemble(f, M);
+  re.initPoints(INITIAL_FN);
+  re.draw();
 }
 
-
-function iterate2() {
+function iterate() {
   canvasUtil.clearCanvas();
-  gdIter();
-  drawPoints();
-  drawLines();
-  drawVerts();
+  re.gradientDescentStep();
+  re.draw();
+}
+
+const linearFunction = new LearnableFunction(
+  2,
+  (x, ps) => ps[0] + ps[1] * x,
+  [
+    (x, ps) => 1,
+    (x, ps) => x
+  ],
+  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} x`
+);
+
+const quadraticFunction = new LearnableFunction(
+  3,
+  (x, ps) => ps[0] + ps[1] * x + ps[2] * x * x,
+  [
+    (x, ps) => 1,
+    (x, ps) => x,
+    (x, ps) => x * x
+  ],
+  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} x + ${ps[2].toFixed(5)} x^2`
+);
+
+const cubicFunction = new LearnableFunction(
+  4,
+  (x, ps) => ps[0] + ps[1] * x + ps[2] * x * x + ps[3] * x * x * x,
+  [
+    (x, ps) => 1,
+    (x, ps) => x,
+    (x, ps) => x * x,
+    (x, ps) => x * x * x
+  ],
+  ps => `${ps[0].toFixed(5)} + ${ps[1].toFixed(5)} x + ${ps[2].toFixed(5)} x^2 + ${ps[3].toFixed(5)} x^3`
+);
+
+function pauseDrawing() {
+  paused = !paused;
 }
 
 
-function drawAfterChange() {
+function draw() {
+  if (paused) {
+    return 0;
+  }
   canvasUtil.clearCanvas();
-  drawPoints();
-  drawLines();
-  drawVerts();
+  re.gradientDescentStep();
+  re.draw();
 }
-
-
-function initPoints() {
-  // create M points 'near' the line y = t2_init * x^2 + t1_init * x + t0_init
-  for (var i=0; i<M; i++) {
-    x[i] = Math.random();
-    y[i] = t2_init * x[i] * x[i] + t1_init * x[i] + t0_init
-         + (2 * Math.random() - 1) * spread * Math.random();
-  }
-}
-
-
-function drawPoints() {
-  for (var i=0; i<M; i++) {
-    canvasUtil.drawDisk(
-      x[i] * WIDTH,
-      y[i] * HEIGHT,
-      pointRadius,
-      pointColor
-    );
-  }
-}
-
-
-function drawVerts() {
-  var L = t2.length;
-  for (var i=0; i<M; i++) {
-    if (reg_type == "linear") {
-      canvasUtil.drawLine(
-        x[i] * WIDTH,
-        y[i] * HEIGHT,
-        x[i] * WIDTH,
-        (m[L-1] * x[i] + b[L-1]) * HEIGHT,
-        'red',
-        1
-      );
-    }
-    if (reg_type == "quadratic") {
-      canvasUtil.drawLine(
-        x[i] * WIDTH,
-        y[i] * HEIGHT,
-        x[i] * WIDTH,
-        (t2[L-1] * x[i] * x[i] + t1[L-1] * x[i] + t0[L-1]) * HEIGHT,
-        'red',
-        1
-      );
-    }
-  }
-}
-
-
-function drawLines() {
-  var L = t2.length;
-  // draw all but final line, scaling the color from light to dark
-  for (var i=0; i<L-1; i++) {
-    // evenly divide interval [0,255] and step through backwards
-    var c = Math.round((L-i)*255/L);
-    if (reg_type == "linear") {
-      canvasUtil.drawLine(0,
-        b[i] * HEIGHT,
-        1 * WIDTH,
-        (m[i] * 1 + b[i]) * HEIGHT,
-        'rgb(' + c + ',' + c + ',' + c + ')',
-        1
-      );
-    }
-    if (reg_type == "quadratic") {
-      for (var j=0; j<WIDTH; j++) {
-        canvasUtil.drawDisk(
-          j,
-          (t2[i] * j * j / (WIDTH * WIDTH) + t1[i] * j / WIDTH + t0[i]) * HEIGHT,
-          1,
-          'rgb(' + c + ',' + c + ',' + c + ')'
-        );
-      }
-    }
-  }
-
-  // draw the final line in black
-  if (reg_type == "linear") {
-    canvasUtil.drawLine(
-      0,
-      b[L-1] * HEIGHT,
-      1*WIDTH,
-      (m[L - 1] * 1 + b[L - 1]) * HEIGHT,
-      'black');
-  }
-  if (reg_type == "quadratic") {
-    for (var j=0; j<WIDTH; j++) {
-      canvasUtil.drawDisk(
-        j,
-        (t2[L - 1] * j * j / (WIDTH * WIDTH) + t1[L - 1] * j / WIDTH + t0[L - 1]) * HEIGHT,
-        1,
-        'black'
-      );
-    }
-  }
-}
-
 
 function init() {
   canvas = document.getElementById("canvas");
@@ -224,14 +222,8 @@ function init() {
     ctx = canvas.getContext('2d');
     reg_type = document.controls.regtype.value;
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
-
-    // parameters to create the random data
-    // A(x-B)^2+C = Ax^2 -2ABx + AB^2+C
-    t0_init = 0.8;
-    t1_init = 0;
-    t2_init = -1;
-    spread = 0.25;
     refreshData();
+    return setInterval(draw, 50);
   }
   else alert('You need a better web browser to see this.');
 }
