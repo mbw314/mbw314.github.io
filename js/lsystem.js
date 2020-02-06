@@ -1,9 +1,10 @@
 const WIDTH = 750;
 const HEIGHT = 750;
-var canvas;
-var ctx;
-var canvasUtil;
-var sysDrawer;
+let canvas;
+let ctx;
+let canvasUtil;
+let sysDrawer;
+const MAX_ITERATIONS = 8;
 
 class Pen {
   // a component of a Turtle
@@ -22,7 +23,7 @@ class Turtle {
     this.pen = pen; // Pen object
     this.dist = dist0; // draw distance
     this.segments = []; // list of LineSegment objects to draw
-    this.stack = []; // stack to store state?
+    this.stack = []; // stack to store state
   }
 
   pushState() {
@@ -128,14 +129,10 @@ class LSystem {
 
   setVariablesAndConstants(variables, constants) {
     [this.variables, this.constants] = this.validateAlphabet(variables, constants);
-    //println('set variables and constants');
-    //println(this.variables);
   }
 
   setRules(rules) {
     this.rules = this.validateRules(rules);
-    //println('set new rules:');
-    //println(rules.toString());
   }
 
   validateAlphabet(variables, constants) {
@@ -166,7 +163,6 @@ class LSystem {
     this.word = this.word
       .map(c => Object.keys(this.rules).includes(c) ? this.rules[c] : c)
       .flatMap(w => w.split(''));
-    //console.log(this.word);
     return this.word;
   }
 
@@ -174,8 +170,6 @@ class LSystem {
     // validate and store a new axiom word
     if (this.isValidWord(word)) {
       this.word = word.split('');
-      //console.log('Set new axiom word: ' + w0);
-      //println('Set new axiom word: ' + w0);
     } else {
       throw new Error("word contains out-of-vocabulary characters");
     }
@@ -233,12 +227,12 @@ class LSystemSpec {
   }
 };
 
-var color0 = "#000000";
-var pen0 = new Pen(color0, 1, true);
-var pos0 = new Point(0.0, 0.0);
-var dir0 = new Vec2D(0.0, -1.0);
-var dist0 = 1.0;
-var scale_factor0 = 1.0;
+const color0 = "#000000";
+const pen0 = new Pen(color0, 1, true);
+const pos0 = new Point(0.0, 0.0);
+const dir0 = new Vec2D(0.0, -1.0);
+const dist0 = 1.0;
+const scale_factor0 = 1.0;
 
 
 class LSystemDrawer {
@@ -247,7 +241,6 @@ class LSystemDrawer {
     this.sys = new LSystem(spec.variables, spec.constants, spec.rules);
     this.sys.setWord(spec.axiom);
     this.turtle = new Turtle(pos0, dir0, pen0);
-    //this.dist = dist0;
     this.angle = spec.angle;
     this.scale_factor = spec.scale_factor;
     this.actions = spec.actions;
@@ -318,7 +311,7 @@ const examples = {
     'axiom': 'F+F+F',
     'angle': 2 * Math.PI / 3.0
   },
-  'ex3': {
+  'ex3': { // Hilbert curve
     'variables': ['F', 'X', 'Y'],
     'rules': {
       'X': '-YF+XFX+FY-',
@@ -338,7 +331,7 @@ const examples = {
     'axiom': 'F+F+F+F',
     'angle': Math.PI / 2.0
   },
-  'ex6': {
+  'ex6': { // Serpinski
     'variables': ['F', 'X', 'Y'],
     'rules': {
       'X': 'YF+XF+Y',
@@ -347,7 +340,7 @@ const examples = {
     'axiom': 'YF',
     'angle': Math.PI / 3.0
   },
-  'ex7': {
+  'ex7': { // Dragon curve
     'variables': ['F', 'X', 'Y'],
     'rules': {
       'X': 'X+YF+',
@@ -356,7 +349,7 @@ const examples = {
     'axiom': 'FX',
     'angle': Math.PI / 2.0
   },
-  'ex8': {
+  'ex8': { // plant
     'variables': ['F', 'X'],
     'rules': {
       'X': 'F+[[X]-X]-F[-FX]+X',
@@ -365,14 +358,14 @@ const examples = {
     'axiom': 'FX',
     'angle': 25 * Math.PI / 180.0
   },
-  'ex9': {
+  'ex9': { // plant
     'rules': {
       'F': 'FF+[+F-F-F]-[-F+F+F]'
     },
     'axiom': 'F',
     'angle': 22.5 * Math.PI / 180.0
   },
-  'ex10': {
+  'ex10': { // pentagons
     'rules': {
       'F': 'F++F++F|F-F++F'
     },
@@ -388,7 +381,7 @@ const examples = {
     'axiom': 'FX',
     'angle': 60.0 * Math.PI / 180.0
   },
-  'ex12': {
+  'ex12': { // penrose tiling
     'variables': ['F', '6', '7', '8', '9'],
     'rules': {
       'F': '',
@@ -411,7 +404,7 @@ const examples = {
     'axiom': 'W',
     'angle': 30.0 * Math.PI / 180.0
   },
-  'ex14': {
+  'ex14': { // plant
     'variables': ['F', 'X'],
     'rules': {
       'F': 'FF',
@@ -420,7 +413,7 @@ const examples = {
     'axiom': 'X',
     'angle': 22.5 * Math.PI / 180.0
   },
-  'ex15': {
+  'ex15': { // snowflake
     'variables': ['F', 'X'],
     'rules': {
       'X': '>[FX][>-----FX][>+++++FX]'
@@ -429,7 +422,7 @@ const examples = {
     'angle': 15 * Math.PI / 180.0,
     'scale_factor': 0.6
   },
-  'ex16': {
+  'ex16': { // sawblade
     'variables': ['F', 'X', 'Y'],
     'rules': {
       'X': 'X+YF++YF-FX--FXFX-YF+X',
@@ -438,7 +431,7 @@ const examples = {
     'axiom': 'X+X+X+X+X+X+X+X',
     'angle': 45 * Math.PI / 180.0,
   },
-  'ex17': {
+  'ex17': { // plant
     'variables': ['F', 'X', 'Y', 'a', 'b'],
     'rules': {
       'F': '>F<',
@@ -451,7 +444,7 @@ const examples = {
     'angle': 45 * Math.PI / 180.0,
     'scale_factor': 1.36
   },
-  'ex18': {
+  'ex18': { // cauliflower
     'variables': ['F', 'X'],
     'rules': {
       'X': '>[---FX][++>FX]'
@@ -459,11 +452,33 @@ const examples = {
     'axiom': '[FX]++++++[FX]++++++[FX]',
     'angle': 20 * Math.PI / 180.0,
     'scale_factor': 0.735
-  }
+  },
+  'ex19': { // H tree
+    'variables': ['F', 'X'],
+    'rules': {
+      'X': '>+[FX]++[FX]'
+    },
+    'axiom': '+[FX]++[FX]',
+    'angle': 90 * Math.PI / 180.0,
+    'scale_factor': 1.0 / Math.sqrt(2)
+  },
+  'ex20': { // Lévy C curve
+    'rules': {'F': '+F--F+'},
+    'axiom': 'F',
+    'angle': 45 * Math.PI / 180.0,
+    'scale_factor': 1.0 / Math.sqrt(2)
+  },
+  'ex21': { // pythagoras tree
+    'variables': ['F', 'X', 'Y'],
+    'rules': {
+      'X': '>F[->X]++F[--->Y]++F++F',
+      'Y': '>F++F[-X]++F[---Y]++F',
+    },
+    'axiom': 'F[-X]++F[---Y]++F++F',
+    'angle': Math.PI / 4.0,
+    'scale_factor': 1.0 / Math.sqrt(2)
+  },
 }
-
-// easier testing? https://jobtalle.com/lindenmayer_systems.html
-// lots of examples: http://paulbourke.net/fractals/lsys/
 
 const actions = {
   'MOVE_FORWARD': 'move forward',
@@ -493,7 +508,6 @@ function draw_iteration() {
   // draw another iteration of the current LSystem when the 'draw next iteration' button is pressed
   sysDrawer.iterate();
   sysDrawer.draw(ctx);
-  //sysDrawer.draw_iteration(ctx);
 }
 
 function load_example(ex) {
@@ -503,7 +517,6 @@ function load_example(ex) {
   //console.log(spec.toString());
   canvasUtil.println(spec.toString());
   sysDrawer = new LSystemDrawer(spec);
-  //sysDrawer.draw_iteration(ctx);
   sysDrawer.draw();
 }
 

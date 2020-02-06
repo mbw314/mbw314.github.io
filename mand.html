@@ -6,6 +6,8 @@
 	<title>Mandelbrot Set</title>
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/mand.js"></script>
@@ -34,7 +36,21 @@
 
 <h2>Mandelbrot Set</h2>
 
-<p>Description forthcoming...</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is one of the
+most well-known fractals. It is the subset of the plane (treated as the set of complex
+numbers \(\mathbb{C}\)) that behaves in a controlled way under repeated applications of a
+certain function from the plane to itself. More specifically, for \(c \in \mathbb{C}\), define the
+function \(f_c: \mathbb{C} \rightarrow \mathbb{C}\) by \(f_{c}(z) = z^{2} + c\). We can repeatedly apply
+this function, starting at \(z_0=0\), to get a sequence \(\{z_n\}_{n=0}^\infty\) defined by
+\[ z_0 = 0, z_1 = f_c(z_0), z_2 = f_c(z_1), z_3 = f_c(z_2), \dots, z_n = f_c(z_{n-1}), \dots \]
+The Mandelbrot set is
+\[ M = \{ c \in \mathbb{C} : \{z_n\} \text{ is a bounded sequence}\}. \]
+</p>
+
+<p>Below is an app to draw the Mandelbrot set. Click to zoom, and shift-click to zoom out. Technically,
+only the black portion of the drawing is the Mandelrot set. The colors are points whose sequences are
+unbounded, with a color assigned based on how many iterations of \(f_c\) are needed before the point's
+sequence reaches a certain distance from the origin.
 </div>
 
 <div class="middle">
@@ -52,7 +68,7 @@
     <tr>
       <td align="center">
         <form name="controls">
-          <input type="button" name="reset" value="Reset" onclick="reset_state();" />
+          <input type="button" name="reset" value="Reset" onclick="resetState();" />
         </form>
       </td>
     </tr>

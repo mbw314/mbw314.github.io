@@ -6,6 +6,8 @@
 	<title>Michael Bradford Williams - Complex Mappings</title>
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
 </head>
 
@@ -31,7 +33,15 @@
 
 <h3>What is a complex mapping?</h3>
 
-<p>A complex mapping is a function that takes a complex number as input and returns another complex number as output.  Visualizing such a function is a bit more complicated than visualizing a real-valued function of a real variable, whose graph is simply a curve in the plane.  The graph of a complex mapping would be a surface in 4-dimensional space, which is not so easy to see!  Therefore it makes more sense to viualize a complex mapping another way, namely by observing how it acts on a region in the plane.  For example, the picture below illustrates how a complex mapping (called <i>f</i> ) deforms a square in the plane. Complex mappings are the basic objects of study in <a href="http://en.wikipedia.org/wiki/Complex_analysis">complex analysis</a>.</p>
+<p>A complex mapping is a function that takes a complex number as input and returns another complex
+number as output: \(f: U \rightarrow \mathbb{C}\) for some domain \(U \subseteq \mathbb{C}\). Visualizing
+such a function is a bit more complicated than visualizing a real-valued
+function of a real variable, whose graph is simply a curve in the plane.  The graph of a complex mapping
+would be a surface in 4-dimensional space, which is not so easy to see!  Therefore it makes more sense
+to viualize a complex mapping another way, namely by observing how it acts on a region in the plane.
+For example, the picture below illustrates how a complex mapping \(f\) deforms a square in
+the plane. Complex mappings are the basic objects of study in
+<a href="http://en.wikipedia.org/wiki/Complex_analysis">complex analysis</a>.</p>
 
 <table  align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr align="center">
@@ -52,13 +62,12 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 
 <h3>Polynomials</h3>
 
-<p>Complex <a href="http://en.wikipedia.org/wiki/Polynomial">polynomials</a> are the same as regular polynomials over the real numbers, except the coefficients and variables are now complex numbers.  The generic form in the program is a degree 3, i.e., a cubic:</p>
+<p>Complex <a href="http://en.wikipedia.org/wiki/Polynomial">polynomials</a> are the
+similar to regular polynomials over the real numbers, except the coefficients and
+variables are now complex numbers.  The generic form in the program is a degree 3, i.e., a cubic:
+\[ A z^3 + B z^2 + C z + D \]
+</p>
 
-<table  align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr align="center">
-        <td><img src="./images/complex/poly_generic.png" alt="a cubic polynomial" /></td>
-</tr>
-</table>
 
 <p>Here are a few examples of how complex polynomials behave.</p>
 
@@ -70,7 +79,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 	</td>
 
 	<td align="left">
-		<img src="./images/complex/poly1_map.png" alt="" />
+    <p>\[f(z) = 2 z^2 + 0.1 z\]</p
 	</td>
 </tr>
 <tr>
@@ -80,7 +89,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 	</td>
 
 	<td align="left">
-		<img src="./images/complex/poly2_map.png" alt="" />
+    <p>\[f(z) = 0.09 z^3 + 1.5 z\]</p>
 	</td>
 </tr>
 <tr>
@@ -90,7 +99,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 	</td>
 
 	<td align="left">
-		<img src="./images/complex/poly3_map.png" alt="" />
+    <p>\[f(z) = (0.01 + 0.02i) z^3 + 0.03 z^2 + (1.2 + 0.02i) z\]</p>
 	</td>
 </tr>
 <tr>
@@ -100,7 +109,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 	</td>
 
 	<td align="left">
-		<img src="./images/complex/poly4_map.png" alt="" />
+    <p>\[f(z) = (0.2 + 0.3i) z^3 + (1 + 0.2i) z\]</p>
 	</td>
 
 </tr>
@@ -109,14 +118,13 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 
 <h3>Mobius Transforms</h3>
 
-<p>A <a href="http://en.wikipedia.org/wiki/M%C3%B6bius_transformation">Mobius transformation</a> (also called fractional linear transformations) have real analogs, but they are not as interesting.  The complex versions, however, constitute a very important and interesting class of functions.  An amazing video describing their nature can be found <a href="http://www.youtube.com/watch?v=JX3VmDgiFnY">here</a>.</p>
-
-<table  align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr align="center">
-        <td><img src="./images/complex/mobius_generic.png" alt="a Mobius transform" /></td>
-</tr>
-
-</table>
+<p>A <a href="http://en.wikipedia.org/wiki/M%C3%B6bius_transformation">Mobius transformation</a>
+(also called fractional linear transformations) have real analogs, but they are not as
+interesting.  The complex versions, however, constitute a very important and interesting class
+of functions.  An amazing video describing their nature can be found
+<a href="http://www.youtube.com/watch?v=JX3VmDgiFnY">here</a>.
+\[ f(z) = \frac{A z + B}{C z + D}, \qquad AD - BC \ne 0. \]
+</p>
 
 <p>Here are a few examples of how Mobius transformtions behave.</p>
 
@@ -127,7 +135,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 		<img src="./images/complex/mobius1_thumb.png" alt="" /></a>
 	</td>
 	<td align="left">
-		<img src="./images/complex/mobius1_map.png" alt="" />
+    <p>\[f(z) = \frac{(2 + 4i)z + 1}{z + (0.1 + 0.1i)}\]</p>
 	</td>
 </tr>
 <tr>
@@ -136,7 +144,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 		<img src="./images/complex/mobius2_thumb.png" alt="" /></a>
 	</td>
 	<td align="left">
-		<img src="./images/complex/mobius2_map.png" alt="" />
+    <p>\[f(z) = \frac{1}{z}\]</p>
 	</td>
 </tr>
 <tr>
@@ -145,7 +153,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 		<img src="./images/complex/mobius3_thumb.png" alt="" /></a>
 	</td>
 	<td align="left">
-		<img src="./images/complex/mobius3_map.png" alt="" />
+    <p>\[f(z) = \frac{-5z + 1}{z}\]</p>
 	</td>
 </tr>
 <tr>
@@ -154,20 +162,19 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 		<img src="./images/complex/mobius4_thumb.png" alt="" /></a>
 	</td>
 	<td align="left">
-		<img src="./images/complex/mobius4_map.png" alt="" />
+    <p>\[f(z) = \frac{1}{z}\]</p>
 	</td>
 </tr>
 </table>
 
 <h3>Exponentials</h3>
 
-<p>The <a href="http://en.wikipedia.org/wiki/Exponential_function">exponential function</a> is perhaps the more important function in mathematics.  The complex version combines the "exponential growth" familiar from the real version with rotation in the plane.  In fact, it is periodic, something one might never guess from looking at the real version.</p>
-
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr align="center">
-        <td><img src="./images/complex/exp_generic.png" alt="a complex exponential" /></td>
-</tr>
-</table>
+<p>The <a href="http://en.wikipedia.org/wiki/Exponential_function">exponential function</a>
+is perhaps the more important function in mathematics.  The complex version combines the
+"exponential growth" familiar from the real version with rotation in the plane.  In fact,
+it is periodic, something one might never guess from looking at the real version.
+\[ f(z) = \exp(Az + B) + C \]
+</p>
 
 <p>Here are a few examples of how complex exponentials behave.</p>
 
@@ -179,7 +186,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 		<img src="./images/complex/exp1_thumb.png" alt="" /></a>
 	</td>
 	<td align="left">
-		<img src="./images/complex/exp1_map.png" alt="" />
+    <p>\[f(z) = \exp(z)\]</p>
 	</td>
 </tr>
 <tr>
@@ -188,7 +195,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 		<img src="./images/complex/exp2_thumb.png" alt="" /></a>
 	</td>
 	<td align="left">
-		<img src="./images/complex/exp2_map.png" alt="" />
+    <p>\[f(z) = \exp((1 + 0.15i)z)\]</p>
 	</td>
 </tr>
 <tr>
@@ -197,7 +204,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 		<img src="./images/complex/exp3_thumb.png" alt="" /></a>
 	</td>
 	<td align="left">
-		<img src="./images/complex/exp3_map.png" alt="" />
+    <p>\[f(z) = (0.1 + 0.5i) \exp((8 + i)z + (1 + 0.2i))\]</p>
 	</td>
 </tr>
 
@@ -207,7 +214,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 		<img src="./images/complex/exp4_thumb.png" alt="" /></a>
 	</td>
 	<td align="left">
-		<img src="./images/complex/exp4_map.png" alt="" />
+    <p>\[f(z) = (0.1 + 0.5i) \exp((-1 - 2.5i)z + (1 + 0.2i))\]</p>
 	</td>
 </tr>
 </table>
@@ -216,7 +223,7 @@ and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.co
 
 
 <div class="bottom">
-<p>last modified: 7/03/2009</p>
+<p>last modified: 02/02/2020</p>
 </div>
 
 </div>

@@ -7,6 +7,8 @@
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/lsystem.js"></script>
 </head>
@@ -34,7 +36,55 @@
 
 <h2>L-Systems</h2>
 
-<p>Description forthcoming...</p>
+<p>A Lindenmayer system, or <a href="https://en.wikipedia.org/wiki/L-system">L-System</a> is a
+collection of symbols and set of rules for replacing any symbol with one or more other symbols. That
+may not sound immediately interesting, but when combined with a means generate a graphical representation
+of a string of symbols, L-Systems are capable of producing a huge array of complex images.</p>
+
+<p>More precisely, an L-System consists of three items:</p>
+<ol>
+  <li>A set of symbols, called the <b>alphabet</b>, which is composed of two disjoint subsets:
+    <ol>
+      <li><b>variables</b></li>
+      <li><b>constants</b></li>
+    </ol>
+  </li>
+  <li>A set of <b>replacement rules</b>, which transform a symbol from the alphabet into a sequence of
+    symbols from the alphabet, such that
+    <ol>
+      <li>a variable can be replaced a sequence of any symbols in the alphabet</li>
+      <li>a constant can only be replaced by itself</li>
+    </ol>
+  </li>
+  <li>An initial sequence of symbols, called the <b>axiom</b>
+  </li>
+</ol>
+<p>Once an L-System is defined, the rules can be applied simulaneously to each symbol in the axiom to
+generate a new sequence of symbols. This process can be repeated for the new sequence, and so on.
+</p>
+
+<p>
+A simple example of an L-System has alphabet \(\{A, B\}\) (both being variables),
+rules \(\{A \rightarrow AB, B \rightarrow BA\}\), and axiom \(A\). Then repeated applications of the
+rules, starting from the axiom, yields
+<ol>
+  <li>\(A\)</li>
+  <li>\(AB\)</li>
+  <li>\(ABBA\)</li>
+  <li>\(ABBABAAB\)</li>
+  <li>etc.</li>
+</ol>
+</p>
+
+<p>
+To visualize an L-System, geometric notions are typically associated with the symbols. For example, a symbol
+might mean "draw a line segment of unit length" or "rotate by angle \(\pi/2\)". The following app has a
+collection of pre-defined L-System that can be loaded, and the rules can be applied iteratively and visualized.
+The details of the L-System will be printed below the image.
+</p>
+
+<p>A huge gallery of interesting example of L-Systems <a href="http://paulbourke.net/fractals/lsys/">can be found here</a>.</p>
+
 </div>
 
 <div class="middle">
@@ -72,6 +122,9 @@
             <option value="ex16">Example 16</option>
             <option value="ex17">Example 17</option>
             <option value="ex18">Example 18</option>
+            <option value="ex19">Example 19</option>
+            <option value="ex20">Example 20</option>
+            <option value="ex21">Example 21</option>
           </select>
           <input type="button" name="example" value="Load Example / Reset"
             onclick="load_example(parameters.example_select.value);" />
