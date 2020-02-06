@@ -6,6 +6,8 @@
 	<title>Michael Bradford Williams</title>
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/regression.js"></script>
@@ -33,48 +35,52 @@
 
 <h2>Linear Regression via Gradient Descent</h2>
 
-<p>Given a set of data, <a href="http://en.wikipedia.org/wiki/Linear_regression">linear regression</a> is a way to fit a linear model to the data. This is done by minimizing a certain "cost function", which measures the deviation of the data from the hypothesized linear model. The linear model with the least cost then has the "best fit" for the data.
+<p>Given a set of data, <a href="http://en.wikipedia.org/wiki/Linear_regression">linear regression</a> is a way to
+model to the data with a linear function. This can be done by minimizing a certain "cost function", which measures the deviation
+of the data from the hypothesized linear model. The linear model with the least cost then has the "best fit" for the data.
 </p>
 
-<p>Consider a set of 2-dimensional data, that is, a collection of points <i>(x,y)</i> in the plane. A linear model for this data will be a line of the form <i>y=mx+b</i>. We hope to find the values of slope <i>m</i> and intercept <i>b</i> that minimize the cost function, which we take as the average of the squared vertical distances from the data points to the line:
+<p>Consider a set of \(m\) 2-dimensional data points
+\[ \{(x_1, y_1), \dots, (x_m, y_m)\} \subset \mathbb{R}^2. \]
+A linear model for
+this data will be a line of the form \(y=mx+b\). We hope to find the values of slope \(m\) and intercept \(b\)
+that minimize the cost function, which we take as the average of the squared vertical distances from the data points to the line:
+\[ J(m, b) = \frac{1}{2m} \sum_{i=1}^m (m x_i + b - y_i)^2. \]
 </p>
 
-<table  align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr align="center">
-	<td>
-	    <img src="./images/cost.png" alt="cost function" />
-	</td>
-</tr>
-</table>
+<p>Note that \(J\) is a function of \(m\) and \(b\). How do we find the values of \(m\) and \(b\) that
+minimize \(J(m, b)\)? This is a multivariable
+<a href="http://en.wikipedia.org/wiki/Optimization_problem">optimization problem</a>, and one method is to
+use <a href="http://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a>. The idea is that the (negative)
+<a href="http://en.wikipedia.org/wiki/Gradient">gradient</a> of \(J\) is a vector \(-\nabla J\) that points in the direction of steepest
+descrease of \(J\). So, if we incrementally follow the gradient of \(J\) through the \((m, b)\)-plane, we will eventually
+reach a value \((m', b')\) that (approximately) minimizes \(J\).</p>
 
-<p>How do we find the values of <i>m</i> and <i>b</i> that minimize <i>J(m,b)</i>? This is a multivariable <a href="http://en.wikipedia.org/wiki/Optimization_problem">optimization problem</a>, and one method is to use <a href="http://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a>. The idea is that the (negative) <a href="http://en.wikipedia.org/wiki/Gradient">gradient</a> of <i>J</i> points in the direction of steepest descrease of <i>J</i>, so if we incrementally follow the gradient of <i>J</i>, we will eventually reach a minimizer. The gradient is just the vector of partial derivatives of <i>J</i>:</p>
 
-<table  align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr align="center">
-	<td>
-	    <img src="./images/grad.png" alt="gradient of cost" />
-	</td>
-</tr>
-</table>
 
-<p>In general, the minimizer found by gradient descent will only be local, but it turns out that the cost function above always has a unique global minimizer. Here is the algorithm. Think of the variables <i>m</i> and <i>b</i> as a point <i>(m,b)</i> in the plane.</p>
+<p>In general, any minimizer found by gradient descent will only be local, but it turns out that the cost function above always
+has a unique global minimizer, since it is a convex function. Here is the algorithm.
+Again think of the variables \(m\) and \(b\) as a point \((m,b)\) in the plane.</p>
 <ol>
-<li>Randomly select initial values <i>(m,b)</i>, and choose a small positive number &alpha;.</li>
-<li>Update <i>(m,b)</i> according to the following replacement:</li>
-<table  align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr align="center">
-	<td>
-	    <img src="./images/update.png" alt="gradient descent" />
-	</td>
-</tr>
-</table>
+<li>Randomly select initial values \((m, b)\), and choose a small number \(\alpha > 0\).</li>
+<li>Update \((m,b)\) according to the following replacement:</li>
+\[ (m, b) \longleftarrow (m, b) - \alpha \nabla J(m, b). \]
 <li>Repeat Step 2 as many times as needed.</li>
 </ol>
-
-<p>One can also consider more complicated models, such as quadratics: <i>y = ax<sup>2</sup> + bx + c</i>. Gradient descent still works in such cases, with appropriate cost function.
+<p>The gradient is just the vector of partial derivatives of \(J\):
+\[ \nabla J(m, b)
+= \left( \frac{\partial J}{\partial m}(m, b), \frac{\partial J}{\partial b}(m, b) \right)
+= \left( \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i) x_i, \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i) \right). \]
 </p>
 
-<p>The app below illustrates how gradient descent finds the line/parabola of best fit. Random data is selected, and you can repeatedly perform Step 2 in the gradient descent algorithm.
+<p>One can also consider more complicated models, such as quadratics (\(y = a x^2 + b x + c\)) or cubics
+ (\(y = a x^3 + b x^2 + c x + d\)). Gradient descent still works in such cases, with modification
+ to the cost function.
+</p>
+
+<p>The app below illustrates how gradient descent finds the linear/quadratic/cubic curve of best fit. Random
+data is selected, and you can initiate Step 2 in the gradient descent algorithm. The number \(\alpha\) is
+called the "learning rate" and can also be controlled.
 </p>
 
 

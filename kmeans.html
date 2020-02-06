@@ -35,15 +35,25 @@
 
 <h2>K-means Clustering</h2>
 
-<p>Below is a visual representation of the <a href="http://en.wikipedia.org/wiki/K-means_clustering">K-means clustering</a> algorithm. This is a <a href="http://en.wikipedia.org/wiki/Machine_leanring">machine learning</a> algorithm that attempts to group a set of (unlabeled) data points into clusters according to proximity.</p>
+<p>Below is a visual representation of the <a href="http://en.wikipedia.org/wiki/K-means_clustering">K-means
+clustering</a> algorithm. This is an unsupervised <a href="http://en.wikipedia.org/wiki/Machine_leanring">machine learning</a>
+algorithm that attempts to group a set of (unlabeled) data points into clusters according to proximity.</p>
 
-<p>The algorithm first initializes a set of K "centroids", which are to be the geometric centers of the data clusters. Then, there is a repeating loop that has two main steps:</p>
+<p>The algorithm first initializes a set of K "centroids", which are to be the geometric centers of the data
+clusters. Then, there is a repeating loop that has two main steps:
 <ol>
-<li>Cluster assignments: decide to which cluster each data point belongs. This is done by finding the centroid that is closest to the data point in question.</li>
-<li>Centroid updating: try to improve the position of the centroids. This is done by moving a given centroid to the average (mean) position of all points in that centroid's cluster.</li>
+<li>Cluster assignments: decide to which cluster each data point belongs. This is done by finding the centroid
+  that is closest to the data point in question.</li>
+<li>Centroid updating: try to improve the position of the centroids. This is done by moving a given centroid to
+  the average (mean) position of all points in that centroid's cluster.</li>
 </ol>
+</p>
 
-<p>Instructions for this demonstration: the data used here consists of 50 randomly selected points in the plane, and the algorithm tries to group those points into 5 clusters. The centroids initialized randomly. Press "Iterate" to step through one iteration of the algorithm. You can see how the centroids move, and how data may move from one cluster to another (by changing color). Press "Reset" to reset data and clusters.</p>
+<p>Instructions for this demonstration: the data used here consists of 75 randomly selected points
+in the plane, and the algorithm tries to group those points into 5 clusters. The centroids are initialized
+randomly. Press "Iterate" to step through one iteration of the algorithm. You can see how the centroids
+move, and how data may move from one cluster to another (by changing color). Press "Reset" to reset data
+and clusters.</p>
 
 <p>You'll need a modern browser to view the app. It has been tested in <a
 href="http://www.mozilla.com/firefox/">Firefox</a> (Windows/Linux) and <a
