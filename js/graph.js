@@ -1,48 +1,31 @@
-var x = 150;
-var y = 150;
-var x_mouse, y_mouse, dragHoldX, dragHoldY, mouseX, mouseY;
-var dx = 2;
-var dy = 4;
-var canvas;
-var ctx;
-var width = 750;//window.innerWidth;
-var height = 500;//window.innerHeight;
-var WIDTH = 750;//window.innerWidth;
-var HEIGHT = 500;//window.innerHeight;
-var time0 = 0;
-var time1 = 0;
-var g;
-var dragging = false;
-var dragIndex = 0;
-var t_default = 3;
-var c_default = "#000000";
-var type = "rand";
-var N = 7;
-var M = 2;
-var canvasUtil;
+let WIDTH = 750;
+let HEIGHT = 500;
+let canvas;
+let canvasUtil;
+let ctx;
+let mouseX, mouseY, dragHoldX, dragHoldY, mouseDragX, mouseDragY;
 
-var color_default = "#000000";
-var color_selected = "#FF0000";
-var color_halo = "#0000FF";
-var flip_prob = 0.35;
-var rad_default = 10;
-var rad_halo = 2;
-var width_halo = 4;
-var thickness_default = 2;
-var edgeClick = 5;
-var permArr = [], usedChars = [];
+let g;
+let dragging = false;
+let dragIndex = 0;
 
-function range(n) {
-  return [...Array(n).keys()];
-}
+let COLOR_DEFAULT = "#000000";
+let COLOR_SELECTED = "#FF0000";
+let COLOR_HALO = "#0000FF";
+let FLIP_PROBABILITY = 0.35;
+let RADIUS_DEFAULT = 10;
+let RADIUS_HALO = 2;
+let WIDTH_HALO = 4;
+let THICKNESS_DEFAULT = 2;
+let EDGE_CLICK = 5;
+let permArr = [], usedChars = [];
+
 
 class Vertex {
   constructor(n, x ,y) {
     this.name = n; // a unique integer
-    this.xCoord = Math.floor(x); // need to round?
-    this.yCoord = Math.floor(y);
-    this.color = color_default;
-    this.radius = rad_default;
+    this.x = Math.floor(x);
+    this.y = Math.floor(y);
     this.halo = false;
     this.neighbors = []; // a list names of neighboring vertices
     this.selected = false;
@@ -50,26 +33,18 @@ class Vertex {
 
   draw() {
     if (this.halo) {
-      canvasUtil.drawDisk(this.xCoord, this.yCoord, this.radius + rad_halo, color_halo);
+      canvasUtil.drawDisk(this.x, this.y, RADIUS_DEFAULT + RADIUS_HALO, COLOR_HALO);
     }
-    canvasUtil.drawDisk(this.xCoord, this.yCoord, this.radius, this.selected ? color_selected : this.color);
+    canvasUtil.drawDisk(this.x, this.y, RADIUS_DEFAULT, this.selected ? COLOR_SELECTED : COLOR_DEFAULT);
   }
 
   updatePosition(x, y) {
-    this.xCoord = Math.floor(x);
-    this.yCoord = Math.floor(y);
-  }
-
-  updateColor(color) {
-    this.color = color;
-  }
-
-  updateRadius(radius) {
-    this.radius = radius;
+    this.x = Math.floor(x);
+    this.y = Math.floor(y);
   }
 
   isEqual(v) {
-    if (this.xCoord == v.xCoord && this.yCoord == v.yCoord) {
+    if (this.x == v.x && this.y == v.y) {
       return true;
     } else {
       return false;
@@ -77,9 +52,9 @@ class Vertex {
   }
 
   hitTestVertex(hitX, hitY) {
-    var dx = this.xCoord - hitX;
-    var dy = this.yCoord - hitY;
-    return (dx * dx + dy * dy < this.radius * this.radius);
+    let dx = this.x - hitX;
+    let dy = this.y - hitY;
+    return (dx * dx + dy * dy < RADIUS_DEFAULT * RADIUS_DEFAULT);
   }
 
   getDegree() {
@@ -87,14 +62,14 @@ class Vertex {
   }
 
   deleteNeighbor(n) {
-    var i = this.neighbors.indexOf(n);
+    let i = this.neighbors.indexOf(n);
     if (i != -1) {
-      var throwaway = this.neighbors.splice(i, 1);
+      let throwaway = this.neighbors.splice(i, 1);
     }
   }
 
   printVertexData() {
-    return `vertex ${this.name} (${this.xCoord}, ${this.yCoord}) [${this.neighbors.join(" ")}]`;
+    return `vertex ${this.name} (${this.x}, ${this.y}) [${this.neighbors.join(" ")}]`;
   }
 }
 
@@ -106,8 +81,6 @@ class Edge {
     } else {
       this.v0 = v;
       this.v1 = w;
-      this.color = color_default;
-      this.thickness = thickness_default;
       v.neighbors.push(w.name);
       w.neighbors.push(v.name);
       this.halo = false;
@@ -116,48 +89,25 @@ class Edge {
 
   draw() {
     if (this.halo) {
-      canvasUtil.drawLine(
-        this.v0.xCoord,
-        this.v0.yCoord,
-        this.v1.xCoord,
-        this.v1.yCoord,
-        color_halo,
-        width_halo
-      );
+      canvasUtil.drawLine(this.v0.x, this.v0.y, this.v1.x, this.v1.y, COLOR_HALO, WIDTH_HALO);
     }
-
-    canvasUtil.drawLine(
-      this.v0.xCoord,
-      this.v0.yCoord,
-      this.v1.xCoord,
-      this.v1.yCoord,
-      this.selected ? color_selected : this.color,
-      this.thickness
-    )
+    canvasUtil.drawLine(this.v0.x, this.v0.y, this.v1.x, this.v1.y, this.selected ? COLOR_SELECTED : COLOR_DEFAULT, THICKNESS_DEFAULT);
   }
 
   hitTestEdge(hitX, hitY) {
     //document.outform.output.value += "hit testing edge" + '\n';
-    var x0 = this.v0.xCoord;
-    var y0 = this.v0.yCoord;
-    var x1 = this.v1.xCoord;
-    var y1 = this.v1.yCoord;
+    let x0 = this.v0.x;
+    let y0 = this.v0.y;
+    let x1 = this.v1.x;
+    let y1 = this.v1.y;
 
-    if (pDistance(hitX, hitY, x0, y0, x1, y1) < edgeClick &&
+    if (pDistance(hitX, hitY, x0, y0, x1, y1) < EDGE_CLICK &&
       !this.v0.hitTestVertex(hitX, hitY) &&
       !this.v1.hitTestVertex(hitX, hitY)) {
       return true;
     } else {
       return false;
     }
-  }
-
-  updateColor(color) {
-    this.color = col;
-  }
-
-  updateThickness(t) {
-    this.thickness = t;
   }
 }
 
@@ -188,12 +138,12 @@ class Graph {
   }
 
   getAdjacencyMatrix() {
-    var L = this.vertices.length;
-    var throwaway = 0;
-    var matrix = [];
-    for (var i=0; i<L; i++) {
+    let L = this.vertices.length;
+    let throwaway = 0;
+    let matrix = [];
+    for (let i=0; i<L; i++) {
       matrix[i] = [];
-      for (var j=0; j<L; j++) {
+      for (let j=0; j<L; j++) {
         if (this.vertices[i].neighbors.indexOf(this.vertices[j].name) == -1) {
           matrix[i][j] = 0;
         }  else {
@@ -211,7 +161,7 @@ class Graph {
   }
 
   getVertexByName(n) {
-    for (var i=0; i<this.vertices.length; i++) {
+    for (let i=0; i<this.vertices.length; i++) {
       if (this.vertices[i].name == n) {
         return this.vertices[i];
       }
@@ -222,8 +172,8 @@ class Graph {
     // if degree is 2
     if (v.neighbors.length == 2) {
       // is neighbor 0 in the list of neighbors of neighbor 1?
-      var n0 = v.neighbors[0];
-      var v1 = this.getVertexByName(v.neighbors[1]);
+      let n0 = v.neighbors[0];
+      let v1 = this.getVertexByName(v.neighbors[1]);
       if (v1.neighbors.indexOf(n0) != -1) {
         return true;
       } else {
@@ -234,33 +184,29 @@ class Graph {
   }
 
   deleteVertex(v) {
-    var throwaway = 0;
-    var delIndex = -1;
-
     // remove all edges containing v
-    for (var j=0; j<v.neighbors.length; j++) {
+    for (let j=0; j<v.neighbors.length; j++) {
       this.deleteEdgeByVertexNames(v.name, v.neighbors[j]);
     }
 
     // remove v from all neighbors' neighbor lists
-    for (var i=0; i<v.neighbors.length; i++) {
-      var w = this.getVertexByName(v.neighbors[i]);
-      delIndex = w.neighbors.indexOf(v.name);
-      throwaway = w.neighbors.splice(delIndex,1);
+    for (let i=0; i<v.neighbors.length; i++) {
+      let w = this.getVertexByName(v.neighbors[i]);
+      let delIndex = w.neighbors.indexOf(v.name);
+      w.neighbors.splice(delIndex,1);
     }
 
     // remove v from list of vertices
-    delIndex = this.vertices.indexOf(v);
+    let delIndex = this.vertices.indexOf(v);
     this.vertices.splice(delIndex, 1);
   }
 
   deleteEdgeByVertexNames(n0, n1) {
     // warning: this does not update vertex neighbor lists!
-    var throwaway = 0;
-    for (var i=0; i<this.edges.length; i++) {
-      if( (n0==this.edges[i].v0.name && n1==this.edges[i].v1.name) ||
-          (n0==this.edges[i].v1.name && n1==this.edges[i].v0.name) ) {
-        throwaway = this.edges.splice(i, 1);
+    for (let i=0; i<this.edges.length; i++) {
+      if ((n0==this.edges[i].v0.name && n1==this.edges[i].v1.name) ||
+          (n0==this.edges[i].v1.name && n1==this.edges[i].v0.name)) {
+        this.edges.splice(i, 1);
         i = this.edges.length;
       }
     }
@@ -271,19 +217,19 @@ class Graph {
     this.edges[i].v0.deleteNeighbor(this.edges[i].v1.name);
     this.edges[i].v1.deleteNeighbor(this.edges[i].v0.name);
     // remove the edge
-    var throwaway = this.edges.splice(i, 1);
+    this.edges.splice(i, 1);
   }
 
   seriesReduce() {
-    var i = this.selectedVertexIndex;
+    let i = this.selectedVertexIndex;
     this.vertices[i].selected = false;
 
     if (this.vertices[i].neighbors.length == 2 &&
         !this.vertexIsInTriangle(this.vertices[i])) {
 
       //get neighbors
-      var v0 = this.getVertexByName(this.vertices[i].neighbors[0]);
-      var v1 = this.getVertexByName(this.vertices[i].neighbors[1]);
+      let v0 = this.getVertexByName(this.vertices[i].neighbors[0]);
+      let v1 = this.getVertexByName(this.vertices[i].neighbors[1]);
 
       // delete the vertex and incident edges
       this.deleteVertex(this.vertices[i]);
@@ -297,7 +243,7 @@ class Graph {
 
   isIsomorphicToKn(n) {
     if (this.vertices.length == n) {
-      for (var i=0; i<this.vertices.length; i++) {
+      for (let i=0; i<this.vertices.length; i++) {
         if (this.vertices[i].getDegree() != n-1)
           return false;
       }
@@ -312,33 +258,33 @@ class Graph {
       return false;
     }
 
-    for (var i=0; i<this.vertices.length; i++) {
+    for (let i=0; i<this.vertices.length; i++) {
       if (this.vertices[i].getDegree() != 3) {
         //document.outform.output.value += "wrong degrees " + '\n';
         return false;
       }
     }
 
-    var k33 = completeBipartiteGraph(3,3);
+    let k33 = Graph.completeBipartiteGraph(3, 3);
     //printMatrix(k33);
-    var mk33 = k33.getAdjacencyMatrix();
+    let mk33 = k33.getAdjacencyMatrix();
 
     // for each permutation of the indices of the vertices
-    var perm = permute([0, 1, 2, 3, 4, 5]);
-    var P = 720; // =6!
-    var curIndices = [];
-    var matrix = [];
+    let perm = permute([0, 1, 2, 3, 4, 5]);
+    let P = 720; // =6!
+    let curIndices = [];
+    let matrix = [];
 
-    for (var k=0; k<P; k++) {
+    for (let k=0; k<P; k++) {
       curIndices = perm.slice(k, k + 1);
       //document.outform.output.value += "curIndices = " + curIndices + '\n';
       matrix = [];
-      for(var i=0; i<6; i++) {
+      for (let i=0; i<6; i++) {
         //document.outform.output.value += "this.V.length = " + this.vertices.length +
         //          ", trying to access element " + curIndices[0][i] + '\n';
 
         matrix[i] = [];
-        for (var j=0; j<6; j++) {
+        for (let j=0; j<6; j++) {
           if (this.vertices[curIndices[0][i]].neighbors.indexOf(
             this.vertices[curIndices[0][j]].name) == -1) {
             matrix[i][j] = 0;
@@ -359,13 +305,13 @@ class Graph {
 
   isPlanarDrawing() {
     //check that no two edges intersect
-    for (var i=0; i<this.edges.length; i++) {
-      for (var j=i+1; j<this.edges.length; j++) {
-        if (intersects(
-        g.edges[i].v0.xCoord, g.edges[i].v0.yCoord,
-        g.edges[i].v1.xCoord, g.edges[i].v1.yCoord,
-        g.edges[j].v0.xCoord, g.edges[j].v0.yCoord,
-        g.edges[j].v1.xCoord, g.edges[j].v1.yCoord)) {
+    for (let i=0; i<this.edges.length; i++) {
+      for (let j=i+1; j<this.edges.length; j++) {
+        if (linesIntersect(
+            g.edges[i].v0.x, g.edges[i].v0.y,
+            g.edges[i].v1.x, g.edges[i].v1.y,
+            g.edges[j].v0.x, g.edges[j].v0.y,
+            g.edges[j].v1.x, g.edges[j].v1.y)) {
           return false;
         }
       }
@@ -373,24 +319,24 @@ class Graph {
     return true;
   }
 
-  static randomGraph(num_vertices, canvas_width, canvas_height) {
-    var R = Math.min(canvas_width, canvas_height) / 3;
-    var theta = 0;
-    var x0 = canvas_width / 2;
-    var y0 = canvas_height / 2;
-    var flip = 0;
+  static randomGraph(numVertices, canvasWidth, canvasHeight) {
+    let R = Math.min(canvasWidth, canvasHeight) / 3;
+    let theta = 0;
+    let x0 = canvasWidth / 2;
+    let y0 = canvasHeight / 2;
+    let flip = 0;
 
-    var G = new Graph([], []);
+    let G = new Graph([], []);
 
-    for (var i=0; i<num_vertices; i++) {
-      theta = 2 * Math.PI * i / num_vertices - Math.PI / 2;
+    for (let i=0; i<numVertices; i++) {
+      theta = 2 * Math.PI * i / numVertices - Math.PI / 2;
       G.addVertex(new Vertex(i, R * Math.cos(theta) + x0, R * Math.sin(theta) + y0));
     }
 
-    for (var j=0; j<num_vertices; j++) {
-      for (var k=j+1; k<num_vertices; k++) {
+    for (let j=0; j<numVertices; j++) {
+      for (let k=j+1; k<numVertices; k++) {
         flip = Math.random();
-        if (flip > flip_prob) {
+        if (flip > FLIP_PROBABILITY) {
           G.addEdge(new Edge(G.vertices[j], G.vertices[k]));
         }
       }
@@ -399,21 +345,21 @@ class Graph {
     return G;
   }
 
-  static completeGraph(num_vertices, canvas_width, canvas_height) {
-    var R = Math.min(canvas_width, canvas_height) / 3;
-    var theta = 0;
-    var x0 = canvas_width / 2;
-    var y0 = canvas_height / 2;
+  static completeGraph(numVertices, canvasWidth, canvasHeight) {
+    let R = Math.min(canvasWidth, canvasHeight) / 3;
+    let theta = 0;
+    let x0 = canvasWidth / 2;
+    let y0 = canvasHeight / 2;
 
-    var G = new Graph([],[]);
+    let G = new Graph([],[]);
 
-    for (var i=0; i<num_vertices; i++) {
-      theta = 2 * Math.PI * i / num_vertices - Math.PI / 2;
+    for (let i=0; i<numVertices; i++) {
+      theta = 2 * Math.PI * i / numVertices - Math.PI / 2;
       G.addVertex(new Vertex(i, R * Math.cos(theta) + x0, R * Math.sin(theta) + y0));
     }
 
-    for (var j=0; j<num_vertices; j++) {
-      for (var k=j+1; k<num_vertices; k++) {
+    for (let j=0; j<numVertices; j++) {
+      for (let k=j+1; k<numVertices; k++) {
         G.addEdge(new Edge(G.vertices[j], G.vertices[k]));
       }
     }
@@ -421,52 +367,87 @@ class Graph {
     return G;
   }
 
-  static completeBipartiteGraph(num_vertices_1, num_vertices_2, canvas_width, canvas_height) {
-    // assume n>0, m>0
+  static completeBipartiteGraph(numVertices1, numVertices2, canvasWidth, canvasHeight) {
     var Gr = new Graph([], []);
-
-    // first group of n vertices
-    for (var i=0; i<num_vertices_1; i++) {
-      Gr.addVertex(new Vertex(i + 1, (i + 1) * canvas_width / (num_vertices_1 + 1), canvas_height / 4));
+    for (var i=0; i<numVertices1; i++) {
+      Gr.addVertex(new Vertex(i + 1, (i + 1) * canvasWidth / (numVertices1 + 1), canvasHeight / 4));
     }
 
-    // second group of m vertices
-    for (var j=0; j<num_vertices_2; j++) {
-      Gr.addVertex(new Vertex(-j - 1, (j + 1) * canvas_width / (num_vertices_2 + 1), 3 * canvas_height / 4));
+    for (var j=0; j<numVertices2; j++) {
+      Gr.addVertex(new Vertex(-j - 1, (j + 1) * canvasWidth / (numVertices2 + 1), 3 * canvasHeight / 4));
     }
 
-    // edges
-    for (var i=0; i<num_vertices_1; i++) {
-      for (var j=0; j<num_vertices_2; j++) {
-        Gr.addEdge(new Edge(Gr.vertices[i], Gr.vertices[num_vertices_1 + j]));
+    for (var i=0; i<numVertices1; i++) {
+      for (var j=0; j<numVertices2; j++) {
+        Gr.addEdge(new Edge(Gr.vertices[i], Gr.vertices[numVertices1 + j]));
       }
     }
 
     return Gr;
   }
 
-  static gridGraph(num_rows, num_cols, canvas_width, canvas_height) {
-    // assume n>0, m>0
+  static gridGraph(numRows, numCols, canvasWidth, canvasHeight) {
     var Gr = new Graph([], []);
-
-    for (var i=0; i<num_cols; i++) {
-      for (var j=0; j<num_rows; j++) {
-        let v_id = i * num_rows + j + 1;
-        let v_x = (i + 1) * canvas_width / (num_cols + 1);
-        let v_y = (j + 1) * canvas_height / (num_rows + 1);
+    for (var i=0; i<numCols; i++) {
+      for (var j=0; j<numRows; j++) {
+        let v_id = i * numRows + j + 1;
+        let v_x = (i + 1) * canvasWidth / (numCols + 1);
+        let v_y = (j + 1) * canvasHeight / (numRows + 1);
         Gr.addVertex(new Vertex(v_id, v_x, v_y));
       }
     }
 
-    for (var i=0; i<num_cols; i++) {
-      for (var j=0; j<num_rows-1; j++) {
-        Gr.addEdge(new Edge(Gr.getVertexByName(i * num_rows + j + 1), Gr.getVertexByName(i * num_rows + j + 2)));
+    for (var i=0; i<numCols; i++) {
+      for (var j=0; j<numRows-1; j++) {
+        Gr.addEdge(new Edge(Gr.getVertexByName(i * numRows + j + 1), Gr.getVertexByName(i * numRows + j + 2)));
       }
     }
 
-    for (var j=0; j<num_rows; j++) {
-      for (var i=0; i<num_cols-1; i++) {
-        Gr.addEdge(new Edge(Gr.getVertexByName(i * num_rows + j + 1), Gr.getVertexByName((i + 1) * num_rows + j + 1)));
+    for (var j=0; j<numRows; j++) {
+      for (var i=0; i<numCols-1; i++) {
+        Gr.addEdge(new Edge(Gr.getVertexByName(i * numRows + j + 1), Gr.getVertexByName((i + 1) * numRows + j + 1)));
+      }
+    }
+
+    return Gr;
+  }
+
+  static triangularGridGraph(numRows, numCols, canvasWidth, canvasHeight) {
+    var Gr = new Graph([], []);
+    for (var i=0; i<=numCols; i++) {
+      for (var j=0; j<numRows; j++) {
+        if ((i + j) % 2 == 1) {
+          let v_id = i * numRows + j + 1;
+          let v_x = (i + 1) * canvasWidth / (numCols + 2);
+          let v_y = (j + 1) * canvasHeight / (numRows + 1);
+          Gr.addVertex(new Vertex(v_id, v_x, v_y));
+          //canvasUtil.println(`draw vertex ${v_id} at (${v_x}, ${v_y})`)
+        }
+      }
+    }
+
+    for (var i=0; i<=numCols; i++) {
+      for (var j=0; j<numRows; j++) {
+        if ((i + j) % 2 == 1) {
+          if (j < numRows-2) {
+            let v1_id = i * numRows + j + 1;
+            let v2_id = i * numRows + j + 3;
+            //canvasUtil.println(`trying to add a vertical edge between vertices ${v1_id} and ${v2_id}`);
+            Gr.addEdge(new Edge(Gr.getVertexByName(v1_id), Gr.getVertexByName(v2_id)));
+          }
+          if (i<numCols) {
+            let v1_id = i * numRows + j + 1;
+            let v2_id = (i+1) * numRows + (j-1) + 1;
+            //canvasUtil.println(`trying to add a up-right diagonal edge between vertices ${v1_id} and ${v2_id}`);
+            Gr.addEdge(new Edge(Gr.getVertexByName(v1_id), Gr.getVertexByName(v2_id)));
+          }
+          if (i<numCols && j<numRows-1) {
+            let v1_id = i * numRows + j + 1;
+            let v2_id = (i+1) * numRows + (j+1) + 1;
+            //canvasUtil.println(`trying to add a down-right diagonal edge between vertices ${v1_id} and ${v2_id}`);
+            Gr.addEdge(new Edge(Gr.getVertexByName(v1_id), Gr.getVertexByName(v2_id)));
+          }
+        }
       }
     }
 
@@ -474,40 +455,42 @@ class Graph {
   }
 }
 
+
 function pDistance(x, y, x1, y1, x2, y2) {
-  var A = x - x1;
-  var B = y - y1;
-  var C = x2 - x1;
-  var D = y2 - y1;
+  // what does this function do?
+  let A = x - x1;
+  let B = y - y1;
+  let C = x2 - x1;
+  let D = y2 - y1;
 
-  var dot = A * C + B * D;
-  var len_sq = C * C + D * D;
-  var param = dot / len_sq;
+  let dot = A * C + B * D;
+  let lenSq = C * C + D * D;
+  let t = dot / lenSq;
 
-  var xx, yy;
+  let xx, yy;
 
-  if (param < 0 || (x1 == x2 && y1 == y2)) {
+  if (t < 0 || (x1 == x2 && y1 == y2)) {
     xx = x1;
     yy = y1;
   }
-  else if (param > 1) {
+  else if (t > 1) {
     xx = x2;
     yy = y2;
   }
   else {
-    xx = x1 + param * C;
-    yy = y1 + param * D;
+    xx = x1 + t * C;
+    yy = y1 + t * D;
   }
 
-  var dx = x - xx;
-  var dy = y - yy;
+  let dx = x - xx;
+  let dy = y - yy;
   return Math.sqrt(dx * dx + dy * dy);
 }
 
 function printMatrix(m) {
   let s = "";
-  for (var i=0; i<m.length; i++) {
-    for (var j=0; j<m[0].length; j++) {
+  for (let i=0; i<m.length; i++) {
+    for (let j=0; j<m[0].length; j++) {
       s += " " + m[i][j];
     }
     s += '\n';
@@ -516,8 +499,8 @@ function printMatrix(m) {
 }
 
 function equalMatrices(A, B) {
-  for (var i=0; i<A.length; i++) {
-    for (var j=0; j<A[i].length; j++) {
+  for (let i=0; i<A.length; i++) {
+    for (let j=0; j<A[i].length; j++) {
       if (A[i][j] != B[i][j]) {
         return false;
       }
@@ -527,8 +510,8 @@ function equalMatrices(A, B) {
 }
 
 function permute(input) {
-  var i, ch;
-  for (i = 0; i < input.length; i++) {
+  let ch;
+  for (let i = 0; i < input.length; i++) {
     ch = input.splice(i, 1)[0];
     usedChars.push(ch);
     if (input.length == 0) {
@@ -541,32 +524,30 @@ function permute(input) {
   return permArr;
 }
 
-function intersects(a, b, c, d, p, q, r, s) {
-  // returns true iff the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
-  //var det, gamma, lambda;
-  var det = (c - a) * (s - q) - (r - p) * (d - b);
+function linesIntersect(a, b, c, d, p, q, r, s) {
+  // returns true iff the line (a,b)->(c,d) intersects the line (p,q)->(r,s)
+  let det = (c - a) * (s - q) - (r - p) * (d - b);
   if (det === 0) {
     return false;
   }
   else {
-    var lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
-    var gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+    let lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
+    let gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
     return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
   }
 }
 
-
 function draw() {
   canvasUtil.clearCanvas();
 
-  for (var i=0; i<g.vertices.length; i++) {
-    if (g.vertices[i].hitTestVertex(x_mouse, y_mouse)) {
+  for (let i=0; i<g.vertices.length; i++) {
+    if (g.vertices[i].hitTestVertex(mouseX, mouseY)) {
       g.vertices[i].halo = true;
     }
   }
 
-  for (var j=0; j<g.edges.length; j++) {
-    if (g.edges[j].hitTestEdge(x_mouse, y_mouse)) {
+  for (let j=0; j<g.edges.length; j++) {
+    if (g.edges[j].hitTestEdge(mouseX, mouseY)) {
       g.edges[j].halo = true;
     }
   }
@@ -575,59 +556,60 @@ function draw() {
   g.resetHalos();
 }
 
-function ev_mousemove2(ev) { // TODO: refactor so that vars here match canvasUtil.js conventions
+function mouseMoveListener(ev) {
   const rect = canvas.getBoundingClientRect()
-  x_mouse = ev.clientX - rect.left
-  y_mouse = ev.clientY - rect.top
+  mouseX = ev.clientX - rect.left
+  mouseY = ev.clientY - rect.top
 }
 
 
-function mouseMoveListener(evt) {
-  var posX;
-  var posY;
-  var shapeRad = g.vertices[dragIndex].radius;
-  var minX = shapeRad;
-  var maxX = canvas.width - shapeRad;
-  var minY = shapeRad;
-  var maxY = canvas.height - shapeRad;
+function mouseDragMoveListener(evt) {
+  let posX = 0;
+  let posY = 0;
+  let shapeRad = RADIUS_DEFAULT;
+  let minX = shapeRad;
+  let maxX = canvas.width - shapeRad;
+  let minY = shapeRad;
+  let maxY = canvas.height - shapeRad;
+
   //getting mouse position correctly
-  var bRect = canvas.getBoundingClientRect();
-  mouseX = (evt.clientX - bRect.left) * (canvas.width / bRect.width);
-  mouseY = (evt.clientY - bRect.top) * (canvas.height / bRect.height);
+  let bRect = canvas.getBoundingClientRect();
+  mouseDragX = (evt.clientX - bRect.left) * (canvas.width / bRect.width);
+  mouseDragY = (evt.clientY - bRect.top) * (canvas.height / bRect.height);
 
   //clamp x and y positions to prevent object from dragging outside of canvas
-  posX = mouseX - dragHoldX;
+  posX = mouseDragX - dragHoldX;
   posX = (posX < minX) ? minX : ((posX > maxX) ? maxX : posX);
-  posY = mouseY - dragHoldY;
+  posY = mouseDragY - dragHoldY;
   posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
 
-  g.vertices[dragIndex].xCoord = posX;
-  g.vertices[dragIndex].yCoord = posY;
+  g.vertices[dragIndex].x = posX;
+  g.vertices[dragIndex].y = posY
 }
 
 function mouseDownListener(evt) {
   //document.outform.output.value += "mousedown" + '\n';
-  var i;
+  //let i;
   //We are going to pay attention to the layering order of the objects so
   //that if a mouse down occurs over more than object, only the topmost one
   //will be dragged.
-  var highestIndex = -1;
+  let highestIndex = -1;
 
   //getting mouse position correctly, being mindful of resizing that may
   //have occured in the browser:
-  var bRect = canvas.getBoundingClientRect();
-  mouseX = (evt.clientX - bRect.left) * (canvas.width / bRect.width);
-  mouseY = (evt.clientY - bRect.top) * (canvas.height / bRect.height);
+  let bRect = canvas.getBoundingClientRect();
+  mouseDragX = (evt.clientX - bRect.left) * (canvas.width / bRect.width);
+  mouseDragY = (evt.clientY - bRect.top) * (canvas.height / bRect.height);
 
   //find which vertex was clicked
-  for (i=0; i < g.vertices.length; i++) {
-    if (g.vertices[i].hitTestVertex(x_mouse, y_mouse)) {
+  for (let i=0; i < g.vertices.length; i++) {
+    if (g.vertices[i].hitTestVertex(mouseX, mouseY)) {
       dragging = true;
       if (i > highestIndex) {
         //We will pay attention to the point on the object
         //where the mouse is "holding" the object:
-        dragHoldX = mouseX - g.vertices[i].xCoord;
-        dragHoldY = mouseY - g.vertices[i].yCoord;
+        dragHoldX = mouseDragX - g.vertices[i].x;
+        dragHoldY = mouseDragY - g.vertices[i].y;
         highestIndex = i;
         dragIndex = i;
       }
@@ -635,7 +617,7 @@ function mouseDownListener(evt) {
   }
 
   if (dragging) {
-    window.addEventListener("mousemove", mouseMoveListener, false);
+    window.addEventListener("mousemove", mouseDragMoveListener, false);
   }
   canvas.removeEventListener("mousedown", mouseDownListener, false);
   window.addEventListener("mouseup", mouseUpListener, false);
@@ -659,13 +641,13 @@ function mouseUpListener(evt) {
   window.removeEventListener("mouseup", mouseUpListener, false);
   if (dragging) {
     dragging = false;
-    window.removeEventListener("mousemove", mouseMoveListener, false);
+    window.removeEventListener("mousemove", mouseDragMoveListener, false);
   }
 }
 
 function mouseDblclickListener(evt) {
-  for (var i=0; i < g.vertices.length; i++) {
-    if (g.vertices[i].hitTestVertex(x_mouse, y_mouse)) {
+  for (let i=0; i < g.vertices.length; i++) {
+    if (g.vertices[i].hitTestVertex(mouseX, mouseY)) {
       //document.outform.output.value += g.vertices[i].printVertexData() + '\n';
 
       // deselect a selected vertex
@@ -683,8 +665,8 @@ function mouseDblclickListener(evt) {
     }
   }
 
-  for (var j=0; j < g.edges.length; j++) {
-    if (g.edges[j].hitTestEdge(x_mouse, y_mouse)) {
+  for (let j=0; j < g.edges.length; j++) {
+    if (g.edges[j].hitTestEdge(mouseX, mouseY)) {
       // deselect a selected edge
       if (g.edges[j].selected && g.selectedEdgeIndex != -1) {
         g.edges[j].selected = false;
@@ -723,90 +705,57 @@ function deleteAnEdge() {
 }
 
 function isItK5() {
-  if (g.isIsomorphicToKn(5)) {
-    canvasUtil.println("  isomorphic to K5: yes");
-  } else {
-    canvasUtil.println("  isomorphic to K5: no");
-  }
+  let msg = "  isomorphic to K5: " + (g.isIsomorphicToKn(5) ? "yes" : "no");
+  canvasUtil.println(msg);
 }
 
 function isItK33() {
-  if (g.isIsomorphicToK33()) {
-    canvasUtil.println("  isomorphic to K33: yes");
-  } else {
-    canvasUtil.println("  isomorphic to K33: no");
-  }
+  let msg = "  isomorphic to K33: " + (g.isIsomorphicToK33() ? "yes" : "no");
+  canvasUtil.println(msg);
 }
 
 function isPlanar() {
-  if (g.isPlanarDrawing()) {
-    canvasUtil.println("  planar drawing: yes");
-  } else {
-    canvasUtil.println("  planar drawing: no");
+  let msg = "  planar drawing: " + (g.isPlanarDrawing() ? "yes" : "no");
+  canvasUtil.println(msg);
+}
+
+function updateGraph(type, n, m) {
+  n = parseInt(n);
+  m = parseInt(m);
+
+  if (type == "rand") {
+    g = Graph.randomGraph(n, WIDTH, HEIGHT);
+    canvasUtil.println(`drew random graph with ${n} vertices`);
+  } else if (type == "comp") {
+    g = Graph.completeGraph(n, WIDTH, HEIGHT);
+    canvasUtil.println(`drew complete graph with ${n} vertices`);
+  } else if (type == "bipt") {
+    g = Graph.completeBipartiteGraph(n, m, WIDTH, HEIGHT);
+    canvasUtil.println(`drew complete bipartite graph with ${n}, ${m} vertices`);
+  } else if (type == "grid") {
+    g = Graph.gridGraph(n, m, WIDTH, HEIGHT);
+    canvasUtil.println(`drew grid graph with ${n} x ${m} vertices`);
+  } else if (type == "tri_grid") {
+    g = Graph.triangularGridGraph(n, m, WIDTH, HEIGHT);
+    canvasUtil.println(`drew triangular grid graph with ${n} x ${m} vertices`);
   }
 }
 
-function updateGraph(newType, newN, newM) {
-  //document.outform.output.value += "called updateGraph with "
-  //        + newType + " " + newN + " " + newM + '\n';
-
-  if (newType == "rand")
-    type = "rand";
-  else if (newType == "comp")
-    type = "comp";
-  else if (newType == "bipt")
-    type = "bipt";
-  else if (newType == "grid")
-    type = "grid";
-
-  N = parseInt(newN);
-  M = parseInt(newM);
-
-  //document.outform.output.value += "updated parameters: "
-  //        + type + " " + N + " " + M + '\n';
-
-  init();
-}
-
-
 function init() {
-  var date0 = new Date();
-  time0 = date0.getTime();
-
   canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
-
-  // Make sure we don't execute when canvas isn't supported
   if (canvas.getContext) {
-    // use getContext to use the canvas for drawing
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
 
     // Attach the event handlers
-    canvas.addEventListener('mousemove', ev_mousemove2, false);
+    canvas.addEventListener('mousemove', mouseMoveListener, false);
     canvas.addEventListener("mousedown", mouseDownListener, false);
     window.addEventListener("mouseup", mouseUpListener, false);
     window.addEventListener("dblclick", mouseDblclickListener, false);
 
-    // which graph to make?
-    //document.outform.output.value += "init called with "
-    //      + type + " " + N + " " + M + '\n';
-
-    if (type == "rand") {
-      g = Graph.randomGraph(N, width, height);
-      canvasUtil.println(`drew random graph with ${N} vertices`);
-    } else if (type == "comp") {
-      g = Graph.completeGraph(N, width, height);
-      canvasUtil.println(`drew complete graph with ${N} vertices`);
-    } else if (type == "bipt") {
-      g = Graph.completeBipartiteGraph(N, M, width, height);
-      canvasUtil.println(`drew complete bipartite graph with ${N}, ${M} vertices`);
-    } else if (type == "grid") {
-      g = Graph.gridGraph(N, M, width, height);
-      canvasUtil.println(`drew grid graph with ${N} x ${M} vertices`);
-    }
-
+    updateGraph('rand', 7, 2);
     return setInterval(draw, 10);
   }
   else { alert('You need a better web browser to see this.'); }
