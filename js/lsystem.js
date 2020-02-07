@@ -471,10 +471,10 @@ const examples = {
   'ex21': { // pythagoras tree
     'variables': ['F', 'X', 'Y'],
     'rules': {
-      'X': '>F[->X]++F[--->Y]++F++F',
-      'Y': '>F++F[-X]++F[---Y]++F',
+      'X': '>FFF[->X]++FF[--->Y]++FFF++FF',
+      'Y': '>FF++FFF[-X]++FF[---Y]++FFF',
     },
-    'axiom': 'F[-X]++F[---Y]++F++F',
+    'axiom': 'FFF[-X]++FF[---Y]++FFF++FF',
     'angle': Math.PI / 4.0,
     'scale_factor': 1.0 / Math.sqrt(2)
   },
