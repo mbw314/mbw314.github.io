@@ -57,7 +57,7 @@ class Vertex {
     return (dx * dx + dy * dy < RADIUS_DEFAULT * RADIUS_DEFAULT);
   }
 
-  getDegree() {
+  degree() {
     return this.neighbors.length;
   }
 
@@ -169,8 +169,7 @@ class Graph {
   }
 
   vertexIsInTriangle(v) {
-    // if degree is 2
-    if (v.neighbors.length == 2) {
+    if (v.degree() == 2) {
       // is neighbor 0 in the list of neighbors of neighbor 1?
       let n0 = v.neighbors[0];
       let v1 = this.getVertexByName(v.neighbors[1]);
@@ -185,9 +184,7 @@ class Graph {
 
   deleteVertex(v) {
     // remove all edges containing v
-    for (let j=0; j<v.neighbors.length; j++) {
-      this.deleteEdgeByVertexNames(v.name, v.neighbors[j]);
-    }
+    v.neighbors.forEach(name => this.deleteEdgeByVertexNames(v.name, name));
 
     // remove v from all neighbors' neighbor lists
     for (let i=0; i<v.neighbors.length; i++) {
@@ -224,7 +221,7 @@ class Graph {
     let i = this.selectedVertexIndex;
     this.vertices[i].selected = false;
 
-    if (this.vertices[i].neighbors.length == 2 &&
+    if (this.vertices[i].degree() == 2 &&
         !this.vertexIsInTriangle(this.vertices[i])) {
 
       //get neighbors
@@ -390,10 +387,10 @@ class Graph {
     var Gr = new Graph([], []);
     for (var i=0; i<numCols; i++) {
       for (var j=0; j<numRows; j++) {
-        let v_id = i * numRows + j + 1;
-        let v_x = (i + 1) * canvasWidth / (numCols + 1);
-        let v_y = (j + 1) * canvasHeight / (numRows + 1);
-        Gr.addVertex(new Vertex(v_id, v_x, v_y));
+        let name = i * numRows + j + 1;
+        let x = (i + 1) * canvasWidth / (numCols + 1);
+        let y = (j + 1) * canvasHeight / (numRows + 1);
+        Gr.addVertex(new Vertex(name, x, y));
       }
     }
 
@@ -413,39 +410,43 @@ class Graph {
   }
 
   static triangularGridGraph(numRows, numCols, canvasWidth, canvasHeight) {
+    function isValidVertex(i, j) {
+      return (i + j) % 2 == 1;
+    }
+
     var Gr = new Graph([], []);
-    for (var i=0; i<=numCols; i++) {
+    for (var i=0; i<numCols; i++) {
       for (var j=0; j<numRows; j++) {
-        if ((i + j) % 2 == 1) {
-          let v_id = i * numRows + j + 1;
-          let v_x = (i + 1) * canvasWidth / (numCols + 2);
-          let v_y = (j + 1) * canvasHeight / (numRows + 1);
-          Gr.addVertex(new Vertex(v_id, v_x, v_y));
-          //canvasUtil.println(`draw vertex ${v_id} at (${v_x}, ${v_y})`)
+        if (isValidVertex(i, j)) {
+          let name = i * numRows + j + 1;
+          let x = (i + 1) * canvasWidth / (numCols + 1);
+          let y = (j + 1) * canvasHeight / (numRows + 1);
+          Gr.addVertex(new Vertex(name, x, y));
+          //canvasUtil.println(`draw vertex ${name} at (${x}, ${y})`);
         }
       }
     }
 
-    for (var i=0; i<=numCols; i++) {
+    for (var i=0; i<numCols; i++) {
       for (var j=0; j<numRows; j++) {
-        if ((i + j) % 2 == 1) {
+        if (isValidVertex(i, j)) {
           if (j < numRows-2) {
-            let v1_id = i * numRows + j + 1;
-            let v2_id = i * numRows + j + 3;
-            //canvasUtil.println(`trying to add a vertical edge between vertices ${v1_id} and ${v2_id}`);
-            Gr.addEdge(new Edge(Gr.getVertexByName(v1_id), Gr.getVertexByName(v2_id)));
+            let name1 = i * numRows + j + 1;
+            let name2 = i * numRows + j + 3;
+            //canvasUtil.println(`trying to add a vertical edge between vertices ${name1} and ${name2}`);
+            Gr.addEdge(new Edge(Gr.getVertexByName(name1), Gr.getVertexByName(name2)));
           }
-          if (i<numCols) {
-            let v1_id = i * numRows + j + 1;
-            let v2_id = (i+1) * numRows + (j-1) + 1;
-            //canvasUtil.println(`trying to add a up-right diagonal edge between vertices ${v1_id} and ${v2_id}`);
-            Gr.addEdge(new Edge(Gr.getVertexByName(v1_id), Gr.getVertexByName(v2_id)));
+          if (i<numCols-1 && j>0) {
+            let name1 = i * numRows + j + 1;
+            let name2 = (i+1) * numRows + (j-1) + 1;
+            //canvasUtil.println(`trying to add a up-right diagonal edge between vertices ${name1} and ${name2}`);
+            Gr.addEdge(new Edge(Gr.getVertexByName(name1), Gr.getVertexByName(name2)));
           }
-          if (i<numCols && j<numRows-1) {
-            let v1_id = i * numRows + j + 1;
-            let v2_id = (i+1) * numRows + (j+1) + 1;
-            //canvasUtil.println(`trying to add a down-right diagonal edge between vertices ${v1_id} and ${v2_id}`);
-            Gr.addEdge(new Edge(Gr.getVertexByName(v1_id), Gr.getVertexByName(v2_id)));
+          if (i<numCols-1 && j<numRows-1) {
+            let name1 = i * numRows + j + 1;
+            let name2 = (i+1) * numRows + (j+1) + 1;
+            //canvasUtil.println(`trying to add a down-right diagonal edge between vertices ${name1} and ${name2}`);
+            Gr.addEdge(new Edge(Gr.getVertexByName(name1), Gr.getVertexByName(name2)));
           }
         }
       }
@@ -453,6 +454,56 @@ class Graph {
 
     return Gr;
   }
+
+  static hexagonalGridGraph(numRows, numCols, canvasWidth, canvasHeight) {
+    function isValidVertex(i, j) {
+      return (((((i+2) % 4) + 1) % 3) + j) % 2 == 1;
+    }
+
+    var Gr = new Graph([], []);
+    for (var i=0; i<numCols; i++) {
+      for (var j=0; j<numRows; j++) {
+        if (isValidVertex(i, j)) {
+          let name = i * numRows + j + 1;
+          let x = (i + 1) * canvasWidth / (numCols + 1);
+          let y = (j + 1) * canvasHeight / (numRows + 1);
+          Gr.addVertex(new Vertex(name, x, y));
+          //canvasUtil.println(`draw vertex ${name} at (${x}, ${y}) with i=${i}, j=${j}`)
+        }
+      }
+    }
+
+    for (var i=0; i<numCols; i++) {
+      for (var j=0; j<numRows; j++) {
+        if (isValidVertex(i, j)) {
+          if ((i%4==1 && j%2==0 && i+1<numCols) ||
+              (i%4==3 && j%2==1 && i+1<numCols)) {
+            let name1 = i * numRows + j + 1;
+            let name2 = (i+1) * numRows + j + 1;
+            //canvasUtil.println(`trying to add a horizontal edge between vertices ${name1} and ${name2}`);
+            Gr.addEdge(new Edge(Gr.getVertexByName(name1), Gr.getVertexByName(name2)));
+          }
+          if ((i%4==0 && j%2==1 && i+1<numCols && j>0) ||
+              (i%4==2 && j%2==0 && i+1<numCols && j>0)) {
+            let name1 = i * numRows + j + 1;
+            let name2 = (i+1) * numRows + (j-1) + 1;
+            //canvasUtil.println(`trying to add a up-right diagonal edge between vertices ${name1} and ${name2}`);
+            Gr.addEdge(new Edge(Gr.getVertexByName(name1), Gr.getVertexByName(name2)));
+          }
+          if ((i%4==0 && j%2==1 && i+1<numCols && j+1<numRows) ||
+              (i%4==2 && j%2==0 && i+1<numCols && j+1<numRows)) {
+            let name1 = i * numRows + j + 1;
+            let name2 = (i+1) * numRows + (j+1) + 1;
+            //canvasUtil.println(`trying to add a down-right diagonal edge between vertices ${name1} and ${name2}`);
+            Gr.addEdge(new Edge(Gr.getVertexByName(name1), Gr.getVertexByName(name2)));
+          }
+        }
+      }
+    }
+
+    return Gr;
+  }
+
 }
 
 
@@ -723,21 +774,31 @@ function updateGraph(type, n, m) {
   n = parseInt(n);
   m = parseInt(m);
 
-  if (type == "rand") {
-    g = Graph.randomGraph(n, WIDTH, HEIGHT);
-    canvasUtil.println(`drew random graph with ${n} vertices`);
-  } else if (type == "comp") {
-    g = Graph.completeGraph(n, WIDTH, HEIGHT);
-    canvasUtil.println(`drew complete graph with ${n} vertices`);
-  } else if (type == "bipt") {
-    g = Graph.completeBipartiteGraph(n, m, WIDTH, HEIGHT);
-    canvasUtil.println(`drew complete bipartite graph with ${n}, ${m} vertices`);
-  } else if (type == "grid") {
-    g = Graph.gridGraph(n, m, WIDTH, HEIGHT);
-    canvasUtil.println(`drew grid graph with ${n} x ${m} vertices`);
-  } else if (type == "tri_grid") {
-    g = Graph.triangularGridGraph(n, m, WIDTH, HEIGHT);
-    canvasUtil.println(`drew triangular grid graph with ${n} x ${m} vertices`);
+  switch (type) {
+    case "rand":
+      g = Graph.randomGraph(n, WIDTH, HEIGHT);
+      canvasUtil.println(`drew random graph with ${n} vertices`);
+      break;
+    case "comp":
+      g = Graph.completeGraph(n, WIDTH, HEIGHT);
+      canvasUtil.println(`drew complete graph with ${n} vertices`);
+      break;
+    case "bipt":
+      g = Graph.completeBipartiteGraph(n, m, WIDTH, HEIGHT);
+      canvasUtil.println(`drew complete bipartite graph with ${n}, ${m} vertices`);
+      break;
+    case "grid":
+      g = Graph.gridGraph(n, m, WIDTH, HEIGHT);
+      canvasUtil.println(`drew grid graph with ${n} x ${m} vertices`);
+      break;
+    case "tri_grid":
+      g = Graph.triangularGridGraph(n, m, WIDTH, HEIGHT);
+      canvasUtil.println(`drew triangular grid graph with ${n} x ${m} vertices`);
+      break;
+    case "hex_grid":
+      g = Graph.hexagonalGridGraph(n, m, WIDTH, HEIGHT);
+      canvasUtil.println(`drew hexagonal grid graph with ${n} x ${m} vertices`);
+      break;
   }
 }
 
