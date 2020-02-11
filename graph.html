@@ -2,15 +2,15 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Michael Bradford Williams</title>
-	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
-	<link rel="shortcut icon" href="favicon.ico" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Michael Bradford Williams</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
-	<script language="JavaScript" type="text/javascript" src="./js/graph.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/graph.js"></script>
 </head>
 
 <body onload="init();">
@@ -21,9 +21,9 @@
 
 <div class="topleftsmall">
    <a href="./index.html">
-	<script type="text/javascript">
-      		showImage("300x50");
-   	</script>
+  <script type="text/javascript">
+          showImage("300x50");
+     </script>
    </a>
 </div>
 
@@ -68,66 +68,67 @@ href="http://www.mozilla.com/firefox/">Firefox</a> (Windows/Linux).</p>
 <form name="parameters" action="#">
 <table border="0" align="center">
 <tr>
-	<td colspan="1" align="right">
-			Graph:
-	</td>
-	<td colspan="1" align="left">
-		<select name="graphOption">
-			<option value="rand" selected="selected">random on n vertices</option>
-			<option value="comp">complete on n vertices</option>
-			<option value="bipt">complete bipartite on n, m vertices</option>
-			<option value="grid">grid with n rows, m columns</option>
+  <td colspan="1" align="right">
+      Graph:
+  </td>
+  <td colspan="1" align="left">
+    <select name="graphOption">
+      <option value="rand" selected="selected">random on n vertices</option>
+      <option value="comp">complete on n vertices</option>
+      <option value="bipt">complete bipartite on n, m vertices</option>
+      <option value="grid">square grid with n rows, m columns</option>
       <option value="tri_grid">triangular grid with n rows, m columns</option>
-		</select> \(n\):
-		<select name="nVertices">
-	    		<option value="1">1</option>
-	    		<option value="2">2</option>
-	    		<option value="3">3</option>
-			<option value="4">4</option>
-			<option value="5">5</option>
-			<option value="6">6</option>
-			<option value="7" selected="selected">7</option>
-			<option value="8">8</option>
-			<option value="9">9</option>
-			<option value="10">10</option>
+      <option value="hex_grid">hexagonal grid with n rows, m columns</option>
+    </select> \(n\):
+    <select name="nVertices">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5" selected="selected">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
     </select> \(m\):
-		<select name="mVertices">
-			<option value="1">1</option>
-	    		<option value="2" selected="selected">2</option>
-	    		<option value="3">3</option>
-			<option value="4">4</option>
-			<option value="5">5</option>
-			<option value="6">6</option>
-			<option value="7">7</option>
-			<option value="8">8</option>
-			<option value="9">9</option>
-			<option value="10">10</option>
-		</select>
-		<input type="button" name="draw" value="Draw New Graph"
-		       onclick="updateGraph(parameters.graphOption.value,
-					parameters.nVertices.value,
-					parameters.mVertices.value);" />
-	</td>
+    <select name="mVertices">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8" selected="selected">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <input type="button" name="draw" value="Draw New Graph"
+           onclick="updateGraph(parameters.graphOption.value,
+          parameters.nVertices.value,
+          parameters.mVertices.value);" />
+  </td>
 </tr>
 <tr>
-	<td align="right">
-		Reductions:
-	</td>
-	<td align="left">
-		<input type="button" name="seriesReduce" value="Series Reduction" onclick="reduce();" />
-		<input type="button" name="deleteVertex" value="Delete Vertex" onclick="deleteAVertex();" />
-		<input type="button" name="deleteEdge" value="Delete Edge" onclick="deleteAnEdge();" />
-	</td>
+  <td align="right">
+    Reductions:
+  </td>
+  <td align="left">
+    <input type="button" name="seriesReduce" value="Series Reduction" onclick="reduce();" />
+    <input type="button" name="deleteVertex" value="Delete Vertex" onclick="deleteAVertex();" />
+    <input type="button" name="deleteEdge" value="Delete Edge" onclick="deleteAnEdge();" />
+  </td>
 </tr>
 <tr>
-	<td align="right">
-		Tests:
-	</td>
-	<td align="left">
-		<input type="button" name="k5" value="Isomorphic to K_5?" onclick="isItK5();" />
-		<input type="button" name="k33" value="Isomorphic to K_3,3?" onclick="isItK33();" />
-		<input type="button" name="planar" value="Planar Drawing?" onclick="isPlanar();" />
-	</td>
+  <td align="right">
+    Tests:
+  </td>
+  <td align="left">
+    <input type="button" name="k5" value="Isomorphic to K_5?" onclick="isItK5();" />
+    <input type="button" name="k33" value="Isomorphic to K_3,3?" onclick="isItK33();" />
+    <input type="button" name="planar" value="Planar Drawing?" onclick="isPlanar();" />
+  </td>
 </tr>
 </table>
 </form>
@@ -149,7 +150,7 @@ href="http://www.mozilla.com/firefox/">Firefox</a> (Windows/Linux).</p>
 <div class="middle">
 
 <form name="outform" action="#">
-	<textarea rows="5" cols="75" name="output"></textarea>
+  <textarea rows="5" cols="75" name="output"></textarea>
 </form>
 
 </div>

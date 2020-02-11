@@ -65,11 +65,6 @@ const cellConfigRowNums = {
   "THREE_AND_THREE_ABOVE": 2
 }
 
-
-function range(n) {
-  return [...Array(n).keys()];
-}
-
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
 };
