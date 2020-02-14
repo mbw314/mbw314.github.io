@@ -30,8 +30,8 @@ function resetDrawing() {
   [x, y, z] = lorenzUpdate(x0, y0, z0);
   canvasUtil.clearCanvas();
   canvasUtil.clearText();
-  canvasUtil.println(`initial data: (${x0.toFixed(3)}, ${y0.toFixed(3)}, ${z0.toFixed(3)})`);
-  canvasUtil.println(`parameters: sigma = ${SIGMA}, rho = ${RHO}, beta = ${BETA}`);
+  canvasUtil.println(`initial position: (${x0.toFixed(3)}, ${y0.toFixed(3)}, ${z0.toFixed(3)})`);
+  canvasUtil.println(`parameters: sigma = ${SIGMA.toFixed(3)}, rho = ${RHO.toFixed(3)}, beta = ${BETA.toFixed(3)}`);
 }
 
 function lorenzUpdate(x, y, z) {
