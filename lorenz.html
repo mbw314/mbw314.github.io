@@ -6,6 +6,8 @@
   <title>Michael Bradford Williams - Lorenz Attractor</title>
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   <link rel="shortcut icon" href="favicon.ico" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/lorenz.js"></script>
@@ -27,7 +29,20 @@
 
   <div class="middle">
     <h2>Lorenz Attractor</h2>
-    <p>[description coming soon]</p>
+    <p>The Lorenz Attractor is a set of solutions to the followng set of differential
+equations, called the <a href="https://en.wikipedia.org/wiki/Lorenz_system">Lorenz system</a>:
+\[ \begin{align*}
+\frac{dx}{dt} &= \sigma(y-x)\\
+\frac{dy}{dt} &= x(\rho - z) - y\\
+\frac{dz}{dt} &= xy - \beta z
+\end{align*} \]
+where \(\sigma, \rho, \beta\) are real-valued parameters. The system is noteworthy because, for
+certain choices of the parameters, solutions exhibit <a href="https://en.wikipedia.org/wiki/Chaos_theory">
+chaotic</a> behavior. If we think of a solution as a particle moving in 3D space, then there are two
+"attractors" around which the particle may orbit, but the orbit alternates back and forth in a
+seemingly random manner.</p>
+
+<p>Below is a visualization of a solution of the system projected onto the \(xy\)-plane.</p>
   </div>
 
   <div class="middle">
