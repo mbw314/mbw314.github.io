@@ -91,7 +91,7 @@ function draw() {
   let f;
   away = document.getElementById("direction").value;
 
-  if (sep  != document.getElementById("separation").value * 1) {
+  if (sep != document.getElementById("separation").value * 1) {
     //sep = document.getElementById("separation").value * 1;
     //vf.initialize(sep);
   }
