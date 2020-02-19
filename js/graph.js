@@ -1,15 +1,5 @@
-// let COLOR_DEFAULT = "#000000";
-// let COLOR_SELECTED = "#FF0000";
-// let COLOR_HALO = "#0000FF";
-// let RADIUS_DEFAULT = 10;
-// let RADIUS_HALO = 2;
-// let WIDTH_HALO = 4;
-// let THICKNESS_DEFAULT = 2;
-// let EDGE_CLICK = 5;
-
 let FLIP_PROBABILITY = 0.35;
 let permArr = [], usedChars = [];
-
 
 class Vertex {
   constructor(n, x ,y) {

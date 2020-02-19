@@ -7,13 +7,9 @@ let paused = false;
 let grid; // Grid object -- need to rename that class
 let count = 0; // used for animation
 
-let COLOR_DEFAULT = "#000000";
-//let COLOR_SELECTED = "#FF0000";
-//let COLOR_HALO = "#0000FF";
-let RADIUS_DEFAULT = 4;
-//let RADIUS_HALO = 2;
-//let WIDTH_HALO = 4;
-let THICKNESS_DEFAULT = 1;
+const COLOR_DEFAULT = "#000000";
+const RADIUS_DEFAULT = 4;
+const THICKNESS_DEFAULT = 1;
 
 const BG_COLOR = Color.colorString(65, 105, 125);
 const DISK_RADIUS = 4;
@@ -63,22 +59,22 @@ class Grid {
       let len = this.paths[i].length;
       if (len >= 1) {
         this.objs.push(new Disk(
-            new Point(this.paths[i][0].x, this.paths[i][0].y), //this.gridToCanvasPt(this.paths[i][0]),
+            new Point(this.paths[i][0].x, this.paths[i][0].y),
             DISK_RADIUS,
             START_COLOR));
         for (let j=1; j<len; j++) {
           this.objs.push(new Segment(
-            new Point(this.paths[i][j-1].x, this.paths[i][j-1].y), //this.gridToCanvasPt(this.paths[i][j-1]),
-            new Point(this.paths[i][j].x, this.paths[i][j].y), //this.gridToCanvasPt(this.paths[i][j]),
+            new Point(this.paths[i][j-1].x, this.paths[i][j-1].y),
+            new Point(this.paths[i][j].x, this.paths[i][j].y),
             MIDDLE_COLOR,
             SEGMENT_WIDTH));
           this.objs.push(new Disk(
-            new Point(this.paths[i][j].x, this.paths[i][j].y), //this.gridToCanvasPt(this.paths[i][j]),
+            new Point(this.paths[i][j].x, this.paths[i][j].y),
             MIDDLE_RADIUS,
             MIDDLE_COLOR));
         }
         this.objs.push(new Disk(
-          new Point(this.paths[i][len-1].x, this.paths[i][len-1].y), //this.gridToCanvasPt(this.paths[i][len-1]),
+          new Point(this.paths[i][len-1].x, this.paths[i][len-1].y),
           DISK_RADIUS,
           STOP_COLOR));
       }
@@ -108,26 +104,22 @@ class Grid {
     let numAvails = this.numAvailablePositions();
     while (numAvails > 0) {
       let v = this.randomInitialPoint();
-      //canvasUtil.println(`started new path with initial vertex ${v.name}, with ${v.degree()} neighbors ${v.neighbors}`);
       this.paths.push([v]);
       let canExtendPath = true;
       numAvails = this.numAvailablePositions();
       while (canExtendPath && numAvails > 0) {
         canExtendPath = this.extendPath();
       }
-      //canvasUtil.println(`finished path ${this.paths[this.paths.length-1].map(v=>v.name)}`);
       numAvails = this.numAvailablePositions();
     }
   }
 
   extendPath() {
-    //canvasUtil.println(printMatrix(this.graph.getAdjacencyMatrix()));
     let canContinue = true;
     let lastPathLength = this.paths[this.paths.length-1].length;
     let v0 = this.paths[this.paths.length-1][lastPathLength-1];
     if (v0.degree() > 0) {
       let v1 = this.graph.getVertexByName(v0.neighbors[Math.floor(Math.random() * v0.degree())]);
-      //canvasUtil.println(`adding to path ${v1.name} with ${v1.degree()} neighbors ${v1.neighbors}`);
       this.graph.deleteVertex(v1); // make it unavailable
       this.paths[this.paths.length-1].push(v1);
     } else {
@@ -159,15 +151,12 @@ function updateGraph(type) {
   switch (type) {
     case "grid":
       graph = Graph.gridGraph(25, 25, WIDTH, HEIGHT);
-      //canvasUtil.println(`drew grid graph with ${n} x ${m} vertices`);
       break;
     case "tri_grid":
       graph = Graph.triangularGridGraph(25, 41, WIDTH, HEIGHT);
-      //canvasUtil.println(`drew triangular grid graph with ${n} x ${m} vertices`);
       break;
     case "hex_grid":
       graph = Graph.hexagonalGridGraph(33, 53, WIDTH, HEIGHT);
-      //canvasUtil.println(`drew hexagonal grid graph with ${n} x ${m} vertices`);
       break;
   }
   graph.draw();
