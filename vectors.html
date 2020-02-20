@@ -2,11 +2,11 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Vector Fields</title>
-	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
-	<link rel="shortcut icon" href="favicon.ico" />
-	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Vector Fields</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/vectors.js"></script>
 </head>
@@ -19,9 +19,9 @@
 
 <div class="topleftsmall">
    <a href="./index.html">
-	<script type="text/javascript">
-      		showImage("300x50");
-   	</script>
+  <script type="text/javascript">
+          showImage("300x50");
+     </script>
    </a>
 </div>
 
@@ -33,44 +33,36 @@
 
 <h2>Vector Fields</h2>
 
-<p>In yet another <a href="http://en.wikipedia.org/wiki/Canvas_(HTML_element)">HTML canvas</a> experiment, I explored a few types of vector fields based on attraction to the mouse cursor.</p>
+<p>In yet another <a href="http://en.wikipedia.org/wiki/Canvas_(HTML_element)">HTML canvas</a> experiment, I
+explored a few types of vector fields based on attraction to the mouse cursor.</p>
 
 <p>You'll need a modern browser to view the app. It has been tested in <a
 href="http://www.mozilla.com/firefox/">Firefox</a> (Windows/Linux) but there is a problem with mouse detection
 in <a href="http://www.google.com/chrome">Chrome</a>.</p> </div>
 
 <div class="middle">
-	<table>
-		<tr>
-			<td><p>Style:</p></td>
-			<td><select id="style">
-					<option value="0" selected>constant attractor force</option>
-					<option value="1">bounded force + remembering vectors</option>
-					<option value="2">gravity-like force</option>
-					<!--<option value="3">gravity-like force with global gravity</option>-->
-				</select></td>
-				<td> </td>
-			<td><p>Direction:</p></td>
-			<td><select id="direction">
-					<option value="1" selected>towards</option>
-					<option value="-1">away</option>
-				</select></td>
-				<td> </td>
-			<td><p>Spacing:</p></td>
-			<td><select id="separation">
-          <option value="15">15</option>
-          <option value="25">25</option>
-					<option value="50" selected>50</option>
-					<option value="75">75</option>
-					<option value="125">125</option>
-					<option value="250">250</option>
-				</select></td>
-		</tr>
-	</table>
+  <table>
+    <tr>
+      <td><p>Style:</p></td>
+      <td><select id="style">
+          <option value="0" selected>constant attractor force</option>
+          <option value="1">bounded force + remembering vectors</option>
+          <option value="2">gravity-like force</option>
+          <!--<option value="3">gravity-like force with global gravity</option>-->
+        </select></td>
+        <td> </td>
+      <td><p>Direction:</p></td>
+      <td><select id="direction">
+          <option value="1" selected>towards</option>
+          <option value="-1">away</option>
+        </select></td>
+        <td> </td>
+    </tr>
+  </table>
 </div>
 
 <div class="middle">
-	<canvas id="canvas" width="750" height="750">
+  <canvas id="canvas" width="750" height="750">
         <p>Your browser is currently unsupported.</p>
         <p>Supported browsers: <a href="http://www.opera.com">Opera</a>, <a
           href="http://www.mozilla.com">Firefox</a>, <a
@@ -80,14 +72,7 @@ in <a href="http://www.google.com/chrome">Chrome</a>.</p> </div>
 </div>
 
 <div class="middle">
-	<table align="center">
-		<tr>
-			<td><p>x-coordinate:</p></td>
-			<td><input id="x-coord" size="4" /></td>
-			<td> </td>
-			<td><p>y-coordinate:</p></td>
-			<td><input id="y-coord" size="4" /></td>
-		</tr>
+  <table align="center">
     <tr>
       <td>
         <form name="outform" action="#">
@@ -95,7 +80,7 @@ in <a href="http://www.google.com/chrome">Chrome</a>.</p> </div>
         </form>
       </td>
     </tr>
-	</table>
+  </table>
 </div>
 
 <div class="bottom">
