@@ -218,15 +218,15 @@ function updateGraph(type, n, m) {
       canvasUtil.println(`drew complete bipartite graph with ${n}, ${m} vertices`);
       break;
     case "grid":
-      g = Graph.gridGraph(n, m, WIDTH, HEIGHT);
+      g = Graph.gridGraph(m, n, WIDTH, HEIGHT);
       canvasUtil.println(`drew grid graph with ${n} x ${m} vertices`);
       break;
     case "tri_grid":
-      g = Graph.triangularGridGraph(n, m, WIDTH, HEIGHT);
+      g = Graph.triangularGridGraph(m, n, WIDTH, HEIGHT);
       canvasUtil.println(`drew triangular grid graph with ${n} x ${m} vertices`);
       break;
     case "hex_grid":
-      g = Graph.hexagonalGridGraph(n, m, WIDTH, HEIGHT);
+      g = Graph.hexagonalGridGraph(m, n, WIDTH, HEIGHT);
       canvasUtil.println(`drew hexagonal grid graph with ${n} x ${m} vertices`);
       break;
   }

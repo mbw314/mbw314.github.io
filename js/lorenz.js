@@ -1,5 +1,5 @@
-const WIDTH = 750;
-const HEIGHT = 750;
+let WIDTH = 750;
+let HEIGHT = 750;
 let canvas;
 let ctx;
 let canvasUtil;
@@ -86,10 +86,15 @@ function prepend(a, item) {
 }
 
 
-function init() {
+function init(adjustSize) {
   canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("content").clientWidth;
+    HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
+
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);

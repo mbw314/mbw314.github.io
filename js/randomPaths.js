@@ -1,7 +1,7 @@
 let canvas;
 let ctx;
-const WIDTH = 750;
-const HEIGHT = 750;
+let WIDTH = 750;
+let HEIGHT = 750;
 let canvasUtil;
 let paused = false;
 let grid; // Grid object -- need to rename that class
@@ -150,13 +150,13 @@ function updateGraph(type) {
   let graph;
   switch (type) {
     case "grid":
-      graph = Graph.gridGraph(25, 25, WIDTH, HEIGHT);
+      graph = Graph.gridGraph(parseInt(WIDTH / 25), parseInt(HEIGHT / 25), WIDTH, HEIGHT);
       break;
     case "tri_grid":
-      graph = Graph.triangularGridGraph(25, 41, WIDTH, HEIGHT);
+      graph = Graph.triangularGridGraph(parseInt(WIDTH / 15), parseInt(HEIGHT / 25), WIDTH, HEIGHT);
       break;
     case "hex_grid":
-      graph = Graph.hexagonalGridGraph(33, 53, WIDTH, HEIGHT);
+      graph = Graph.hexagonalGridGraph(parseInt(WIDTH / 8), parseInt(HEIGHT / 15), WIDTH, HEIGHT);
       break;
   }
   graph.draw();
@@ -167,15 +167,22 @@ function updateGraph(type) {
 }
 
 
-function init() {
+function init(adjustSize) {
   canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("content").clientWidth;
+    HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
+
+  console.log(`${WIDTH} ${HEIGHT}`);
   if (canvas.getContext){
+    console.log("got context");
     ctx = canvas.getContext('2d');
-    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
     canvasUtil.clearCanvas(BG_COLOR);
-    updateGraph('grid', 20, 20);
+    updateGraph('grid');
     return setInterval(draw, 15);
   } else {
     alert('You need a better web browser to see this.'); }

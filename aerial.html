@@ -6,67 +6,15 @@
   <title>Michael Bradford Williams - [Title]</title>
   <!--<link rel="stylesheet" type="text/css" href="./css/styles.css" />-->
   <link rel="shortcut icon" href="favicon.ico" />
-  <script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+  <!-- <script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script> -->
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/aerial.js"></script>
 </head>
 
-<body onload="init();">
-<div class="container">
+<body onload="init(1);">
 
-  <div class="topsmall">
-    <div class="topleftsmall">
-       <a href="./index.html">
-      <script type="text/javascript">
-              showImage("300x50");
-         </script>
-       </a>
-    </div>
-    <h1><a href="./index.html">Michael Bradford Williams</a></h1>
-  </div>
-
-  <div class="middle">
-    <h2>[Title]</h2>
-    <p>[description]</p>
-  </div>
-
-  <div class="middle">
-    <form name="parameters" action="#">
-      <table border="1" align="center">
-        <tr>
-          <td colspan="1" align="right">
-            [Controls:]
-          </td>
-          <td colspan="1" align="right">
-            <input type="button" name="do_something" value="Do Something" onclick="doSomething());" />
-          </td>
-        </tr>
-          <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
-        <tr>
-        </tr>
-      </table>
-    </form>
-  </div>
-
-  <div class="middle">
-  <center>
-    <canvas id="canvas" width="750" height="500">
-      <p>Your browser is currently unsupported.</p>
-    </canvas>
-  </center>
-  </div>
-
-
-  <div class="middle">
-    <form name="outform" action="#">
-      <textarea rows="5" cols="80" name="output"></textarea>
-    </form>
-  </div>
-
-  <div class="bottom">
-    <p>last modified: 01/01/2020</p>
-  </div>
-
+<div id="content" width="100%">
+<canvas id="canvas" width="750" height="500"></canvas>
 </div>
 </body>
 </html>
