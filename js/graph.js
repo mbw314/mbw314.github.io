@@ -371,33 +371,48 @@ class Graph {
     return Gr;
   }
 
-  static gridGraph(numRows, numCols, canvasWidth, canvasHeight) {
+  static gridGraph(numCols, numRows, canvasWidth, canvasHeight) {
+    function getName(i, j) {
+      return i * numRows + j + 1;
+    }
+
+    // quantities needed to ensure proper proportions and center the grid on the canvas
+    let sep = Math.min(canvasWidth / (numCols + 1), canvasHeight / (numRows + 1));
+    let xMax = (numCols - 1) * sep;
+    let yMax = (numRows - 1) * sep;
+    let x0 = (canvasWidth - xMax) / 2;
+    let y0 = (canvasHeight - yMax) / 2;
+
     let Gr = new Graph([], []);
     for (let i=0; i<numCols; i++) {
       for (let j=0; j<numRows; j++) {
         let name = i * numRows + j + 1;
-        let x = (i + 1) * canvasWidth / (numCols + 1);
-        let y = (j + 1) * canvasHeight / (numRows + 1);
+        let x = i * sep + x0;
+        let y = j * sep + y0;
         Gr.addVertex(new Vertex(name, x, y));
       }
     }
 
     for (let i=0; i<numCols; i++) {
       for (let j=0; j<numRows-1; j++) {
-        Gr.addEdge(new Edge(Gr.getVertexByName(i * numRows + j + 1), Gr.getVertexByName(i * numRows + j + 2)));
+        let name1 = getName(i, j);
+        let name2 = getName(i, j + 1);
+        Gr.addEdge(new Edge(Gr.getVertexByName(name1), Gr.getVertexByName(name2)));
       }
     }
 
     for (let j=0; j<numRows; j++) {
       for (let i=0; i<numCols-1; i++) {
-        Gr.addEdge(new Edge(Gr.getVertexByName(i * numRows + j + 1), Gr.getVertexByName((i + 1) * numRows + j + 1)));
+        let name1 = getName(i, j);
+        let name2 = getName(i + 1, j);
+        Gr.addEdge(new Edge(Gr.getVertexByName(name1), Gr.getVertexByName(name2)));
       }
     }
 
     return Gr;
   }
 
-  static triangularGridGraph(numRows, numCols, canvasWidth, canvasHeight) {
+  static triangularGridGraph(numCols, numRows, canvasWidth, canvasHeight) {
     function isValidVertex(i, j) {
       return (i + j) % 2 == 1;
     }
@@ -451,7 +466,7 @@ class Graph {
     return Gr;
   }
 
-  static hexagonalGridGraph(numRows, numCols, canvasWidth, canvasHeight) {
+  static hexagonalGridGraph(numCols, numRows, canvasWidth, canvasHeight) {
     function isValidVertex(i, j) {
       if (j%2==0) {
         return i%6==1 || i%6==3;
@@ -508,7 +523,6 @@ class Graph {
 
     return Gr;
   }
-
 }
 
 

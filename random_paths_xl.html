@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Random Paths</title>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/graph.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/randomPaths.js"></script>
+</head>
+
+<body onload="init(1);">
+
+<div id="content" width="100%">
+
+<table border="0" align="center" id="controls_table">
+<form name="controls">
+<tr>
+	<td colspan="1" align="right">Graph:</td>
+	<td colspan="1" align="center">
+	    <select id="graph">
+			<option value="grid" selected>rectangular grid</option>
+			<option value="tri_grid">triangular grid</option>
+			<option value="hex_grid">hexagonal grid</option>
+		</select></td>
+	<td colspan="1" align="center">
+	    <input type="button" name="draw" value="Draw" onClick="updateGraph(controls.graph.value);"></td>
+  <td colspan="1" align="center">
+      <input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
+</tr>
+</form>
+</table>
+
+<canvas id="canvas" width="750" height="750"></canvas>
+
+</div>
+
+</body>
+</html>

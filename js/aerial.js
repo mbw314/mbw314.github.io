@@ -34,7 +34,6 @@ class Ridge {
       canvasUtil.drawLine(i, this.heights[i], i, this.maxHeight, this.color, 1);
     }
   }
-
 }
 
 
@@ -49,13 +48,18 @@ function movingAvg(xs, w) {
 }
 
 
-function init() {
+function init(adjustSize) {
   canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("content").clientWidth;
+    HEIGHT = window.innerHeight;
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
+
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
-    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
     canvasUtil.clearCanvas(Color.colorString(200, 200, 200));
 
     for (let i=0; i<numRidges; i++) {

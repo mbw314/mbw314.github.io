@@ -1,8 +1,8 @@
 let canvas;
 let ctx;
-const WIDTH = 750;
-const HEIGHT = 750;
-const DIAG = Math.sqrt(WIDTH * WIDTH + HEIGHT * HEIGHT);
+let WIDTH = 750;
+let HEIGHT = 750;
+let DIAG = Math.sqrt(WIDTH * WIDTH + HEIGHT * HEIGHT);
 const NUM_ROWS = 30;
 const NUM_COLS = 30;
 let canvasUtil;
@@ -57,8 +57,8 @@ class VectorField {
     let y0 = (canvasHeight - yMax) / 2;
 
     this.vectors = new Array(this.numRows);
-    for (let i=0; i<this.numRows; i++) {
-      for (let j=0; j<this.numCols; j++) {
+    for (let i=0; i<this.numCols; i++) {
+      for (let j=0; j<this.numRows; j++) {
         let p0 = new Vec2D(i * this.sep + x0, j * this.sep + y0);
         let p1 = p0.plus(new Vec2D(0.9 * this.sep, 0));
         let vel = new Vec2D(0.0, 0.0);
@@ -76,12 +76,12 @@ class VectorField {
   }
 
   trackMouse(gv) {
-    let r = Math.round(255 - 255 * mousePos.y / DIAG);
+    let r = Math.round(255 - 255 * mousePos.y / HEIGHT);
     let g = 0;
-    let b = Math.round(255 * mousePos.x / DIAG);
+    let b = Math.round(255 * mousePos.x / WIDTH);
     let color = Color.colorString(r, g, b);
     // p1 = (mouse - p0) * length + p0
-    let length = 0.9 * Math.min(this.sep, gv.p0.minus(mousePos).norm());
+    let length = 0.85 * Math.min(this.sep, gv.p0.minus(mousePos).norm());
     let p1 = mousePos.minus(gv.p0).toUnitVector().scale(away * length).plus(gv.p0);
     return new GraphicalVector(gv.p0, p1, gv.vel, color);
   }
@@ -95,7 +95,7 @@ class VectorField {
     let accNormSq = acc.normSq();
     let vel = acc.plus(gv.vel);
     let dir = gv.p1.plus(vel).minus(gv.p0).toUnitVector(); // direction of endpoint
-    let length = 0.9 * Math.min(this.sep, dist);
+    let length = 0.85 * Math.min(this.sep, dist);
     let p1 = dir.scale(length).plus(gv.p0);
     let r = Math.round((255 * 2 / Math.PI) * Math.atan(accNormSq));
     let g = 0;
@@ -117,7 +117,7 @@ class VectorField {
       let acc = mouseMinusP0.scale(away * GRAV_CONST / Math.pow(distSq, 1.5) - 1 / boundSq);
       let vel = gv.vel.plus(acc);
       let dir = gv.p1.plus(vel).minus(gv.p0).toUnitVector(); // direction of endpoint
-      let length = 0.9 * Math.min(this.sep, dist);
+      let length = 0.85 * Math.min(this.sep, dist);
       let p1 = dir.scale(length).plus(gv.p0);
       let color = Color.colorString(Math.round(255 - 255 * distSq / boundSq), 0, b);
       return new GraphicalVector(gv.p0, p1, vel, color);
@@ -157,16 +157,21 @@ function ev_mousemove (ev) {
   mousePos.y = mouseY;
 }
 
-function init() {
+function init(adjustSize) {
   canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("content").clientWidth;
+    HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
+
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
-    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
     canvas.addEventListener('mousemove', ev_mousemove, false);
     canvasUtil.clearCanvas();
-    vf = new VectorField(NUM_ROWS, NUM_COLS);
+    vf = new VectorField(parseInt(HEIGHT / 25), parseInt(WIDTH / 25));
     vf.initialize(WIDTH, HEIGHT);
     return setInterval(draw, 10);
   } else {

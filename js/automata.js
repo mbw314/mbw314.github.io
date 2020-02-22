@@ -1,15 +1,13 @@
-var ctx;
-var canvas;
-var WIDTH = 750;
-var HEIGHT = 750;
+let ctx;
+let canvas;
+let WIDTH = 750;
+let HEIGHT = 750;
 let paused = true;
 let ca; // cellular automaton object
-var gridHeight;
-var magnification;
-var colors;
-var colorMatrix;
-
-var oldTimeStamp = 0;
+let gridHeight;
+let magnification;
+let colors;
+let colorMatrix;
 
 const magnifications = {
   '1x': 1,
@@ -207,8 +205,8 @@ function drawNew(numColors, cellConfigKey, initialRowsStyle, magKey) {
   // create a new automaton with given parameters, and draw it
   canvasUtil.clearCanvas();
   magnification = magnifications[magKey];
-  let gridWidth = WIDTH / magnification;
-  gridHeight = HEIGHT / magnification;
+  let gridWidth = parseInt(WIDTH / magnification);
+  gridHeight = parseInt(HEIGHT / magnification);
   let numInitialRows = cellConfigRowNums[cellConfigKey];
   let cellConfig = cellConfigs[cellConfigKey];
   //canvasUtil.println(`drawNew with numColors = ${numColors}; cellConfig = ${cellConfig}; initialRowsStyle = ${initialRowsStyle}; numInitialRows = ${numInitialRows}; magnification = ${magnification}; gridWidth = ${gridWidth}; gridHeight = ${gridHeight}`);
@@ -252,13 +250,18 @@ function draw() {
 }
 
 
-function init() {
+function init(adjustSize) {
   canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = parseInt(document.getElementById("content").clientWidth / 30) * 30;
+    HEIGHT = window.innerHeight - parseInt(1.25 * document.getElementById("controls_table").clientHeight);
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
+
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
-    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT); //, document.outform.output);
     canvasUtil.clearCanvas();
     return setInterval(draw, 20);
   } else {

@@ -1,14 +1,14 @@
 let canvas;
 let ctx;
 let canvasUtil;
-const WIDTH = 750;
-const HEIGHT = 750;
+let WIDTH = 750;
+let HEIGHT = 750;
 let ms;
 
-const X_MIN = -2.0;
-const X_MAX = 1.0;
-const Y_MIN = -1.5
-const Y_MAX = 1.5;
+let X_MIN = -1.75;
+let X_MAX = 0.75;
+let Y_MIN = -1.25
+let Y_MAX = 1.25;
 const RADIUS = 2.0;
 const MAX_ITERATIONS = 175;
 const SCALE_FACTOR = 2.5;
@@ -136,14 +136,29 @@ function resetState() {
   ms.draw(ctx);
 }
 
-function init() {
+function init(adjustSize) {
   canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("content").clientWidth;
+    HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
+  }
   canvas.width = WIDTH;
-  canvas.height = WIDTH;
+  canvas.height = HEIGHT;
+
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     canvasUtil.clearCanvas('black');
+
+    if (HEIGHT < WIDTH) {
+      let xSpan = (Y_MAX - Y_MIN) * WIDTH / HEIGHT;
+      X_MIN = -2 * xSpan / 3;
+      X_MAX = xSpan / 3;
+    } else if (WIDTH < HEIGHT) {
+      let ySpan = (X_MAX - X_MIN) * HEIGHT / WIDTH;
+      Y_MIN = -1 * ySpan / 2;
+      Y_MAX = ySpan / 2;
+    }
 
     canvas.addEventListener('click', function(e) {
         const rect = canvas.getBoundingClientRect()
