@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>N-gon Pattern</title>
+	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+	<link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
+	<script type="text/javascript" src="./js/range.js"></script>
+	<script type="text/javascript" src="./js/timer.js"></script>
+	<script type="text/javascript" src="./js/slider.js"></script>
+  <script type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script type="text/javascript" src="./js/ngons.js"></script>
+</head>
+
+<body onLoad="init();">
+
+<div class="container">
+
+<div class="topsmall">
+
+<div class="topleftsmall">
+   <a href="./index.html">
+	<script type="text/javascript">
+      		showImage("300x50");
+   	</script>
+   </a>
+</div>
+
+<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+
+</div>
+
+<div class="middle">
+
+<h2>N-gon Pattern</h2>
+
+<p>Here's a simple applet that draws regular n-gons on a grid, while allowing the radius,
+number of sides, and angle of rotation of the n-gons, as well as the grid size (separation)
+to change.</p>
+
+<p>Here is a <a href="./n_gons_xl.html">larger version</a> of this program.</p>
+</div>
+
+<div class="middle">
+
+<table border="0" align="center">
+
+<tr>
+	<td><p>Radius:</p></td>
+	<td><div class="slider" id="radSlider" tabIndex="1"><input class="slider-input" id="radSliderInput"/></div></td>
+
+	<td> </td>
+	<td><p>Separation:</p></td>
+	<td><div class="slider" id="sepSlider" tabIndex="1"><input class="slider-input" id="sepSliderInput"/></div></td>
+</tr>
+
+<tr>
+	<td><p>Sides:</p></td>
+	<td><div class="sides" id="sidesSlider" tabIndex="1"><input class="sides-input" id="sidesSliderInput"/></div></td>
+
+	<td> </td>
+
+	<td><p>Angle:</p></td>
+	<td><div class="phase" id="phaseSlider" tabIndex="1"><input class="phase-input" id="phaseSliderInput"/></div></td>
+</tr>
+
+
+</table>
+
+<script type="text/javascript">
+
+var radSl = new Slider(document.getElementById("radSlider"), document.getElementById("radSliderInput"));
+var sepSl = new Slider(document.getElementById("sepSlider"), document.getElementById("sepSliderInput"));
+var sidesSl = new Slider(document.getElementById("sidesSlider"), document.getElementById("sidesSliderInput"));
+var phaseSl = new Slider(document.getElementById("phaseSlider"), document.getElementById("phaseSliderInput"));
+
+radSl.setMinimum(25);
+radSl.setValue(175);
+radSl.setMaximum(300);
+
+sepSl.setMinimum(20);
+sepSl.setValue(100);
+sepSl.setMaximum(400);
+
+sidesSl.setMinimum(3);
+sidesSl.setValue(4);
+sidesSl.setMaximum(10);
+
+phaseSl.setMinimum(0);
+phaseSl.setValue(60);
+phaseSl.setMaximum(360);
+
+radSl.onchange = function() {draw()};
+sepSl.onchange = function() {draw()};
+sidesSl.onchange = function() {draw()};
+phaseSl.onchange = function() {draw()};
+
+window.onresize = function() {
+	radSl.recalculate();
+	sepSl.recalculate();
+	sidesSl.recalculate();
+	phaseSl.recalculate();
+	draw();
+};
+
+
+</script>
+</div>
+
+<div class="middle">
+
+<center>
+<canvas id="canvas" width="750" height="750"></canvas>
+</center>
+
+</div>
+
+
+<div class="bottom">
+<p>last modified: 06/23/2011</p>
+</div>
+
+</div>
+
+</body>
+</html>
