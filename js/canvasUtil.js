@@ -277,3 +277,32 @@ function arrayProduct(xs, ys) {
 function range(n) {
   return [...Array(n).keys()];
 }
+
+class Point3D {
+  constructor(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+  toString() {
+    return `(${this.x}, ${this.y}, ${this.z})`;
+  }
+}
+
+
+class ParametrizedCurve {
+  constructor(p0, updateFn, projectionFn, colorFn) {
+    this.p0 = p0; // Point3D -- initial data for curve
+    this.points = new Array(MAX_POINTS).fill(p0); // array of Point3D objects, e.g., solution of ODE; most recent stored first, at most maxPoints items
+    this.updateFn = updateFn; // function R^3 -> R^3 (e.g, the system of ODE)
+    this.maxPoints = MAX_POINTS;
+    this.projectionFn = projectionFn; // function R^3 -> R^2 mapping space to canvas
+    this.colorFn = colorFn; // function from points array index to color
+    console.log(`initialized with p0=${this.p0}; num points = ${this.points.length}; updateFn = ${updateFn}`);
+  }
+
+  updatePoints() {
+    let pNew = this.updateFn(this.points[0]);
+    this.points = prepend(this.points, pNew);
+  }
+}
