@@ -4,7 +4,7 @@ let canvas;
 let ctx;
 let canvasUtil;
 let paused = false;
-let curve; // ParametrizedCurve object
+let curve; // AnimatedCurve object
 
 let x0 = 1.0;
 let y0 = -1.4;
@@ -50,7 +50,7 @@ function resetDrawing() {
     x0 + Math.random() * 0.1,
     y0 + Math.random() * 0.1,
     z0 + Math.random() * 0.1);
-  curve = new ParametrizedCurve(p0, lorenzUpdate, spaceToScreenXY, colorFn);
+  curve = new AnimatedCurve(p0, lorenzUpdate, spaceToScreenXY, colorFn);
   canvasUtil.clearCanvas();
   canvasUtil.clearText();
   canvasUtil.println(`initial position: (${p0.x.toFixed(3)}, ${p0.y.toFixed(3)}, ${p0.z.toFixed(3)})`);

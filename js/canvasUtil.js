@@ -95,7 +95,7 @@ class Color {
   }
 
   static colorString(r, g, b) {
-    return `rgb(${r}, ${g}, ${b})`;
+    return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
   }
 
   static random() {
@@ -278,6 +278,7 @@ function range(n) {
   return [...Array(n).keys()];
 }
 
+
 class Point3D {
   constructor(x, y, z) {
     this.x = x;
@@ -290,7 +291,7 @@ class Point3D {
 }
 
 
-class ParametrizedCurve {
+class AnimatedCurve {
   constructor(p0, updateFn, projectionFn, colorFn) {
     this.p0 = p0; // Point3D -- initial data for curve
     this.points = new Array(MAX_POINTS).fill(p0); // array of Point3D objects, e.g., solution of ODE; most recent stored first, at most maxPoints items

@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Michael Bradford Williams - Polar curves</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script type="text/javascript" src="./js/range.js"></script>
+  <script type="text/javascript" src="./js/timer.js"></script>
+  <script type="text/javascript" src="./js/slider.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/jscript.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/spiro.js"></script>
+</head>
+
+<body onload="init();">
+<div class="container">
+
+  <div class="topsmall">
+    <div class="topleftsmall">
+       <a href="./index.html">
+      <script type="text/javascript">
+              showImage("300x50");
+         </script>
+       </a>
+    </div>
+    <h1><a href="./index.html">Michael Bradford Williams</a></h1>
+  </div>
+
+  <div class="middle">
+    <h2>Spirographs</h2>
+<p>A <a href="https://en.wikipedia.org/wiki/Spirograph">Spirograph</a> is a well-known toy that
+allows one to draw a variety of curves that follow the trajectory of a point inside a small
+gear that moves inside of a larger gear (with inward facing teeth). The curves have a very
+interesting an long-studied mathematical basis, which is explained well
+<a href="https://en.wikipedia.org/wiki/Spirograph#Mathematical_basis">here</a>.</p>
+
+<p>If we assume that the gears are circles, and the larger circle has radius 1, then let \(k \in [0, 1]\) represent the
+radius of the smaller circle. Let \(\ell \in [0, 1]\) represent the proportional distance from the center of the
+smaller circle to the curve, at the start of the drawing. Then the resulting curve has a nice form (see the
+above link) with \(k\) and \(\ell\) as adjustable parameters:</p>
+<p>
+\[ \begin{align*}
+x(t) &= (1-k) \cos(t) + k \ell \cos\left( \frac{1-k}{k} t \right) \\
+y(t) &= (1-k) \sin(t) + k \ell \sin\left( \frac{1-k}{k} t \right)
+\end{align*} \]
+</p>
+<p>The time parameter \(t\) of the curve can range over all real numbers, but we only need one period of the curve, which is
+\(2\pi\) times the least common multiple of the periods of the trig functions involved.  Also, technically, we
+should have \(k \in [0, 1]\) and \(\ell \in [0, 1]\), but there is no mathematical reason for such restrictions
+in the above equations (except when \(k=0\)).</p>
+
+<p>Below is a program to draw Spirograph-like curves, where \(k\) \(\ell\) can be adjusted. Here is a
+<a href="./spiro_xl.html">larger version</a> of the program.</p>
+
+  </div>
+
+  <div class="middle">
+    <form name="parameters" action="#">
+      <table border="0" align="center">
+        <tr>
+        	<td><p>\(k\)</p></td>
+        	<td><div class="slider" id="speedSlider" tabIndex="1"><input class="slider-input" id="speedSliderInput"/></div></td>
+        	<td> </td>
+        	<td><p>\(\ell\)</p></td>
+        	<td><div class="slider" id="angleSlider" tabIndex="2"><input class="slider-input" id="angleSliderInput"/></div></td>
+          <td> </td>
+          <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td>
+        </tr>
+      </table>
+
+      <script type="text/javascript">
+var speedSl = new Slider(document.getElementById("speedSlider"), document.getElementById("speedSliderInput"));
+speedSl.setMinimum(SLIDER_MIN);
+speedSl.setMaximum(SLIDER_MAX);
+speedSl.setValue(
+  actualToSlider(
+    speedSl.getMinimum(),
+    speedSl.getMaximum(),
+    K_MIN,
+    K_MAX,
+    K_DEFAULT
+  )
+);
+
+var angleSl = new Slider(document.getElementById("angleSlider"), document.getElementById("angleSliderInput"));
+angleSl.setMinimum(SLIDER_MIN);
+angleSl.setMaximum(SLIDER_MAX);
+angleSl.setValue(
+  actualToSlider(
+    angleSl.getMinimum(),
+    angleSl.getMaximum(),
+    L_MIN,
+    L_MAX,
+    L_DEFAULT
+  )
+);
+
+function update() {
+  let dsAvg = sliderToActual(
+    speedSl.getMinimum(),
+    speedSl.getMaximum(),
+    K_MIN,
+    K_MAX,
+    speedSl.getValue()
+  );
+  let angle = sliderToActual(
+    angleSl.getMinimum(),
+    angleSl.getMaximum(),
+    L_MIN,
+    L_MAX,
+    angleSl.getValue()
+  );
+  draw(dsAvg, angle);
+}
+
+speedSl.onchange = update;
+angleSl.onchange = update;
+
+window.onresize = function () {
+  speedSl.recalculate();
+  angleSl.recalculate();
+};
+      </script>
+
+    </form>
+  </div>
+
+  <div class="middle">
+  <center>
+    <canvas id="canvas" width="750" height="750">
+      <p>Your browser is currently unsupported.</p>
+    </canvas>
+  </center>
+  </div>
+
+
+  <div class="middle">
+    <form name="outform" action="#">
+      <textarea rows="5" cols="80" name="output"></textarea>
+    </form>
+  </div>
+
+  <div class="bottom">
+    <p>last modified: 01/01/2020</p>
+  </div>
+
+</div>
+</body>
+</html>
