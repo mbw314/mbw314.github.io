@@ -3,7 +3,6 @@ let HEIGHT = 750;
 let canvas;
 let ctx;
 let canvasUtil;
-let curve; // ParametrizedCurve object
 
 let X_MIN = -1;
 let X_MAX = 1;
