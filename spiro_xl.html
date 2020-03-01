@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Michael Bradford Williams - Spirographs</title>
+  <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script type="text/javascript" src="./js/range.js"></script>
+  <script type="text/javascript" src="./js/timer.js"></script>
+  <script type="text/javascript" src="./js/slider.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/spiro.js"></script>
+</head>
+
+<body onload="init(1);">
+
+<div id="content" width="100%">
+
+<table border="1" align="center" id="controls_table">
+  <tr>
+    <form name="parameters" action="#">
+  	<td><p>Radius:</p></td>
+  	<td><div class="slider" id="kSlider" tabIndex="1"><input class="slider-input" id="kSliderInput"/></div></td>
+  	<td> </td>
+  	<td><p>Separation:</p></td>
+  	<td><div class="slider" id="lSlider" tabIndex="2"><input class="slider-input" id="lSliderInput"/></div></td>
+    <td> </td>
+    <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td></form>
+    <td><form name="outform" action="#">
+      <textarea rows="1" cols="80" name="output"></textarea>
+    </form></td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+var kSlider = new Slider(document.getElementById("kSlider"), document.getElementById("kSliderInput"));
+kSlider.setMinimum(SLIDER_MIN);
+kSlider.setMaximum(SLIDER_MAX);
+kSlider.setValue(
+  actualToSlider(
+    kSlider.getMinimum(),
+    kSlider.getMaximum(),
+    K_MIN,
+    K_MAX,
+    K_DEFAULT
+  )
+);
+
+var lSlider = new Slider(document.getElementById("lSlider"), document.getElementById("lSliderInput"));
+lSlider.setMinimum(SLIDER_MIN);
+lSlider.setMaximum(SLIDER_MAX);
+lSlider.setValue(
+  actualToSlider(
+    lSlider.getMinimum(),
+    lSlider.getMaximum(),
+    L_MIN,
+    L_MAX,
+    L_DEFAULT
+  )
+);
+
+function update() {
+  let dsAvg = sliderToActual(
+    kSlider.getMinimum(),
+    kSlider.getMaximum(),
+    K_MIN,
+    K_MAX,
+    kSlider.getValue()
+  );
+  let angle = sliderToActual(
+    lSlider.getMinimum(),
+    lSlider.getMaximum(),
+    L_MIN,
+    L_MAX,
+    lSlider.getValue()
+  );
+  draw(dsAvg, angle);
+}
+
+kSlider.onchange = update;
+lSlider.onchange = update;
+
+window.onresize = function () {
+  kSlider.recalculate();
+  lSlider.recalculate();
+};
+</script>
+</form>
+
+<canvas id="canvas" width="750" height="500"></canvas>
+
+</div>
+
+</div>
+</body>
+</html>
