@@ -105,7 +105,7 @@ class KMeansEnsemble {
       let p = new Vec2D(Math.random() * WIDTH, Math.random() * HEIGHT);
       let r = Math.round(k * 255 / numCentroids);
       let g = Math.round((numCentroids - k) * 255 / numCentroids);
-      let b = Math.round(Math.random() * 255);
+      let b = Math.floor(Math.random() * 256);
       let c = Color.colorString(r, g, b);
       this.centroids.push(new KMeansCentroid(p, c, CENTROID_RADIUS, k));
     }
