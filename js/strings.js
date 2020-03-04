@@ -56,7 +56,7 @@ function draw() {
 
   if (Math.random() < splitProb && N < splitLimit) {
     canSplit = true;
-    indexToSplit = Math.round(Math.random() * N);
+    indexToSplit = Math.floor(Math.random() * N);
   }
   else {
     canSplit = false;

@@ -2,11 +2,11 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />	
-	<title> </title>	
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Michael Bradford Williams | Random Strings</title>
 	<link rel="shortcut icon" href="favicon.ico" />
     <script type="text/javascript">
-	
+
 var canvas,ctx;
 var width = window.outerWidth;
 var height = window.outerHeight;
@@ -43,7 +43,7 @@ var b_bg = 201;
 var r0 = 120;
 var g0 = 55;
 var b0 = 35;
-		
+
 var r1 = 75;
 var g1 = 135;
 var b1 = 20;
@@ -67,20 +67,20 @@ function init(){
 	// get the canvas element using the DOM
 	canvas = document.getElementById("canvas");
 	canvas.width = width - 35;
-	canvas.height = height - 175;	
+	canvas.height = height - 175;
 	WIDTH = canvas.width;
 	HEIGHT = canvas.height;
-	
+
 	canvasMinX = findPos(canvas)[0];
-	canvasMinY = findPos(canvas)[1];	
-	
+	canvasMinY = findPos(canvas)[1];
+
 	// Make sure we don't execute when canvas isn't supported
 	if (canvas.getContext){
 		// use getContext to use the canvas for drawing
-		ctx = canvas.getContext('2d');	
-		
+		ctx = canvas.getContext('2d');
+
 		// Attach the mousemove event handler.
-		canvas.addEventListener('mousemove', ev_mousemove, false);	
+		canvas.addEventListener('mousemove', ev_mousemove, false);
 
 		// initialize
 		ds[0] = Math.random()*ds_top + ds_var;
@@ -89,18 +89,18 @@ function init(){
 		posYlast[0] = HEIGHT/2;//Math.round(Math.random()*HEIGHT);
 		posXcur[0] = ds[0]*Math.cos(theta[0]) + posXlast[0];
 		posYcur[0] = ds[0]*Math.sin(theta[0]) + posYlast[0];
-		color[0] =  'rgb(' + r0 + ',' + g0 + ',' + b0 + ')';	//"rgb(0,0,0)";						
+		color[0] =  'rgb(' + r0 + ',' + g0 + ',' + b0 + ')';	//"rgb(0,0,0)";
 		bias[0] = 1;
-				
-		// background		
+
+		// background
 		ctx.fillStyle = 'rgb(' + r_bg + ',' + g_bg + ',' + b_bg + ')';
-		ctx.fillRect(0,0,WIDTH,HEIGHT);		
-				
+		ctx.fillRect(0,0,WIDTH,HEIGHT);
+
 		// call the drawing function
-		return setInterval(draw, 10);	
-	} 
+		return setInterval(draw, 10);
+	}
 	else { alert('You need a better web browser to see this.'); }
-}	
+}
 
 
 function rect(x,y,w,h) {
@@ -120,11 +120,11 @@ function drawLine(x0,y0,x1,y1,c) {
 	ctx.moveTo(x0,y0);
 	ctx.lineTo(x1,y1);
 	ctx.closePath();
-	ctx.stroke();	
+	ctx.stroke();
 }
 
 function drawDot(x,y,r,c) {
-	ctx.beginPath();		
+	ctx.beginPath();
 	ctx.fillStyle = c;
 	ctx.arc(x,y,r,0,2*Math.PI,true);
 	ctx.closePath();
@@ -132,17 +132,17 @@ function drawDot(x,y,r,c) {
 }
 
 
-function draw() {	
+function draw() {
 
 	if (Math.random() < split_prob && N < N_MAX) {
 		splitting = true;
-		splitter = Math.round(Math.random()*N);		
+		splitter = Math.floor(Math.random() * N);
 	}
 	else splitting = false;
-	
+
 	var tempN = N;
 	for (var i=0; i<tempN; i++) {
-	
+
 		if (splitting == true && i == splitter) {
 
 			// make arrays longer
@@ -153,109 +153,109 @@ function draw() {
 			posYcur.length++;
 			color.length++;
 			ds.length++;
-			theta.length++;			
+			theta.length++;
 			bias.length++;
-			
-			// fill in last spots of arrays			
+
+			// fill in last spots of arrays
 
 
 			var t = N/N_MAX;
-			
+
 			/*
 			var r = Math.round( r0*(1-t) + r1*t );  // straight-line
 			var g = Math.round( g0*(1-t) + g1*t );
-			var b = Math.round( b0*(1-t) + b1*t );			
+			var b = Math.round( b0*(1-t) + b1*t );
 			*/
-			
-			
+
+
 			var r = Math.round( -1*Math.abs(r1-r0)*Math.pow( 1 - (t-1)*(t-1), 1/2 ) + r0 );
 			var g = Math.round(    Math.abs(g1-g0)*Math.pow( 1 - (t-1)*(t-1), 1/2 ) + g0 );
-			var b = Math.round( -1*Math.abs(b1-b0)*Math.pow( 1 - (t-1)*(t-1), 1/3 ) + b0 );		
+			var b = Math.round( -1*Math.abs(b1-b0)*Math.pow( 1 - (t-1)*(t-1), 1/3 ) + b0 );
 
-			//document.outform.output.value = 'N = ' + N + ', (r,g,b) = (' + r + ',' + g + ',' + b + ')';			
-	
+			//document.outform.output.value = 'N = ' + N + ', (r,g,b) = (' + r + ',' + g + ',' + b + ')';
+
 			color[N-1] = 'rgb(' + r + ',' + g + ',' + b + ')';
 			bias[N-1] = -1*bias[i];
 			theta[i]   = Math.PI/3;
-			theta[N-1] = -1*theta[i]; 
+			theta[N-1] = -1*theta[i];
 			ds[N-1] = Math.random()*ds_top + ds_var;
-			
+
 			posXlast[N-1] = posXlast[i];
 			posYlast[N-1] = posYlast[i];
-			
+
 			posXcur[N-1] = posXcur[i];
 			posYcur[N-1] = posYcur[i]
-			
+
 			var dispX1 = (posXcur[i] - posXlast[i])*Math.cos(theta[i]) - (posYcur[i] - posYlast[i])*Math.sin(theta[i]);
 			var dispY1 = (posXcur[i] - posXlast[i])*Math.sin(theta[i]) + (posYcur[i] - posYlast[i])*Math.cos(theta[i]);
-			
+
 			var norm1 = ds[i]/Math.sqrt( dispX1*dispX1 + dispY1*dispY1 );
-			
+
 			if (posXcur[i] + dispX1*norm1 > WIDTH || posXcur[i] + dispX1*norm1 < 0) {
-				dispX1 = -dispX1;			
+				dispX1 = -dispX1;
 				bias[i] *= -1;
 			}
 			if (posYcur[i] + dispY1*norm1 > HEIGHT || posYcur[i] + dispY1*norm1 < 0) {
 				dispY1 = -dispY1;
-				bias[i] *= -1;				
+				bias[i] *= -1;
 			}
-			
+
 			posXlast[i] = posXcur[i];
 			posXcur[i] += dispX1*norm1;
 			posYlast[i] = posYcur[i];
 			posYcur[i] += dispY1*norm1;
-			
-			
+
+
 			var dispX2 = (posXcur[N-1] - posXlast[N-1])*Math.cos(theta[N-1]) - (posYcur[N-1] - posYlast[N-1])*Math.sin(theta[N-1]);
 			var dispY2 = (posXcur[N-1] - posXlast[N-1])*Math.sin(theta[N-1]) + (posYcur[N-1] - posYlast[N-1])*Math.cos(theta[N-1]);
-						
+
 			var norm2 = ds[N-1]/Math.sqrt( dispX2*dispX2 + dispY2*dispY2 );
-			
+
 			if (posXcur[N-1] + dispX2*norm2 > WIDTH || posXcur[N-1] + dispX2*norm2 < 0) {
-				dispX2 = -dispX2;			
+				dispX2 = -dispX2;
 				bias[N-1] *= -1;
 			}
 			if (posYcur[N-1] + dispY2*norm2 > HEIGHT || posYcur[N-1] + dispY2*norm2 < 0) {
 				dispY2 = -dispY2;
-				bias[N-1] *= -1;				
+				bias[N-1] *= -1;
 			}
-			
+
 			posXlast[N-1] = posXcur[N-1];
 			posXcur[N-1] += dispX2*norm2;
 			posYlast[N-1] = posYcur[N-1];
 			posYcur[N-1] += dispY2*norm2;
-			
+
 		}
-		else {			
+		else {
 			theta[i] = bias[i]*(Math.random()*Math.PI/3 - Math.PI/6);
-	
+
 			if (Math.random() < bias_prob) {
 				bias[0] *= -1;
 				//document.outform.output.value += 'bias changed ';
 			}
-	
+
 			var dispX = (posXcur[i] - posXlast[i])*Math.cos(theta[i]) - (posYcur[i] - posYlast[i])*Math.sin(theta[i]);
 			var dispY = (posXcur[i] - posXlast[i])*Math.sin(theta[i]) + (posYcur[i] - posYlast[i])*Math.cos(theta[i]);
-			
+
 			var norm = ds[i]/Math.sqrt( dispX*dispX + dispY*dispY );
-	
+
 			if (posXcur[i] + dispX*norm > WIDTH || posXcur[i] + dispX*norm < 0) {
-				dispX = -dispX;				
+				dispX = -dispX;
 				bias[i] *= -1;
 			}
 			if (posYcur[i] + dispY*norm > HEIGHT || posYcur[i] + dispY*norm < 0) {
 				dispY = -dispY;
-				bias[i] *= -1;			
+				bias[i] *= -1;
 			}
 
 			posXlast[i] = posXcur[i];
 			posXcur[i] += dispX*norm;
 			posYlast[i] = posYcur[i];
-			posYcur[i] += dispY*norm;	
+			posYcur[i] += dispY*norm;
 		}
-						
-		drawLine(posXlast[i],posYlast[i],posXcur[i],posYcur[i],color[i]);				
-	}			
+
+		drawLine(posXlast[i],posYlast[i],posXcur[i],posYcur[i],color[i]);
+	}
 }
 
 function ev_mousemove (ev) {
@@ -266,27 +266,27 @@ function ev_mousemove (ev) {
 	} else if (ev.offsetX || ev.offsetX == 0) { // Opera
 		x_mouse = ev.offsetX - canvasMinX;
 		y_mouse = ev.offsetY - canvasMinY;
-	}		
+	}
 }
 
 // find the position of the upper-left corner of an object (e.g., the canvase)
 function findPos(obj) {
 	var curLeft = 0;
 	var curTop = 0;
-	
-	if(obj.offsetParent) {		
+
+	if(obj.offsetParent) {
 		do {
 			curLeft += obj.offsetLeft;
 			curTop += obj.offsetTop;
 		} while (obj = obj.offsetParent);
 	}
-	
+
 	return [curLeft,curTop];
 }
 
 
-	</script>	
-</head> 
+	</script>
+</head>
 
 <body onload="init();">
 
@@ -294,10 +294,6 @@ function findPos(obj) {
 <center>
 	<canvas id="canvas" width="750" height="750">
         <p>Your browser is currently unsupported.</p>
-        <p>Supported browsers: <a href="http://www.opera.com">Opera</a>, <a 
-          href="http://www.mozilla.com">Firefox</a>, <a 
-          href="http://www.apple.com/safari">Safari</a>, and <a 
-          href="http://www.konqueror.org">Konqueror</a>.</p>
 	</canvas>
 </center>
 

@@ -79,7 +79,7 @@ class AbstractAutomatonRule {
 
   randomRule() {
     return range(Math.pow(this.numStates, this.numInputs))
-      .map(k => Math.round(Math.random() * this.numStates + 1) % this.numStates);
+      .map(k => Math.floor(Math.random() * this.numStates) % this.numStates);
   }
 
   evaluate(inputs) {
@@ -133,7 +133,7 @@ class CellularAutomaton {
       for (let r=0; r < this.numInitialRows; r++) {
         //this.currentRows[r]
         let row = range(this.width)
-          .map(k => Math.round(Math.random() * this.numStates + 1) % this.numStates);
+          .map(k => Math.floor(Math.random() * this.numStates) % this.numStates);
         rows.push(row);
         //canvasUtil.println(`made this new row: ${row}`);
       }
