@@ -142,11 +142,6 @@ class Particle {
 }
 
 function refreshDrawing() {
-  //canvasUtil.println("refreshing");
-  //N = 1;
-
-  //indexToSplit = 0;
-  //canSplit = false;
   splitProb = 0.035;
 
   //make a new particle: curPos, lastPos, ds, theta, bias, color
