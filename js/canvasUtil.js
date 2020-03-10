@@ -60,6 +60,18 @@ class CanvasUtil {
     this.ctx.stroke();
   }
 
+  drawQuad(x0, y0, x1, y1, cx, cy, color, width, cap) {
+    // draw a line segment from (x0, y0) to (x1, y1) with given color and width
+    this.ctx.beginPath();
+    this.ctx.lineCap = cap;
+    this.ctx.lineWidth = width;
+    this.ctx.strokeStyle = color;
+    this.ctx.moveTo(x0, y0);
+    this.ctx.quadraticCurveTo(cx, cy, x1, y1);
+    this.ctx.closePath();
+    this.ctx.stroke();
+  }
+
   clearCanvas(color) {
     // clear the canvas by drawing a rectangle (with an optional color) with the same dimensions as the canvas
     this.ctx.beginPath();
@@ -82,6 +94,12 @@ class Color {
     this.r = Math.round(red);
     this.g = Math.round(green);
     this.b = Math.round(blue);
+  }
+
+  isEqualTo(other) {
+    return parseInt(Math.round(this.r)) == parseInt(Math.round(other.r))
+      && parseInt(Math.round(this.g)) == parseInt(Math.round(other.g))
+      && parseInt(Math.round(this.b)) == parseInt(Math.round(other.b));
   }
 
   static interpolate(c0, c1, t) {

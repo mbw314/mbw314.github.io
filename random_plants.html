@@ -12,7 +12,7 @@
   <script type="text/javascript" src="./js/timer.js"></script>
   <script type="text/javascript" src="./js/slider.js"></script>
   <script type="text/javascript" src="./js/canvasUtil.js"></script>
-  <script type="text/javascript" src="./js/strings.js"></script>
+  <script type="text/javascript" src="./js/plants.js"></script>
 </head>
 
 <body onload="init();">
@@ -38,14 +38,13 @@
 
 <h2>Random Strings</h2>
 
-<p>In yet another <a href="http://en.wikipedia.org/wiki/Canvas_(HTML_element)">HTML canvas</a> experiment, I tried to model
-(somewhat) random motion.  A single particle moves randomly at a certain speed, while tracing out its path.  It isn't completely random, since its forward direction
-is restricted to a certain angle.  After some random amount of time, the particle splits off into two new ones.  This continues until
-the maximum number of splits has been reached.  At each split, the color of the new particles lightens a bit.</p>
+<p>This experiment is a modification of a <a href="./strings.html">previous one</a>. Instead of strings that
+evolve indefinitely, the strings are branches of a growing plant. The each branch has some thickness that
+decreases over time, and the plant has an upper limit on total "mass" that it can attain. New branches
+form in the same manner as before.</p>
 
-<p>Below are controls for the applet, which should be self-explanatory. Here is a
-<a href="./strings_xl.html">larger version</a> of the program</a>.</p>
-
+<p>Below are controls for the applet, which are the same as before.  There is also a
+<a href="./random_plants_xl.html">larger version</a> of the program.</p>
 </div>
 
 <div class="middle">

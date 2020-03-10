@@ -3,54 +3,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>Michael Bradford Williams | Random Strings</title>
-  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <title>Michael Bradford Williams | Random Plants</title>
   <link rel="shortcut icon" href="favicon.ico" />
   <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
-  <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script type="text/javascript" src="./js/range.js"></script>
   <script type="text/javascript" src="./js/timer.js"></script>
   <script type="text/javascript" src="./js/slider.js"></script>
   <script type="text/javascript" src="./js/canvasUtil.js"></script>
-  <script type="text/javascript" src="./js/strings.js"></script>
+  <script type="text/javascript" src="./js/plants.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
+<div id="content" width="100%">
 
-<div class="container">
-
-<div class="topsmall">
-
-<div class="topleftsmall">
-   <a href="./index.html">
-  <script type="text/javascript">
-          showRandomImage("300x50");
-     </script>
-   </a>
-</div>
-
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
-
-</div>
-
-<div class="middle">
-
-<h2>Random Strings</h2>
-
-<p>In yet another <a href="http://en.wikipedia.org/wiki/Canvas_(HTML_element)">HTML canvas</a> experiment, I tried to model
-(somewhat) random motion.  A single particle moves randomly at a certain speed, while tracing out its path.  It isn't completely random, since its forward direction
-is restricted to a certain angle.  After some random amount of time, the particle splits off into two new ones.  This continues until
-the maximum number of splits has been reached.  At each split, the color of the new particles lightens a bit.</p>
-
-<p>Below are controls for the applet, which should be self-explanatory. Here is a
-<a href="./strings_xl.html">larger version</a> of the program</a>.</p>
-
-</div>
-
-<div class="middle">
-
-<table border="0" cell-padding="0">
+<table border="0" align="center" id="controls_table">
   <tr>
     <td align="right"><p>Maximum Splits:</p></td>
     <td><div class="slider" id="splitSlider" tabIndex="1"><input class="slider-input" id="splitSliderInput"/></div></td>
@@ -199,10 +166,6 @@ window.onresize = function () {
   <textarea rows="10" cols="80" name="output"></textarea>
 </form>
 </center>
-</div>
-
-<div class="bottom">
-<p>last modified: 2/23/2020</p>
 </div>
 
 </div>
