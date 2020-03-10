@@ -178,19 +178,12 @@ function draw() {
     canSplit = true;
     indexToSplit = Math.floor(Math.random() * N);
   }
-  else {
-    canSplit = false;
-  }
 
   let tempN = N;
   for (let i=0; i<tempN; i++) {
     if (canSplit == true && i == indexToSplit) {
       N++;
-      //let t = N / splitLimit;
-      //let newColor = Color.interpolate(BLACK, WHITE, t).toString
-      //= branches[i].color.isEqualTo(START_COLOR) ? END_COLOR : START_COLOR;
-      let newColor = Color.interpolate(branches[i].color, END_COLOR, 0.05); // should be modification of current color
-      //let newWidth = Math.max(branches[i].width - 1, 1);
+      let newColor = Color.interpolate(branches[i].color, END_COLOR, 0.05);
       let newWidth = Math.max(branches[i].width * 0.85, 1);
       branches[i].width = newWidth;
       branches[i].color = newColor;
@@ -236,7 +229,7 @@ function refreshDrawing() {
   let theta0 = 3 * Math.PI / 2;
   let p0 = new Vec2D(0.5 * WIDTH , 0.99 * HEIGHT);
   let dir = new Vec2D(Math.cos(theta0), Math.sin(theta0));
-  let particle = new Branch(
+  let branch = new Branch(
     p0.plus(dir.scale(ds0)),
     p0,
     ds0,
@@ -249,7 +242,7 @@ function refreshDrawing() {
     p0.plus(dir.toUnitVector().scale(MAX_WIDTH / 2).rotate(Math.PI / 2)),
     p0.plus(dir.toUnitVector().scale(MAX_WIDTH / 2).rotate(Math.PI / 2))
   )
-  branches = [particle];
+  branches = [branch];
   canvasUtil.clearCanvas(BG_COLOR.toString());
 }
 

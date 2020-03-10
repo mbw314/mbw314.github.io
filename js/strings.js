@@ -1,24 +1,18 @@
-var canvas;
-var ctx;
-var WIDTH = 750;
-var HEIGHT = 750;
-var canvasUtil;
-var stop = false;
+let canvas;
+let ctx;
+let WIDTH = 750;
+let HEIGHT = 750;
+let canvasUtil;
+let stop = false;
 
-var N = 1;
-var splitLimit = 200;
+let particles = [];
 
-var dsAvg = 0.75;
-var dsVar = 0.35;
-
-var particles = [];
-
-var biasProb = 0.05;
-var angle = Math.PI/3;
-
-var indexToSplit = 0;
-var canSplit = false;
-var splitProb = 0.035;
+let splitLimit = 200;
+let dsAvg = 0.75;
+let dsVar = 0.35;
+let biasProb = 0.05;
+let angle = Math.PI / 4;
+let splitProb = 0.035;
 
 const MAX_WIDTH = 1;
 
@@ -30,19 +24,19 @@ const SLIDER_MIN = 0;
 const SLIDER_MAX = 50;
 
 const SPLIT_LIMIT_MIN = 1;
-const SPLIT_LIMIT_DEFAULT = 200;
+const SPLIT_LIMIT_DEFAULT = splitLimit;
 const SPLIT_LIMIT_MAX = 400;
 
 const SPLIT_PROB_MIN = 0.01;
-const SPLIT_PROB_DEFAULT = 0.03;
+const SPLIT_PROB_DEFAULT = splitProb;
 const SPLIT_PROB_MAX = 0.05;
 
 const SPEED_MIN = 0.05;
-const SPEED_DEFAULT = 1.0;
+const SPEED_DEFAULT = dsAvg;
 const SPEED_MAX = 2.5;
 
 const ANGLE_MIN = Math.PI / 12;
-const ANGLE_DEFAULT = Math.PI / 4;
+const ANGLE_DEFAULT = angle;
 const ANGLE_MAX = 2 * Math.PI / 3;
 
 function stopDrawing() {
@@ -50,23 +44,24 @@ function stopDrawing() {
 }
 
 function draw() {
+  let N = particles.length;
+
   if (stop) {
     return 0;
   }
 
+  let canSplit = false;
+  let indexToSplit = 0;
   if (Math.random() < splitProb && N < splitLimit) {
     canSplit = true;
     indexToSplit = Math.floor(Math.random() * N);
   }
-  else {
-    canSplit = false;
-  }
 
-  var tempN = N;
-  for (var i=0; i<tempN; i++) {
+  let tempN = N;
+  for (let i=0; i<tempN; i++) {
     if (canSplit == true && i == indexToSplit) {
       N++;
-      var t = N / splitLimit;
+      let t = N / splitLimit;
       let newColor = Color.interpolate(BLACK, WHITE, t).toString();
       let newWidth = Math.max(particles[i].width - 1, 1);
       particles[i].width = newWidth;
@@ -148,10 +143,10 @@ class Particle {
 
 function refreshDrawing() {
   //canvasUtil.println("refreshing");
-  N = 1;
+  //N = 1;
 
-  indexToSplit = 0;
-  canSplit = false;
+  //indexToSplit = 0;
+  //canSplit = false;
   splitProb = 0.035;
 
   //make a new particle: curPos, lastPos, ds, theta, bias, color
@@ -173,13 +168,17 @@ function refreshDrawing() {
 }
 
 
-function init() {
+function init(adjustSize) {
   canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("content").clientWidth;
+    HEIGHT = window.innerHeight - parseInt(1.2 * document.getElementById("controls_table").clientHeight);
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
     ctx = canvas.getContext('2d');
-    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
+    canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT); //, document.outform.output);
     refreshDrawing();
     return setInterval(draw, 10);
   }
