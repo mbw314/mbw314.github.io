@@ -98,7 +98,7 @@ class ColorMatrix {
   // represents an image that can be drawn on the canvas
   constructor(matrix, colors) {
     this.matrix = matrix; // double array of integers (=indices of colors array)
-    this.colors = colors; // array of color strings
+    this.colors = colors; // array of Color objects
     this.numRows = matrix.length;
     this.numCols = matrix[0].length;
     //canvasUtil.println(`created new ColorMatrix with size ${this.numRows} x ${this.numCols} and ${this.colors.length} colors`);
@@ -106,11 +106,22 @@ class ColorMatrix {
 
   draw(mag) {
     //canvasUtil.println(`filling color matrix of size ${this.numRows} x ${this.numCols} at magnification ${mag}x`);
+    let imageData = ctx.createImageData(WIDTH, HEIGHT);
     for (let i=0; i < this.numRows; i++) {
       for (let j=0; j < this.numCols; j++) {
-        canvasUtil.drawRect(mag * j, mag * i, mag, mag, this.colors[this.matrix[i][j]]);
+        let color = this.colors[this.matrix[i][j]];
+        for (let mi=0; mi<mag; mi++) {
+          for (let mj=0; mj<mag; mj++) {
+            let pixelIndex = ((i * mag + mi) * WIDTH + (j * mag + mj)) * 4;
+            imageData.data[pixelIndex] = color.r;
+            imageData.data[pixelIndex+1] = color.g;
+            imageData.data[pixelIndex+2] = color.b;
+            imageData.data[pixelIndex+3] = 255; // Alpha
+          }
+        }
       }
     }
+    canvasUtil.ctx.putImageData(imageData, 0, 0);
   }
 }
 
@@ -165,7 +176,6 @@ class CellularAutomaton {
 
   iterate() {
     // get a new row and update the current rows of the grid
-    // TODO: make this more efficient
     let newRow = this.getNewRow();
     if (this.numInitialRows == 1) {
       this.currentRows = [newRow];
@@ -178,25 +188,18 @@ class CellularAutomaton {
 
   fillColorMatrix(numRows) {
     // produce full ColorMatrix from the current system
-    // TODO: make this more efficient
-    let t0 = (new Date()).getTime();
     let rows = this.currentRows;
     for (let i=this.currentRows.length; i < numRows; i++) {
       rows.push(this.iterate());
     }
-    let t1 =(new Date()).getTime();
-    //canvasUtil.println(`generated color matrix in ${t1 - t0} milliseconds`);
     colorMatrix = new ColorMatrix(rows, this.states);
   }
 
   iterateColorMatrix() {
     // perform an iteration on the existing ColorMatrix
-    let t0 =(new Date()).getTime();
     let newRow = this.iterate();
     let temp = colorMatrix.matrix.shift();
     colorMatrix.matrix = colorMatrix.matrix.concat([newRow]);
-    let t1 =(new Date()).getTime();
-    //canvasUtil.println(`generated color matrix in ${t1 - t0} milliseconds`);
   }
 }
 
@@ -210,7 +213,7 @@ function drawNew(numColors, cellConfigKey, initialRowsStyle, magKey) {
   let numInitialRows = cellConfigRowNums[cellConfigKey];
   let cellConfig = cellConfigs[cellConfigKey];
   //canvasUtil.println(`drawNew with numColors = ${numColors}; cellConfig = ${cellConfig}; initialRowsStyle = ${initialRowsStyle}; numInitialRows = ${numInitialRows}; magnification = ${magnification}; gridWidth = ${gridWidth}; gridHeight = ${gridHeight}`);
-  colors = range(6).map(i => Color.random().toString());
+  colors = range(6).map(i => Color.random());
   ca = new CellularAutomaton(colors.slice(0, numColors), gridWidth, numInitialRows, cellConfig);
   ca.initialize(initialRowsStyle);
   ca.fillColorMatrix(gridHeight);
@@ -245,8 +248,12 @@ function draw() {
     return 0;
   }
   canvasUtil.clearCanvas();
+  let t0 =(new Date()).getTime();
   ca.iterateColorMatrix();
+  let t1 = (new Date()).getTime();
   colorMatrix.draw(magnification);
+  let t2 = (new Date()).getTime();
+  //console.log(`new frame: iterated in ${t1 - t0} ms; drew in ${t2 - t1} ms`);
 }
 
 
