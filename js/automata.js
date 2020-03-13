@@ -22,36 +22,37 @@ const firstRowsStyles = {
   "CENTERED": "CENTERED"
 }
 
+// for a given cell configuration, specify which cells--relative to (i, j)--are needed to determine a rule
 const cellConfigs = {
-  "TWO_ABOVE": [
-    (i, j) => [i - 1, j],
-    (i, j) => [i - 1, j + 1],
+  "TWO_ABOVE": (i, j) => [
+      [i - 1, j],
+      [i - 1, j + 1],
   ],
-  "THREE_ABOVE": [
-    (i, j) => [i - 1, j - 1],
-    (i, j) => [i - 1, j],
-    (i, j) => [i - 1, j + 1],
+  "THREE_ABOVE": (i, j) => [
+    [i - 1, j - 1],
+    [i - 1, j],
+    [i - 1, j + 1],
   ],
-  "FIVE_ABOVE": [
-    (i, j) => [i - 1, j - 2],
-    (i, j) => [i - 1, j - 1],
-    (i, j) => [i - 1, j],
-    (i, j) => [i - 1, j - 1],
-    (i, j) => [i - 1, j - 2],
+  "FIVE_ABOVE": (i, j) => [
+    [i - 1, j - 2],
+    [i - 1, j - 1],
+    [i - 1, j],
+    [i - 1, j - 1],
+    [i - 1, j - 2],
   ],
-  "THREE_AND_ONE_ABOVE": [
-    (i, j) => [i - 1, j - 1],
-    (i, j) => [i - 1, j],
-    (i, j) => [i - 1, j + 1],
-    (i, j) => [i - 2, j],
+  "THREE_AND_ONE_ABOVE": (i, j) => [
+    [i - 1, j - 1],
+    [i - 1, j],
+    [i - 1, j + 1],
+    [i - 2, j],
   ],
-  "THREE_AND_THREE_ABOVE": [
-    (i, j) => [i - 1, j - 1],
-    (i, j) => [i - 1, j],
-    (i, j) => [i - 1, j + 1],
-    (i, j) => [i - 2, j - 1],
-    (i, j) => [i - 2, j],
-    (i, j) => [i - 2, j + 1],
+  "THREE_AND_THREE_ABOVE": (i, j) => [
+    [i - 1, j - 1],
+    [i - 1, j],
+    [i - 1, j + 1],
+    [i - 2, j - 1],
+    [i - 2, j],
+    [i - 2, j + 1],
   ]
 }
 
@@ -115,13 +116,13 @@ class ColorMatrix {
 
 
 class CellularAutomaton {
-  // encapsulates data needed to store visualize a cellular automaton
+  // encapsulates data needed to visualize a cellular automaton
   constructor(states, width, numInitialRows, cellMappings) {
     this.states = states; // array of states e.g., colors
     this.numStates = this.states.length;
     this.width = width;
-    this.cellMappings = cellMappings; // array of functions (i, j) -> f(i, j) that indicate which cells to use as input for the automata rule
-    this.automata = new AbstractAutomatonRule(states.length, cellMappings.length);
+    this.cellMappings = cellMappings; // function (i, j) -> Array of f(i, j) that indicate which cells to use as input for the automata rule
+    this.automata = new AbstractAutomatonRule(states.length, cellMappings(0, 0).length);
     this.numInitialRows = numInitialRows;
     this.currentRows; // matrix of states (indexes of states array) for rows needed to apply the automata rule
   }
@@ -153,8 +154,7 @@ class CellularAutomaton {
     let i = this.currentRows.length;
     let row = [];
     for (let j=0; j < this.width; j++) {
-      let inputs =  this.cellMappings
-        .map(f => f(i, j))
+      let inputs =  this.cellMappings(i, j)
         .map(indices => this.currentRows[indices[0].mod(this.width)][indices[1].mod(this.width)]);
       //console.log(inputs);
       let newState = this.automata.evaluate(inputs);
@@ -222,8 +222,8 @@ function refresh(initialRowsStyle, magKey) {
   // keep the current automaton rule, but update some image parameters, and draw it
   canvasUtil.clearCanvas();
   magnification = magnifications[magKey];
-  let gridWidth = WIDTH / magnification;
-  gridHeight = HEIGHT / magnification;
+  let gridWidth = parseInt(WIDTH / magnification);
+  gridHeight = parseInt(HEIGHT / magnification);
   //canvasUtil.println(`refresh with initialRowsStyle = ${initialRowsStyle}; cellConfig = ${cellConfig}; magnification = ${magnification}; gridWidth = ${gridWidth}; gridHeight = ${gridHeight}`);
   ca.width = gridWidth;
   ca.initialize(initialRowsStyle);
