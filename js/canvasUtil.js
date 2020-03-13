@@ -126,6 +126,11 @@ class Color {
   toString() {
     return `rgb(${this.r}, ${this.g}, ${this.b})`;
   }
+
+  static rgbFromString(s) {
+    let rgb = s.split(', ');
+    return [parseInt(rgb[0].slice(4)), parseInt(rgb[1]), parseInt(rgb[2])];
+  }
 }
 
 
