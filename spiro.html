@@ -34,15 +34,16 @@
   <div class="middle">
     <h2>Spirographs</h2>
 <p>A <a href="https://en.wikipedia.org/wiki/Spirograph">Spirograph</a> is a well-known toy that
-allows one to draw a variety of curves that follow the trajectory of a point inside a small
+allows one to draw a variety of beautiful curves. Each curve follows the trajectory of a point inside a small
 gear that moves inside of a larger gear (with inward facing teeth). The curves have a very
-interesting an long-studied mathematical basis, which is explained well
+interesting and long-studied mathematical basis, which is explained well
 <a href="https://en.wikipedia.org/wiki/Spirograph#Mathematical_basis">here</a>.</p>
 
 <p>If we assume that the gears are circles, and the larger circle has radius 1, then let \(k \in [0, 1]\) represent the
 radius of the smaller circle. Let \(\ell \in [0, 1]\) represent the proportional distance from the center of the
-smaller circle to the curve, at the start of the drawing. Then the resulting curve has a nice form (see the
-above link) with \(k\) and \(\ell\) as adjustable parameters:</p>
+smaller circle to the curve, at the start of the drawing. Then the resulting curve can be parametrized
+by time: \(c(t) = (x(t), y(t))\). It turns out that the functions \(x(t)\) and \(y(t)\) have a nice form (see the
+above link for a derivation) with \(k\) and \(\ell\) as additional adjustable parameters:</p>
 <p>
 \[ \begin{align*}
 x(t) &= (1-k) \cos(t) + k \ell \cos\left( \frac{1-k}{k} t \right) \\
@@ -54,7 +55,7 @@ y(t) &= (1-k) \sin(t) + k \ell \sin\left( \frac{1-k}{k} t \right)
 should have \(k \in [0, 1]\) and \(\ell \in [0, 1]\), but there is no mathematical reason for such restrictions
 in the above equations (except when \(k=0\)).</p>
 
-<p>Below is a program to draw Spirograph-like curves, where \(k\) \(\ell\) can be adjusted. Here is a
+<p>Below is a program to draw Spirograph-like curves, where \(k\) and \(\ell\) can be adjusted. Here is a
 <a href="./spiro_xl.html">larger version</a> of the program.</p>
 
   </div>
@@ -140,9 +141,11 @@ window.onresize = function () {
 
 
   <div class="middle">
+    <center>
     <form name="outform" action="#">
-      <textarea rows="5" cols="80" name="output"></textarea>
+      <textarea rows="1" cols="80" name="output"></textarea>
     </form>
+  </center>
   </div>
 
   <div class="bottom">

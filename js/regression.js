@@ -1,5 +1,3 @@
-let canvas;
-let ctx;
 const WIDTH = 750;
 const HEIGHT = 750;
 let canvasUtil;
@@ -12,7 +10,6 @@ const POINT_RADIUS = 4;
 const RESIDUAL_COLOR = 'red';
 const RESIDUAL_WIDTH = 1;
 const INITIAL_FN = x => 0.5 * x * x * x - 0.2 * x * x - 0.1 * x + 0.65;
-//x => 0.424 + 3.115 * x - 8.575 * x * x + 5.35938 * x * x * x; //x => 1.5 * x * (1 - x) + 0.25; //x => 0.424 + 3.115 * x - 8.575 * x * x + 5.35938 * x * x * x; ;  //x =>  1.5 * x * (1 - x) + 0.25;//x => 0.29 + 0.47 * x; //
 let re; // RegressionEnsemble object;
 
 
@@ -59,7 +56,7 @@ class RegressionEnsemble {
   }
 
   initPoints(targetFn) {
-    // create points near the line y = f(x) (using provided parameters) inside [-1, 1] x [-1, 1]
+    // create points near the line y = f(x) (using provided parameters) inside [-1, 1] x R
     let points = [];
     for (let i=0; i<this.numPoints; i++) {
       let newX = 2 * Math.random() - 1;
@@ -215,11 +212,11 @@ function draw() {
 }
 
 function init() {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext) {
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     reg_type = document.controls.regtype.value;
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     refreshData();

@@ -1,7 +1,5 @@
 const WIDTH = 750;
 const HEIGHT = 750;
-let canvas;
-let ctx;
 let canvasUtil;
 let sysDrawer;
 const MAX_ITERATIONS = 8;
@@ -507,7 +505,7 @@ const default_actions = {
 function draw_iteration() {
   // draw another iteration of the current LSystem when the 'draw next iteration' button is pressed
   sysDrawer.iterate();
-  sysDrawer.draw(ctx);
+  sysDrawer.draw();
 }
 
 function load_example(ex) {
@@ -521,11 +519,11 @@ function load_example(ex) {
 }
 
 function init() {
-  canvas = document.getElementById('canvas');
+  let canvas = document.getElementById('canvas');
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext) {
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     load_example('ex1');
   }

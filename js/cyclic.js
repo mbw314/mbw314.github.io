@@ -1,10 +1,8 @@
-let canvas;
-let ctx;
 let WIDTH = 750;
 let HEIGHT = 750;
 let canvasUtil;
 let paused = false;
-const NUM_POINTS = 512; //537;
+const NUM_POINTS = 512;
 let t = 0;
 const BLACK = new Color(0, 0, 0);
 const WHITE = new Color(255, 255, 255);
@@ -20,11 +18,6 @@ function draw() {
     return 0;
   }
 
-  canvasUtil.clearCanvas();
-
-  //let time = new Date();
-  //let ms = 10 * Math.round(time.getMilliseconds() / 10);
-
   // nice pictures version, animated, lower time interval
   t = (t + 0.00005) % NUM_POINTS;
   let t1 = t * (NUM_POINTS - t);
@@ -38,7 +31,10 @@ function draw() {
   // let f = i => (t * i) % NUM_POINTS; // linear in i, change slope with time, mix of patterns and chaos
   // console.log(`map: i -> ${t} * i`);
 
+  canvasUtil.clearCanvas();
   createImage(f);
+  canvasUtil.clearText();
+  canvasUtil.println(`Endomorphism parameter c = ${parseInt(t1)}`);
 }
 
 
@@ -67,7 +63,7 @@ function createImage(f) {
 
 
 function init(adjustSize) {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
     WIDTH = document.getElementById("content").clientWidth;
     HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
@@ -75,7 +71,7 @@ function init(adjustSize) {
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     canvasUtil.clearCanvas();
     return setInterval(draw, 5);

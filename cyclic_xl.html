@@ -12,31 +12,21 @@
 <body onload="init(1);">
 
 <div id="content" width="100%">
+  <table border="0" align="center" id="controls_table">
+    <tr>
+      <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
+      <td><form name="outform" action="#">
+        <textarea rows="1" cols="50" name="output"></textarea>
+      </form></td>
+    </tr>
+  </table>
 
-<table border="0" align="center" id="controls_table">
-  <tr>
-    <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
-  </tr>
-</table>
-
+  <center>
+    <canvas id="canvas" width="750" height="500">
+      <p>Your browser is currently unsupported.</p>
+    </canvas>
+  </center>
 </div>
 
-<div class="middle">
-<center>
-  <canvas id="canvas" width="750" height="500">
-    <p>Your browser is currently unsupported.</p>
-  </canvas>
-</center>
-</div>
-
-
-<div class="middle">
-  <form name="outform" action="#">
-    <textarea rows="1" cols="80" name="output"></textarea>
-  </form>
-</div>
-
-
-</div>
 </body>
 </html>

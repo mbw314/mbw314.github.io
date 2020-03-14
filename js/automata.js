@@ -1,5 +1,4 @@
-let ctx;
-let canvas;
+let canvasUtil;
 let WIDTH = 750;
 let HEIGHT = 750;
 let paused = true;
@@ -106,7 +105,7 @@ class ColorMatrix {
 
   draw(mag) {
     //canvasUtil.println(`filling color matrix of size ${this.numRows} x ${this.numCols} at magnification ${mag}x`);
-    let imageData = ctx.createImageData(WIDTH, HEIGHT);
+    let imageData = canvasUtil.ctx.createImageData(WIDTH, HEIGHT);
     for (let i=0; i < this.numRows; i++) {
       for (let j=0; j < this.numCols; j++) {
         let color = this.colors[this.matrix[i][j]];
@@ -258,16 +257,16 @@ function draw() {
 
 
 function init(adjustSize) {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = parseInt(document.getElementById("content").clientWidth / 30) * 30;
+    WIDTH = parseInt(document.getElementById("content").clientWidth / 30) * 30; // round width to 30 = LCM of magnification values
     HEIGHT = window.innerHeight - parseInt(1.25 * document.getElementById("controls_table").clientHeight);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
 
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT); //, document.outform.output);
     canvasUtil.clearCanvas();
     return setInterval(draw, 20);

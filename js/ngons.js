@@ -1,4 +1,3 @@
-let ctx;
 let WIDTH = 750;
 let HEIGHT = 750;
 let canvasUtil;
@@ -31,18 +30,18 @@ function drawNGon(numSides, centerX, centerY, rad, phi) {
   let x0 = rad * Math.cos(phi) + centerX;
   let y0 = rad * Math.sin(phi) + centerY;
 
-  ctx.beginPath();
-  ctx.moveTo(x0, y0);
+  canvasUtil.ctx.beginPath();
+  canvasUtil.ctx.moveTo(x0, y0);
 
   // connect the Nth roots of unity, properly rotated, scaled, and translated
   for (let k=0; k<numSides; k++) {
     let x = centerX + rad * Math.cos(k * 2 * Math.PI / numSides + phi);
     let y = centerY + rad * Math.sin(k * 2 * Math.PI / numSides + phi);
-    ctx.lineTo(x, y);
+    canvasUtil.ctx.lineTo(x, y);
   }
 
-  ctx.lineTo(x0, y0);
-  ctx.stroke();
+  canvasUtil.ctx.lineTo(x0, y0);
+  canvasUtil.ctx.stroke();
 }
 
 function init(adjustSize) {
@@ -54,7 +53,7 @@ function init(adjustSize) {
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
     draw();
   }

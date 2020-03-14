@@ -1,7 +1,6 @@
 const WIDTH = 750;
 const HEIGHT = 750;
-let canvas;
-let ctx;
+let canvasUtil;
 
 const MAX_ITER = 10;
 const x0 = WIDTH / 2;
@@ -32,12 +31,14 @@ class CircleFractal {
       let r = r0 / numCircles;
       let x = x0 - r0 + (2 * i + 1) * r;
       let clockwise = i % 2 == 1; // clockwise or anticlockwise -- alternate up and down
-      ctx.fillStyle = this.getColor(i).toString();
-      ctx.beginPath();
-      ctx.arc(x, y0, r, 0, THETA, clockwise);
-      ctx.closePath();
-      ctx.fill();
+      canvasUtil.ctx.fillStyle = this.getColor(i).toString();
+      canvasUtil.ctx.beginPath();
+      canvasUtil.ctx.arc(x, y0, r, 0, THETA, clockwise);
+      canvasUtil.ctx.closePath();
+      canvasUtil.ctx.fill();
     }
+    canvasUtil.clearText();
+    canvasUtil.println(`Iteration ${this.iteration}`);
     this.iteration += 1;
   }
 }
@@ -54,12 +55,12 @@ function iterate() {
   circleFractal.iterateAndDraw();
 }
 
-function init(){
-  canvas = document.getElementById("canvas");
+function init() {
+  let canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     refreshData();
   }
