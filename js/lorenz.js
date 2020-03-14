@@ -1,7 +1,5 @@
 let WIDTH = 750;
 let HEIGHT = 750;
-let canvas;
-let ctx;
 let canvasUtil;
 let paused = false;
 let curve; // AnimatedCurve object
@@ -113,7 +111,7 @@ function prepend(a, item) {
 }
 
 function init(adjustSize) {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
     WIDTH = document.getElementById("content").clientWidth;
     HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
@@ -122,7 +120,7 @@ function init(adjustSize) {
   canvas.height = HEIGHT;
 
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     resetDrawing();
     return setInterval(draw, 50);

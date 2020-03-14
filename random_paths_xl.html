@@ -13,27 +13,25 @@
 <body onload="init(1);">
 
 <div id="content" width="100%">
+  <table border="0" align="center" id="controls_table">
+    <form name="controls">
+    <tr>
+    	<td colspan="1" align="right">Graph:</td>
+    	<td colspan="1" align="center">
+    	    <select id="graph">
+    			<option value="grid" selected>rectangular grid</option>
+    			<option value="tri_grid">triangular grid</option>
+    			<option value="hex_grid">hexagonal grid</option>
+    		</select></td>
+    	<td colspan="1" align="center">
+    	    <input type="button" name="draw" value="Draw" onClick="updateGraph(controls.graph.value);"></td>
+      <td colspan="1" align="center">
+          <input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
+    </tr>
+    </form>
+  </table>
 
-<table border="0" align="center" id="controls_table">
-<form name="controls">
-<tr>
-	<td colspan="1" align="right">Graph:</td>
-	<td colspan="1" align="center">
-	    <select id="graph">
-			<option value="grid" selected>rectangular grid</option>
-			<option value="tri_grid">triangular grid</option>
-			<option value="hex_grid">hexagonal grid</option>
-		</select></td>
-	<td colspan="1" align="center">
-	    <input type="button" name="draw" value="Draw" onClick="updateGraph(controls.graph.value);"></td>
-  <td colspan="1" align="center">
-      <input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
-</tr>
-</form>
-</table>
-
-<canvas id="canvas" width="750" height="750"></canvas>
-
+  <canvas id="canvas" width="750" height="750"></canvas>
 </div>
 
 </body>

@@ -1,5 +1,3 @@
-let canvas;
-let ctx;
 let WIDTH = 750;
 let HEIGHT = 750;
 let canvasUtil;
@@ -168,7 +166,7 @@ function updateGraph(type) {
 
 
 function init(adjustSize) {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
     WIDTH = document.getElementById("content").clientWidth;
     HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
@@ -178,8 +176,7 @@ function init(adjustSize) {
 
   console.log(`${WIDTH} ${HEIGHT}`);
   if (canvas.getContext){
-    console.log("got context");
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
     canvasUtil.clearCanvas(BG_COLOR);
     updateGraph('grid');

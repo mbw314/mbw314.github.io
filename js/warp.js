@@ -1,5 +1,3 @@
-let canvas;
-let ctx;
 let WIDTH = 750;
 let HEIGHT = 750;
 let canvasUtil;
@@ -59,11 +57,11 @@ function draw() {
 
 
 function init() {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     canvasUtil.clearCanvas();
     //canvas.addEventListener('mousemove', ev_mousemove, false);

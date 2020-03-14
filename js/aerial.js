@@ -1,5 +1,3 @@
-let canvas;
-let ctx;
 let WIDTH = 1500;
 let HEIGHT = 750;
 let canvasUtil;
@@ -49,7 +47,7 @@ function movingAvg(xs, w) {
 
 
 function init(adjustSize) {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
     WIDTH = document.getElementById("content").clientWidth;
     HEIGHT = window.innerHeight;
@@ -58,7 +56,7 @@ function init(adjustSize) {
   canvas.height = HEIGHT;
 
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
     canvasUtil.clearCanvas(Color.colorString(200, 200, 200));
 

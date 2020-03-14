@@ -1,7 +1,5 @@
 const WIDTH = 750;
 const HEIGHT = 750;
-let canvas;
-let ctx;
 let canvasUtil;
 let kme; // k-means ensemble
 const BLACK = Color.colorString(0, 0, 0);
@@ -187,11 +185,11 @@ function iterate() {
 }
 
 function init() {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     kme = new KMeansEnsemble();
     refreshData();

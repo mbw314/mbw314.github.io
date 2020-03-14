@@ -1,9 +1,7 @@
-let canvas;
-let ctx;
 let canvasUtil;
 let WIDTH = 750;
 let HEIGHT = 750;
-let ms;
+let ms; // MandelbrotSet object
 
 let X_MIN = -1.75;
 let X_MAX = 0.75;
@@ -60,9 +58,8 @@ class MandelbrotSet {
   }
 
   draw(ctx) {
-    let imageData = ctx.createImageData(this.canvasWidth, this.canvasHeight);
-    canvasUtil.println(this.toString());
-    let time0 = (new Date()).getTime();
+    let imageData = canvasUtil.ctx.createImageData(this.canvasWidth, this.canvasHeight);
+    let t0 = (new Date()).getTime();
     let radius_sq = this.radius * this.radius;
     let xScale = (this.xMax - this.xMin) / this.canvasWidth;
     let yScale = (this.yMax - this.yMin) / this.canvasHeight;
@@ -95,10 +92,11 @@ class MandelbrotSet {
         imageData.data[pixelIndex+3] = 255;   // Alpha
       }
     }
-    ctx.putImageData(imageData, 0, 0);
-    let time1 = (new Date()).getTime();
-    let delta_t = time1 - time0;
-    canvasUtil.println("Drawing completed in " + delta_t + " milliseconds.");
+    canvasUtil.ctx.putImageData(imageData, 0, 0);
+    let t1 = (new Date()).getTime();
+    canvasUtil.clearText();
+    canvasUtil.println(this.toString());
+    canvasUtil.println(`Drawing completed in ${t1 - t0} milliseconds.`);
   }
 }
 
@@ -126,27 +124,27 @@ function zoom(x0, y0) {
   ms.yMin = y - new_half_height;
   ms.yMax = y + new_half_height;
 
-  ms.draw(ctx);
+  ms.draw();
   zoomExp = -1;
 }
 
 function resetState() {
   canvasUtil.clearCanvas('black');
   ms = new MandelbrotSet({});
-  ms.draw(ctx);
+  ms.draw();
 }
 
 function init(adjustSize) {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
     WIDTH = document.getElementById("content").clientWidth;
-    HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
+    HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls_table").clientHeight);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
 
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     canvasUtil.clearCanvas('black');
 

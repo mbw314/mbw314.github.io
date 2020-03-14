@@ -1,33 +1,31 @@
-var canvas;
-var ctx;
-var WIDTH = 750;
-var HEIGHT = 750;
-var canvasUtil;
-var ensemble;
-var paused = false;
+let WIDTH = 750;
+let HEIGHT = 750;
+let canvasUtil;
+let ensemble;
+let paused = false;
 
 const ATTRACTOR_COLOR = "black";
 
-var SPEED_MAX = 20;
-var ACC_MAX = 1;
-var PARTICLE_MASS_MAX = 5;
+const SPEED_MAX = 20;
+const ACC_MAX = 1;
+const PARTICLE_MASS_MAX = 5;
 
-var NUM_PARTICLES_MIN = 1;
-var NUM_PARTICLES = 2;
-var NUM_PARTICLES_MAX = 10;
+const NUM_PARTICLES_MIN = 1;
+let NUM_PARTICLES = 2;
+const NUM_PARTICLES_MAX = 10;
 
-var NUM_ATTRACTORS_MIN = 1;
-var NUM_ATTRACTORS = 2;
-var NUM_ATTRACTORS_MAX = 5;
+const NUM_ATTRACTORS_MIN = 1;
+let NUM_ATTRACTORS = 2;
+const NUM_ATTRACTORS_MAX = 5;
 
-var TAIL = 10;
+let TAIL = 10;
 
-var ATT_MASS_MIN = 100;
-var ATT_MASS_MOD = 300;
+let ATT_MASS_MIN = 100;
+let ATT_MASS_MOD = 300;
 
-var G_POW_MIN = 1;
-var G_POW = 5;
-var G_POW_MAX = 10;
+const G_POW_MIN = 1;
+let G_POW = 5;
+const G_POW_MAX = 10;
 
 
 function pauseDrawing() {
@@ -93,14 +91,14 @@ class Particle {
   draw() {
     // to create a tail effect, draw history of positions with older => smaller
     // this doesn't fit too easily into the CanvasUtil framework :/
-    ctx.beginPath();
-    ctx.fillStyle = this.color;
+    canvasUtil.ctx.beginPath();
+    canvasUtil.ctx.fillStyle = this.color;
     for (let j=0; j<this.tail_len; j++) {
       let radius = 2 * this.mass * (this.tail_len - j) / this.tail_len;
-      ctx.arc(this.ps[j].x, this.ps[j].y, radius, 0, 2 * Math.PI, true);
+      canvasUtil.ctx.arc(this.ps[j].x, this.ps[j].y, radius, 0, 2 * Math.PI, true);
     }
-    ctx.closePath();
-    ctx.fill();
+    canvasUtil.ctx.closePath();
+    canvasUtil.ctx.fill();
   }
 
   static makeRandom(n) {
@@ -171,7 +169,7 @@ class Ensemble {
       }
 
       if (document.getElementById("massive").value == 0) {
-        for (var j=0; j<NUM_PARTICLES; j++) {
+        for (let j=0; j<NUM_PARTICLES; j++) {
           if (j != i) {
             let r = this.particles[i].ps[0].minus(this.particles[j].ps[0]);
             this.particles[i].acc = r.scale(-1.0 * G * this.particles[j].mass / Math.pow(r.normSq(), 1.5)).plus(this.particles[i].acc);
@@ -223,7 +221,7 @@ function draw() {
 
 
 function init(adjustSize){
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
     WIDTH = document.getElementById("content").clientWidth;
     HEIGHT = window.innerHeight - parseInt(1.2 * document.getElementById("controls_table").clientHeight);
@@ -231,7 +229,7 @@ function init(adjustSize){
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT); //, document.outform.output);
     ensemble = Ensemble.makeRandom(NUM_PARTICLES_MAX, NUM_ATTRACTORS_MAX);
     return setInterval(draw, 5);

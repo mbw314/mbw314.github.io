@@ -1,9 +1,12 @@
 let WIDTH = 750;
 let HEIGHT = 500;
-let canvas;
 let canvasUtil;
-let ctx;
-let mouseX, mouseY, dragHoldX, dragHoldY, mouseDragX, mouseDragY;
+let mouseX;
+let mouseY;
+let dragHoldX;
+let dragHoldY;
+let mouseDragX;
+let mouseDragY;
 
 let g;
 let dragging = false;
@@ -233,11 +236,11 @@ function updateGraph(type, n, m) {
 }
 
 function init() {
-  canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("canvas");
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext) {
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
 
     // Attach the event handlers

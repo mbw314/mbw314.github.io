@@ -12,30 +12,28 @@
 <body onload="init(1);">
 
 <div id="content" width="100%">
+  <table border="0" align="center" id="controls_table">
+  <form name="controls">
+  <tr>
+    <td>Style:</td>
+    <td><select id="style">
+        <option value="0" selected>constant attractor force</option>
+        <option value="1">bounded force + remembering vectors</option>
+        <option value="2">gravity-like force</option>
+        <!--<option value="3">gravity-like force with global gravity</option>-->
+      </select></td>
+      <td> </td>
+    <td>Direction:</td>
+    <td><select id="direction">
+        <option value="1" selected>towards</option>
+        <option value="-1">away</option>
+      </select></td>
+      <td> </td>
+  </tr>
+  </form>
+  </table>
 
-<table border="0" align="center" id="controls_table">
-<form name="controls">
-<tr>
-  <td>Style:</td>
-  <td><select id="style">
-      <option value="0" selected>constant attractor force</option>
-      <option value="1">bounded force + remembering vectors</option>
-      <option value="2">gravity-like force</option>
-      <!--<option value="3">gravity-like force with global gravity</option>-->
-    </select></td>
-    <td> </td>
-  <td>Direction:</td>
-  <td><select id="direction">
-      <option value="1" selected>towards</option>
-      <option value="-1">away</option>
-    </select></td>
-    <td> </td>
-</tr>
-</form>
-</table>
-
-<canvas id="canvas" width="750" height="750"></canvas>
-
+  <canvas id="canvas" width="750" height="750"></canvas>
 </div>
 
 </body>

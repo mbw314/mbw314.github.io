@@ -12,25 +12,24 @@
 <body onload="init(1);">
 
 <div id="content" width="100%">
+  <table border="0" align="center" id="controls_table">
+    <tr>
+    <form name="parameters" action="#">
+      <td colspan="1" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
+      <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td>
+      <td colspan="1" align="center">Perspective:<select name="projection">
+         <option value="xy" selected="selected">xy-plane</option>
+         <option value="xz">xz-plane</option>
+         <option value="yz">yz-plane</option>
+       </select></td>
+    </form>
+    <form name="outform" action="#">
+      <td><textarea rows="2" cols="80" name="output"></textarea></td>
+    </form>
+  </table>
 
-<table border="0" align="center" id="controls_table">
-  <tr>
-  <form name="parameters" action="#">
-    <td colspan="1" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
-    <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td>
-    <td colspan="1" align="center"><select name="projection">
-       <option value="xy" selected="selected">xy-plane</option>
-       <option value="xz">xz-plane</option>
-       <option value="yz">yz-plane</option>
-     </select></td>
-  </form>
-  <form name="outform" action="#">
-    <td><textarea rows="2" cols="80" name="output"></textarea></td>
-  </form>
-</table>
-
-<canvas id="canvas" width="750" height="500"></canvas>
-
+  <canvas id="canvas" width="750" height="500"></canvas>
 </div>
+
 </body>
 </html>

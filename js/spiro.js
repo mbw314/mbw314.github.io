@@ -16,7 +16,7 @@ const SLIDER_MIN = 1;
 const SLIDER_MAX = 150;
 const K_MIN = -1.0;
 const K_DEFAULT = 0.77;
-const K_MAX = 2.0;
+const K_MAX = 1.0;
 const L_MIN = -1.0;
 const L_DEFAULT = 0.67;
 const L_MAX = 2.0;
@@ -104,7 +104,9 @@ function getPolarCurve(k, l) {
 function draw(k, l) {
   canvasUtil.clearCanvas();
   let curve = getPolarCurve(k, l);
-  curve.draw()
+  curve.draw();
+  canvasUtil.clearText();
+  canvasUtil.println(`k = ${k.toFixed(3)}; l = ${l.toFixed(3)}`);
 }
 
 function init(adjustSize) {
