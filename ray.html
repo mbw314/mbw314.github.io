@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Michael Bradford Williams | Ray Tracer</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/ray.js"></script>
+</head>
+
+<body onload="init();">
+<div class="container">
+
+  <div class="topsmall">
+    <div class="topleftsmall">
+       <a href="./index.html">
+      <script type="text/javascript">
+              showRandomImage("300x50");
+         </script>
+       </a>
+    </div>
+    <h1><a href="./index.html">Michael Bradford Williams</a></h1>
+  </div>
+
+  <div class="middle">
+    <h2>Ray Tracer</h2>
+    <p>[description coming soon]</p>
+  </div>
+
+  <div class="middle">
+    <form name="parameters" action="#">
+      <table border="1" align="center" id="controls_table">
+        <!-- <tr>
+          <td colspan="1" align="right">
+            [Controls:]
+          </td>
+          <td colspan="1" align="right">
+            <input type="button" name="do_something" value="Do Something" onclick="doSomething());" />
+          </td>
+          <td colspan="2" align="center">
+            <input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();">
+          </td> -->
+      </table>
+    </form>
+  </div>
+
+  <div class="middle">
+  <center>
+    <canvas id="canvas" width="750" height="750">
+      <p>Your browser is currently unsupported.</p>
+    </canvas>
+  </center>
+  </div>
+
+
+  <div class="middle">
+    <form name="outform" action="#">
+      <textarea rows="5" cols="80" name="output"></textarea>
+    </form>
+  </div>
+
+  <div class="bottom">
+    <p>last modified: 01/01/2020</p>
+  </div>
+
+</div>
+</body>
+</html>
