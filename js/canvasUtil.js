@@ -304,12 +304,29 @@ function range(n) {
 
 class Point3D {
   constructor(x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this.x = x; // float
+    this.y = y; // float
+    this.z = z; // float
   }
+
+  translate(dir, dist) { // vec3d and float
+    let unit_dir = dir.scale(1 / dir.norm());
+    let new_x = this.x + unit_dir.x * dist;
+    let new_y = this.y + unit_dir.y * dist;
+    let new_z = this.z + unit_dir.z * dist;
+    return new Point(new_x, new_y, new_z);
+  }
+
   toString() {
-    return `(${this.x}, ${this.y}, ${this.z})`;
+    return `(${this.x.toFixed(3)}, ${this.y.toFixed(3)}, ${this.z.toFixed(3)})`;
+  }
+
+  distanceSq(p) {
+    return (this.x - p.x) * (this.x - p.x) + (this.y - p.y) * (this.y - p.y) + (this.z - p.z) * (this.z - p.z);
+  }
+
+  distance(p) {
+    return Math.sqrt(this.distanceSq(p));
   }
 }
 
