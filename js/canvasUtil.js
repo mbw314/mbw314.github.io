@@ -331,6 +331,59 @@ class Point3D {
 }
 
 
+class Vec3D extends Point3D {
+  constructor(x, y, z) {
+    super(x, y, z);
+  }
+
+  scale(a) {
+    return new Vec3D(a * this.x, a * this.y, a * this.z);
+  }
+
+  plus(v) {
+    return new Vec3D(this.x + v.x, this.y + v.y, this.z + v.z);
+  }
+
+  times(v) {
+    return new Vec3D(this.x * v.x, this.y * v.y, this.z * v.z);
+  }
+
+  minus(v) {
+    return new Vec3D(this.x - v.x, this.y - v.y, this.z - v.z);
+  }
+
+  normSq() {
+    return this.x * this.x + this.y * this.y + this.z * this.z;
+  }
+
+  norm() {
+    return Math.sqrt(this.normSq());
+  }
+
+  toUnitVector() {
+    return this.scale(1.0 / this.norm());
+  }
+
+  dot(v) {
+    return this.x * v.x + this.y * v.y + this.z * v.z;
+  }
+
+  cross(v) {
+    return new Vec3D(
+      this.y * v.z - this.z * v.y,
+      this.z * v.x - this.x * v.z,
+      this.x * v.y - this.y * v.x);
+  }
+
+  projXY() {
+    return new Vec2D(this.x, this.y);
+  }
+
+  near(v) {
+    this.minus(v).normSq() < EPSILON * EPSILON
+  }
+}
+
 class AnimatedCurve {
   constructor(p0, updateFn, projectionFn, colorFn) {
     this.p0 = p0; // Point3D -- initial data for curve
