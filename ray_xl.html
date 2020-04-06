@@ -14,19 +14,30 @@
 
 <div id="content" width="100%">
 <table border="0" align="center" id="controls_table">
-<form name="parameters" action="#">
-
-      <!-- <tr>
+  <form name="parameters" action="#">
+    <table border="1" align="center" id="controls_table">
+      <tr>
         <td colspan="1" align="right">
-          [Controls:]
+          Scene: <select name="scene_select">
+            <option value="0" selected="selected">scene 1</option>
+            <option value="1">Test: Planes</option>
+            <option value="2">Test: Spheres</option>
+            <option value="3">Test: Boxes</option>
+            <option value="4">Test: Cylinders</option>
+            <option value="5">Test: Hyperbolic Paraboloids 1</option>
+            <option value="6">Test: Hyperbolic Paraboloids 2</option>
+            <option value="7">Test: Elliptic Paraboloids 1</option>
+            <option value="8">Test: Elliptic Paraboloids 2</option>
+          </select>
         </td>
-        <td colspan="1" align="right">
-          <input type="button" name="do_something" value="Do Something" onclick="doSomething());" />
-        </td>
+        <td>Camera X: <input type="text" id="camera_x" value="-5"></td>
+        <td>Camera Y: <input type="text" id="camera_y" value="1"></td>
+        <td>Camera Z: <input type="text" id="camera_z" value="3"></td>
         <td colspan="2" align="center">
-          <input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();">
-        </td> -->
-</form>
+          <input type="button" name="draw" value="Draw Scene" onClick="drawScene();">
+        </td>
+    </table>
+  </form>
 </table>
 
 <center><canvas id="canvas" width="750" height="750"></canvas>

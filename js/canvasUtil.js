@@ -380,7 +380,7 @@ class Vec3D extends Point3D {
   }
 
   near(v) {
-    this.minus(v).normSq() < EPSILON * EPSILON
+    return this.minus(v).normSq() < EPSILON * EPSILON;
   }
 }
 
