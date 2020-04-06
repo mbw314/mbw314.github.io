@@ -13,7 +13,6 @@
 
 
 <div id="content" width="100%">
-<table border="0" align="center" id="controls_table">
   <form name="parameters" action="#">
     <table border="1" align="center" id="controls_table">
       <tr>
@@ -30,18 +29,16 @@
             <option value="8">Test: Elliptic Paraboloids 2</option>
           </select>
         </td>
-        <td>Camera X: <input type="text" id="camera_x" value="-5"></td>
-        <td>Camera Y: <input type="text" id="camera_y" value="1"></td>
-        <td>Camera Z: <input type="text" id="camera_z" value="3"></td>
+        <td>Camera X: <input type="text" id="camera_x" value="-5" size="5">
+             Y: <input type="text" id="camera_y" value="1" size="5">
+             Z: <input type="text" id="camera_z" value="3" size="5"></td>
         <td colspan="2" align="center">
           <input type="button" name="draw" value="Draw Scene" onClick="drawScene();">
         </td>
     </table>
   </form>
-</table>
 
-<center><canvas id="canvas" width="750" height="750"></canvas>
-</center>
+  <center><canvas id="canvas" width="750" height="750"></canvas></center>
 </div>
 
 
