@@ -152,6 +152,10 @@ function test_box() {
   console.log(`got t = ${t}`);
   console.assert(!t);
   console.log('----------------------');
+
+  console.log('--------------------');
+  console.log('-----END OF TESTS---');
+  console.log('--------------------');
 }
 
 function test_cylinder() {
@@ -172,7 +176,7 @@ function test_cylinder() {
   let normal = cyl.normalFn(v);
   console.log('expected: normal = (0, 0, 1)');
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(normal, vecK));
+  console.assert(normal.near(vecK));
   console.log('--------------------');
 
   console.log('test normal to bottom of cylinder');
@@ -180,7 +184,7 @@ function test_cylinder() {
   normal = cyl.normalFn(v);
   console.log('expected: normal = (0, 0, -1)');
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(normal, negVecK));
+  console.assert(normal.near(negVecK));
   console.log('--------------------');
 
   console.log('test normal to side of cylinder 1');
@@ -188,7 +192,7 @@ function test_cylinder() {
   normal = cyl.normalFn(v);
   console.log('expected: normal = (1, 0, 0)');
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(normal, vecI));
+  console.assert(normal.near(vecI));
   console.log('--------------------');
 
   console.log('test normal to side of cylinder 2');
@@ -196,7 +200,7 @@ function test_cylinder() {
   normal = cyl.normalFn(v);
   console.log('expected: normal = (0, 1, 0)');
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(normal, vecJ));
+  console.assert(normal.near(vecJ));
   console.log('--------------------');
 
   console.log('test normal to side of cylinder 3');
@@ -204,7 +208,7 @@ function test_cylinder() {
   normal = cyl.normalFn(v);
   console.log('expected: normal = (sqrt(2), -sqrt(2), 0)');
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(normal, new Vec3D(Math.sqrt(2), -1 * Math.sqrt(2), 0)));
+  console.assert(normal.near(new Vec3D(Math.sqrt(2), -1 * Math.sqrt(2), 0)));
   console.log('--------------------');
 
   console.log('testing intersection 1');
@@ -218,8 +222,8 @@ function test_cylinder() {
   console.log(`expected: point = ${expPt.toString()}; normal = (-1, 0, 0)`);
   console.log(`got point = ${point.toString()}`);
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(point, new Vec3D(-1, 0, 0)));
-  console.assert(vec_near(normal, new Vec3D(-1, 0, 0)));
+  console.assert(point.near(new Vec3D(-1, 0, 0)));
+  console.assert(normal.near(new Vec3D(-1, 0, 0)));
   console.log('----------------------');
 
   console.log('testing intersection 2');
@@ -233,8 +237,8 @@ function test_cylinder() {
   console.log('expected: point = (-0.707, -0.707, -0.5); normal = (-0.707, -0.707, 0)');
   console.log(`got point = ${point.toString()}`);
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(point, expPt));
-  console.assert(vec_near(normal, new Vec3D(-0.5 * Math.sqrt(2), -0.5 * Math.sqrt(2), 0)));
+  console.assert(point.near(expPt));
+  console.assert(normal.near(new Vec3D(-0.5 * Math.sqrt(2), -0.5 * Math.sqrt(2), 0)));
   console.log('----------------------');
 
   console.log('testing intersection 3');
@@ -248,8 +252,8 @@ function test_cylinder() {
   console.log(`expected: point = ${expPt.toString()}; normal = (-1, 0, 0)`);
   console.log(`got point = ${point.toString()}`);
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(point, new Vec3D(-1, 0, 0.7)));
-  console.assert(vec_near(normal, new Vec3D(-1, 0, 0)));
+  console.assert(point.near(new Vec3D(-1, 0, 0.7)));
+  console.assert(normal.near(new Vec3D(-1, 0, 0)));
   console.log('----------------------');
 
   console.log('testing intersection 4');
@@ -263,8 +267,8 @@ function test_cylinder() {
   console.log(`expected: point = ${expPt.toString()}; normal = (-0.5, -0.5 * sqrt(3), -0.8)`);
   console.log(`got point = ${point.toString()}`);
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(point, expPt));
-  console.assert(vec_near(normal, new Vec3D(-0.5, -0.5 * Math.sqrt(3), 0)));
+  console.assert(point.near(expPt));
+  console.assert(normal.near(new Vec3D(-0.5, -0.5 * Math.sqrt(3), 0)));
   console.log('----------------------');
 
   console.log('testing intersection 5');
@@ -278,8 +282,8 @@ function test_cylinder() {
   console.log(`expected: point = ${expPt.toString()}; normal = (-0.5 * sqrt(3), 0.5, 0)`);
   console.log(`got point = ${point.toString()}`);
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(point, expPt));
-  console.assert(vec_near(normal, new Vec3D(-0.5 * Math.sqrt(3), 0.5, 0)));
+  console.assert(point.near(expPt));
+  console.assert(normal.near(new Vec3D(-0.5 * Math.sqrt(3), 0.5, 0)));
   console.log('----------------------');
 
   console.log('testing intersection 6');
@@ -293,8 +297,8 @@ function test_cylinder() {
   console.log(`expected: point = ${expPt.toString()}; normal = (0, 0, -1)`);
   console.log(`got point = ${point.toString()}`);
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(point, expPt));
-  console.assert(vec_near(normal, negVecK));
+  console.assert(point.near(expPt));
+  console.assert(normal.near(negVecK));
   console.log('----------------------');
 
   console.log('testing intersection 7');
@@ -308,7 +312,201 @@ function test_cylinder() {
   console.log(`expected: point = ${expPt.toString()}; normal = (0, 0, 1)`);
   console.log(`got point = ${point.toString()}`);
   console.log(`got normal = ${normal.toString()}`);
-  console.assert(vec_near(point, expPt));
-  console.assert(vec_near(normal, vecK));
+  console.assert(point.near(expPt));
+  console.assert(normal.near(vecK));
   console.log('----------------------');
+
+  console.log('testing non intersection');
+  // test cylinder with p0 = (0, 0, -1), height = 2, radius = 1, axisDir = K;
+  cyl = new VerticalCylinder(
+    new Vec3D(0, 0, -1),
+    v => red,
+    new Material(1.0, 1.0, 5),
+    2,
+    1,
+    false,
+    false
+  );
+  console.log(cyl.toString());
+  expPt = new Vec3D(0, 0, 1);
+  rayBase = new Vec3D(0, 0, 2);
+  rayDir = expPt.minus(rayBase).toUnitVector();
+  console.log(`base = ${rayBase}; rayDir = ${rayDir}`);
+  t = cyl.rayIntersects(rayBase, rayDir);
+  console.log('expected: t = undefined');
+  console.log(`got t = ${t}`);
+  console.assert(!t);
+  console.log('----------------------');
+
+  console.log('testing bottom intersection from above');
+  // test cylinder with p0 = (0, 0, -1), height = 2, radius = 1, axisDir = K;
+  cyl = new VerticalCylinder(
+    new Vec3D(0, 0, -1),
+    v => red,
+    new Material(1.0, 1.0, 5),
+    2,
+    1,
+    false,
+    true
+  );
+  console.log(cyl.toString());
+  expPt = new Vec3D(0, 0, -1);
+  rayBase = new Vec3D(0, 0, 2);
+  rayDir = expPt.minus(rayBase).toUnitVector();
+  console.log(`base = ${rayBase}; rayDir = ${rayDir}`);
+  t = cyl.rayIntersects(rayBase, rayDir);
+  point = rayBase.plus(rayDir.scale(t));
+  normal = cyl.normalFn(point);
+  console.log(`expected: point = ${expPt.toString()}; normal = (0, 0, 1)`);
+  console.log(`got point = ${point.toString()}`);
+  console.log(`got normal = ${normal.toString()}`);
+  console.assert(point.near(expPt));
+  console.assert(normal.near(negVecK));
+  console.log('----------------------');
+
+  console.log('testing bottom intersection from below');
+  console.log(cyl.toString());
+  expPt = new Vec3D(0, 0, -1);
+  rayBase = new Vec3D(0, 0, -2);
+  rayDir = expPt.minus(rayBase).toUnitVector();
+  console.log(`base = ${rayBase}; rayDir = ${rayDir}`);
+  t = cyl.rayIntersects(rayBase, rayDir);
+  point = rayBase.plus(rayDir.scale(t));
+  normal = cyl.normalFn(point);
+  console.log(`expected: point = ${expPt.toString()}; normal = (0, 0, 1)`);
+  console.log(`got point = ${point.toString()}`);
+  console.log(`got normal = ${normal.toString()}`);
+  console.assert(point.near(expPt));
+  console.assert(normal.near(negVecK));
+  console.log('----------------------');
+
+  console.log('testing top intersection from above');
+  // test cylinder with p0 = (0, 0, -1), height = 2, radius = 1, axisDir = K;
+  cyl = new VerticalCylinder(
+    new Vec3D(0, 0, -1),
+    v => red,
+    new Material(1.0, 1.0, 5),
+    2,
+    1,
+    true,
+    false
+  );
+  console.log(cyl.toString());
+  expPt = new Vec3D(0, 0, 1);
+  rayBase = new Vec3D(0, 0, 2);
+  rayDir = expPt.minus(rayBase).toUnitVector();
+  console.log(`base = ${rayBase}; rayDir = ${rayDir}`);
+  t = cyl.rayIntersects(rayBase, rayDir);
+  point = rayBase.plus(rayDir.scale(t));
+  normal = cyl.normalFn(point);
+  console.log(`expected: point = ${expPt.toString()}; normal = (0, 0, 1)`);
+  console.log(`got point = ${point.toString()}`);
+  console.log(`got normal = ${normal.toString()}`);
+  console.assert(point.near(expPt));
+  console.assert(normal.near(vecK));
+  console.log('----------------------');
+
+  console.log('testing bottom intersection from below');
+  console.log(cyl.toString());
+  expPt = new Vec3D(0, 0, 1);
+  rayBase = new Vec3D(0, 0, -2);
+  rayDir = expPt.minus(rayBase).toUnitVector();
+  console.log(`base = ${rayBase}; rayDir = ${rayDir}`);
+  t = cyl.rayIntersects(rayBase, rayDir);
+  point = rayBase.plus(rayDir.scale(t));
+  normal = cyl.normalFn(point);
+  console.log(`expected: point = ${expPt.toString()}; normal = (0, 0, 1)`);
+  console.log(`got point = ${point.toString()}`);
+  console.log(`got normal = ${normal.toString()}`);
+  console.assert(point.near(expPt));
+  console.assert(normal.near(vecK));
+  console.log('----------------------');
+
+  console.log('--------------------');
+  console.log('-----END OF TESTS---');
+  console.log('--------------------');
+ }
+
+function test_paraboloid() {
+  let parab = new Paraboloid(
+    new Vec3D(0, 0, 0),
+    p => (parseInt(Math.round(5 * p.z)) % 2 == 0) ? red : lightGray, // stripes
+    m2,
+    -1,
+    -1,
+    p => p.x * p.x + p.y * p.y <= 1 // disk
+  );
+  console.log(parab.toString());
+
+  console.log('test normal');
+  let p = new Vec3D(0, 0, 1);
+  let normal = parab.normalFn(p);
+  console.log('expected: normal = (0, 0, 1)');
+  console.log(`got normal = ${normal.toString()}`);
+  console.assert(normal.near(vecK));
+  console.log('--------------------');
+
+  console.log('testing intersection from above');
+  let expPt = origin;
+  let rayBase = new Vec3D(1, 0, 1);
+  let rayDir = expPt.minus(rayBase).toUnitVector();
+  console.log(`base = ${rayBase}; rayDir = ${rayDir}`);
+  let t = parab.rayIntersects(rayBase, rayDir);
+  let point = rayBase.plus(rayDir.scale(t));
+  normal = parab.normalFn(point);
+  console.log(`expected: point = ${expPt.toString()}; normal = (0, 0, 1)`);
+  console.log(`got point = ${point.toString()}`);
+  console.log(`got normal = ${normal.toString()}`);
+  console.assert(point.near(expPt));
+  console.assert(normal.near(vecK));
+  console.log('----------------------');
+
+  console.log('testing intersection from below');
+  expPt = origin;
+  rayBase = new Vec3D(1, 0, -2);
+  rayDir = expPt.minus(rayBase).toUnitVector();
+  console.log(`base = ${rayBase}; rayDir = ${rayDir}`);
+  t = parab.rayIntersects(rayBase, rayDir);
+  point = rayBase.plus(rayDir.scale(t));
+  normal = parab.normalFn(point);
+  console.log(`expected: point = ${expPt.toString()}; normal = (0, 0, 1)`);
+  console.log(`got point = ${point.toString()}`);
+  console.log(`got normal = ${normal.toString()}`);
+  console.assert(point.near(expPt));
+  console.assert(normal.near(vecK));
+  console.log('----------------------');
+
+  console.log('testing intersection from below -- inside');
+  expPt = new Vec3D(-0.5, 0, -0.25);
+  rayBase = new Vec3D(1, 0, -2);
+  rayDir = expPt.minus(rayBase).toUnitVector();
+  console.log(`base = ${rayBase}; rayDir = ${rayDir}`);
+  t = parab.rayIntersects(rayBase, rayDir);
+  point = rayBase.plus(rayDir.scale(t));
+  normal = parab.normalFn(point);
+  console.log(`expected: point = ${expPt.toString()}; normal = (-1/sqrt(2), 0, 1/sqrt(2))`);
+  console.log(`got point = ${point.toString()}`);
+  console.log(`got normal = ${normal.toString()}`);
+  console.assert(point.near(expPt));
+  console.assert(normal.near(new Vec3D(-1 * Math.sqrt(2), 0, Math.sqrt(2)).toUnitVector()));
+  console.log('----------------------');
+
+  console.log('testing intersection from below -- outside');
+  expPt = new Vec3D(-0.5, 0, -0.25);
+  rayBase = new Vec3D(-3, 0, -2);
+  rayDir = expPt.minus(rayBase).toUnitVector();
+  console.log(`base = ${rayBase}; rayDir = ${rayDir}`);
+  t = parab.rayIntersects(rayBase, rayDir);
+  point = rayBase.plus(rayDir.scale(t));
+  normal = parab.normalFn(point);
+  console.log(`expected: point = ${expPt.toString()}; normal = (-1/sqrt(2), 0, 1/sqrt(2))`);
+  console.log(`got point = ${point.toString()}`);
+  console.log(`got normal = ${normal.toString()}`);
+  console.assert(point.near(expPt));
+  //console.assert(normal.near(vecK));
+  console.log('----------------------');
+
+  console.log('--------------------');
+  console.log('-----END OF TESTS---');
+  console.log('--------------------');
 }
