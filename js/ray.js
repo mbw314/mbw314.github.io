@@ -12,6 +12,7 @@ const negVecK = new Vec3D(0, 0, -1.0);
 const origin = new Vec3D(0, 0, 0);
 
 const lightGray = new Vec3D(0.85, 0.85, 0.85);
+const gray = new Vec3D(0.5, 0.5, 0.5);
 const darkGray = new Vec3D(0.3, 0.3, 0.3);
 const purple = new Vec3D(0.8, 0.2, 0.9);
 const blue = new Vec3D(0.1, .25, 0.8);
@@ -20,6 +21,8 @@ const green = new Vec3D(0.2, 0.9, 0.5);
 const red = new Vec3D(0.9, 0.2, 0.1);
 const blueGreen = new Vec3D(0.2, 0.9, 0.85);
 const lightBlue = new Vec3D(0.1, 0.1, 0.6);
+const black = new Vec3D(0.05, 0.05, 0.05);
+const yellow = new Vec3D(0.85, 0.9, 0.1);
 
 
 function near(x, y) {
@@ -790,26 +793,26 @@ const paraboloidTestLights4 = [
 const cylCenter = new Vec3D(5, 0, -2);
 const testScene = [
   new Plane( // bottom
-    new Vec3D(0, 0, -3),
+    new Vec3D(0, 0, -5),
     p => darkGray,
     m1,
     vecK
   ),
   new Plane( // back
-    new Vec3D(10, 0, 0),
+    new Vec3D(12, 0, 0),
     p => lightGray,
     m1,
     negVecI
   ),
   new Plane( // left
-    new Vec3D(0, -7, 0),
+    new Vec3D(0, -7.5, 0),
     p => lightGray.minus(purple).scale(0.5 * Math.sin(0.5 * p.z + 0.5 * p.y) + 1).plus(purple), // smoothed stripes,
     m1,
     vecJ
   ),
   new Sphere(
     new Vec3D(5, 0, 6),
-    p => (parseInt(Math.round(5 * p.z)) % 2 == 0) ? blueGreen : red, // stripes,
+    p => yellow,
     m2,
     2
   ),
@@ -822,10 +825,10 @@ const testScene = [
     p => true
   ),
   new Paraboloid(
-    new Vec3D(2, 4.5, -0.5),
-    p => (parseInt(Math.round(2 * p.x) + Math.round(2 * p.y)) % 2 == 0) ? blueGreen : darkGray, // checkerboard
-    m2,
-    -0.15,
+    new Vec3D(3, 5.5, -0.5),
+    p => (parseInt(Math.round(2 * p.x) + Math.round(2 * p.y)) % 2 == 0) ? blueGreen : gray, // checkerboard
+    m3,
+    -0.1,
     -0.15,
     p => (p.x + 1) * (p.x + 1) + (p.y - 3) * (p.y - 3)  < 4 * 4 // disk
   ),
@@ -893,41 +896,46 @@ const testScene = [
     false
   ),
   new Box(
-    new Vec3D(5, -7, -2),
-    v => green,
-    m1,
-    new Vec3D(-2, -2, -15)
-  )
-  ,
-  new Box(
-    new Vec3D(5, -7, -2),
+    new Vec3D(5, -10, -3),
     v => purple,
-    m1,
+    m3,
+    new Vec3D(-3, -1, -15)
+  ),
+  new Box(
+    new Vec3D(5, -10, -3),
+    v => green,
+    m2,
+    new Vec3D(-2, -2, -2)
+  ),
+  new Box(
+    new Vec3D(5, -10, -2),
+    v => purple,
+    m3,
     new Vec3D(-1, -3, -1)
   ),
   new Box(
-    new Vec3D(5, -7, -1),
+    new Vec3D(5, -10, -1),
     v => green,
-    m1,
+    m2,
     new Vec3D(0, -4, 0)
   ),
   new Box(
-    new Vec3D(5, -7, 0),
+    new Vec3D(5, -10, 0),
     v => purple,
-    m1,
+    m3,
     new Vec3D(1, -5, 1)
   ),
   new Box(
-    new Vec3D(5, -7, 1),
+    new Vec3D(5, -10, 1),
     v => green,
-    m1,
+    m2,
     new Vec3D(2, -6, 2)
   )
 ];
 
 const testLights = [
-  new LightSource(new Vec3D(9, 3, 7), new Vec3D(0.65, 0.65, 0.72)),
-  new LightSource(new Vec3D(-10, -2, 8), new Vec3D(0.75, 0.75, 0.62))
+  new LightSource(new Vec3D(9, 5, 8), new Vec3D(0.65, 0.65, 0.72)),
+  new LightSource(new Vec3D(-10, -2, 5), new Vec3D(0.75, 0.75, 0.62))
 ];
 
 

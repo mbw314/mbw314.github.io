@@ -27,13 +27,28 @@
 
   <div class="middle">
     <h2>Ray Tracer</h2>
-    <p>[description coming soon]</p>
+    <p><a href="">Ray tracing</a> is a technique for rendering image. The main idea
+is to trace (backwards) the path of rays of light from a virtual camera (a point in 3D space),
+through each pixel in a virtual image (a rectangular region of a plane), and into a
+virtual scene containing the objects that will appear in the image. One advantage of
+this approach is that a high degree of realism can be attained with pysically accurate
+models of how light interacts with various types of materials (e.g., shadows, reflections,
+refraction, etc.). One disadvantage is that it can be very computationally expensive.</p>
+
+<p>Below is a somewhat basic implementation of the ray tracing algorithm. The objects
+available include planes, rectangular boxes, spheres, cylinders, and (elliptic or hyperbolic)
+paraboloids. Lights are point lights, and shading is accomplished with a combination of
+<a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian</a> (flat) and
+<a href="https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model">Binn-Phong</a>
+(specular) reflectance. A number of different scenes (mostly basic ones for testing) can
+be selected, and the position of the camera can be controlled.</p>
+
     <p>Here is a <a href="./ray_xl.html">larger version</a> of this program.</a>
   </div>
 
   <div class="middle">
     <form name="parameters" action="#">
-      <table border="1" align="center" id="controls_table">
+      <table border="0" align="center" id="controls_table">
         <tr>
           <td colspan="1" align="right">
             Scene: <select name="scene_select">
@@ -48,9 +63,9 @@
               <option value="8">Test: Elliptic Paraboloids 2</option>
             </select>
           </td>
-          <td>Camera X: <input type="text" id="camera_x" value="-5"></td>
-          <td>Camera Y: <input type="text" id="camera_y" value="1"></td>
-          <td>Camera Z: <input type="text" id="camera_z" value="3"></td>
+          <td>Camera X: <input type="text" id="camera_x" value="-5" size="5">
+               Y: <input type="text" id="camera_y" value="1" size="5">
+               Z: <input type="text" id="camera_z" value="3" size="5"></td>
           <td colspan="2" align="center">
             <input type="button" name="draw" value="Draw Scene" onClick="drawScene();">
           </td>
