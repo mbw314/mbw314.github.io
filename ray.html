@@ -36,13 +36,31 @@ this approach is that a high degree of realism can be attained with pysically ac
 models of how light interacts with various types of materials (e.g., shadows, reflections,
 refraction, etc.). One disadvantage is that it can be very computationally expensive.</p>
 
-<p>Below is a somewhat basic implementation of the ray tracing algorithm. The objects
-available include planes, rectangular boxes, spheres, cylinders, and (elliptic or hyperbolic)
-paraboloids. Lights are point lights, and shading is accomplished with a combination of
+<p>Below is a (relatively) basic implementation of the ray tracing algorithm. It has the following features:</p>
+<ul>
+  <li>Objects:</li>
+    <ul>
+      <li>plane</li>
+      <li>rectangular boxes</li>
+      <li>spheres</li>
+      <li>cylinders</li>
+      <li>paraboloids (elliptic or hyperbolic)</li>
+    </ul>
+   <li>Object transformations</li>
+     <ul>
+       <li>Scaling</li>
+       <li>Rotation</li>
+       <li>Translation</li>
+     </ul>
+   <li>Point lighting</li>
+   <li>Shading: combination of
 <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian</a> (flat) and
 <a href="https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model">Binn-Phong</a>
-(specular) reflectance. A number of different scenes (mostly basic ones for testing) can
-be selected, and the position of the camera can be controlled.</p>
+(specular) reflectance</li>
+</ul>
+<p>A number of different scenes (mostly basic ones for testing) can be selected, and the position
+of the camera can be controlled. The camera is always pointed at the origin. WARNING: performance in
+Firefox, at least in my experiments, has been very poor.</p>
 
     <p>Here is a <a href="./ray_xl.html">larger version</a> of this program.</a>
   </div>
@@ -57,11 +75,12 @@ be selected, and the position of the camera can be controlled.</p>
               <option value="1">Test: Planes</option>
               <option value="2">Test: Spheres</option>
               <option value="3">Test: Boxes</option>
-              <option value="4">Test: Cylinders</option>
-              <option value="5">Test: Hyperbolic Paraboloids 1</option>
-              <option value="6">Test: Hyperbolic Paraboloids 2</option>
-              <option value="7">Test: Elliptic Paraboloids 1</option>
-              <option value="8">Test: Elliptic Paraboloids 2</option>
+              <option value="4">Test: Cylinders 1</option>
+              <option value="5">Test: Cylinders 2</option>
+              <option value="6">Test: Hyperbolic Paraboloids 1</option>
+              <option value="7">Test: Hyperbolic Paraboloids 2</option>
+              <option value="8">Test: Elliptic Paraboloids 1</option>
+              <option value="9">Test: Elliptic Paraboloids 2</option>
             </select>
           </td>
           <td>Camera X: <input type="text" id="camera_x" value="-5" size="5">
@@ -85,7 +104,7 @@ be selected, and the position of the camera can be controlled.</p>
 
   <div class="middle">
     <form name="outform" action="#">
-      <textarea rows="5" cols="80" name="output"></textarea>
+      <textarea rows="25" cols="80" name="output"></textarea>
     </form>
   </div>
 

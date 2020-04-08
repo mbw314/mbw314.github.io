@@ -30,6 +30,184 @@ function near(x, y) {
 }
 
 
+class Transformation {
+  // basic notion of transformation of a point/vector that can be composed, inverted, and a applied
+  // specific functionality will be provided by subclasses
+  constructor() {
+    // defaults to the identity transformation
+    this.mapX = p => p.x; // Vec3D -> Float
+    this.mapY = p => p.y; // Vec3D -> Float
+    this.mapZ = p => p.z; // Vec3D -> Float
+  }
+
+  toString() {
+    return "Identity transformation";
+  }
+
+  inverse() {
+    return this;
+  }
+
+  compose(other) {
+    let newRT = new Transformation();
+    newRT.mapX = p => this.mapX(other.apply(p));
+    newRT.mapY = p => this.mapY(other.apply(p));
+    newRT.mapZ = p => this.mapZ(other.apply(p));
+    return newRT;
+  }
+
+  apply(p) { // Vec3D
+    return new Vec3D(this.mapX(p), this.mapY(p), this.mapZ(p));
+  }
+}
+
+
+class Scaling extends Transformation {
+  constructor(scaleX, scaleY, scaleZ) {
+    super();
+    this.a = scaleX;
+    this.b = scaleY;
+    this.c = scaleZ;
+    this.mapX = p => this.a * p.x;
+    this.mapY = p => this.b * p.y;
+    this.mapZ = p => this.c * p.z;
+    console.assert((this.a != 0) && (this.b != 0) && (this.c != 0));
+  }
+
+  inverse() {
+    return new Scaling(1 / this.a, 1 / this.b, 1 / this.c);
+  }
+
+  toString() {
+    return `Scaling with a = ${this.a}, b = ${this.b}, c = ${this.c}`;
+  }
+}
+
+
+class Translation extends Transformation {
+  constructor(dir, dist) {
+    super();
+    this.dir = dir; // Vec3D
+    this.dist = dist; // Float
+    this.mapX = p => p.x + this.dist * this.dir.x;
+    this.mapY = p => p.y + this.dist * this.dir.y;
+    this.mapZ = p => p.z + this.dist * this.dir.z;
+    console.assert(dist > 0);
+  }
+
+  inverse() {
+    return new Translation(this.dir.scale(-1), this.dist);
+  }
+
+  toString() {
+    return `Translation with direction ${this.dir.toString()} and distance ${this.dist}`;
+  }
+}
+
+
+class RotationAroundX extends Transformation {
+  constructor(theta) {
+    super();
+    this.theta = theta; // Float
+    this.mapX = p => p.x;
+    this.mapY = p => Math.cos(this.theta) * p.y - Math.sin(this.theta) * p.z;
+    this.mapZ = p => Math.sin(this.theta) * p.y + Math.cos(this.theta) * p.z;
+  }
+
+  inverse() {
+    return new RotationAroundX(-1 * this.theta);
+  }
+
+  toString() {
+    return `Rotation around x-axis with angle ${this.theta}`;
+  }
+}
+
+
+class RotationAroundY extends Transformation {
+  constructor(theta) {
+    super();
+    this.theta = theta; // Float
+    this.mapX = p => Math.cos(this.theta) * p.x + Math.sin(this.theta) * p.z;
+    this.mapY = p => p.y;
+    this.mapZ = p => -1 * Math.sin(this.theta) * p.x + Math.cos(this.theta) * p.z;
+  }
+
+  inverse() {
+    return new RotationAroundY(-1 * this.theta);
+  }
+
+  toString() {
+    return `Rotation around y-axis with angle ${this.theta}`;
+  }
+}
+
+
+class RotationAroundZ extends Transformation {
+  constructor(theta) {
+    super();
+    this.theta = theta; // Float
+    this.mapX = p => Math.cos(this.theta) * p.x - Math.sin(this.theta) * p.y;
+    this.mapY = p => Math.sin(this.theta) * p.x + Math.cos(this.theta) * p.y;
+    this.mapZ = p => p.z;
+  }
+
+  inverse() {
+    return new RotationAroundZ(-1 * this.theta);
+  }
+
+  toString() {
+    return `Rotation around z-axis with angle ${this.theta}`;
+  }
+}
+
+
+class SurfaceTransformation {
+  constructor(scaling, rotations, translation) {
+    this.scaling = scaling;
+    this.rotations = rotations; // array
+    this.rotation = this.composeRotations(rotations);
+    this.translation = translation;
+  }
+
+  composeRotations(rotations) {
+    return rotations.reduce((a, b) => a.compose(b));
+  }
+
+  transformPoint(p) {
+    // from base object space to ambient space
+    return this.translation.compose(this.rotation).compose(this.scaling).apply(p);
+  }
+
+  invTransformPoint(p) {
+    // from base object space to ambient space
+    return this.scaling.inverse().compose(this.rotation.inverse()).compose(this.translation.inverse()).apply(p);
+  }
+
+  transformRay(rayBase, rayDir) {
+    // from ambient space to base object space
+    return [
+      this.invTransformPoint(rayBase),
+      this.scaling.inverse().compose(this.rotation.inverse()).apply(rayDir)
+    ];
+  }
+
+  transformNormal(n) {
+    // from base object space to ambient space
+    return this.rotation.compose(this.scaling.inverse()).apply(n);
+  }
+
+  toString() {
+    return [
+      'Surface Transformation:',
+      `  Scaling: ${this.scaling.toString()}`,
+      `  Rotations: ${this.rotations.map(r => r.toString()).join('; ')}`,
+      `  Translation: ${this.translation.toString()}`
+    ].join('\n');
+  }
+}
+
+
 class Camera { // incorporates Eye and Viewport
   constructor(eyePos, target, up, theta, numRows, numCols) {
     // 'target' is center of viewport
@@ -65,9 +243,9 @@ class RayTracer {
     this.camera = camera; // Camera object
     this.scene = scene;   // array of SceneObject objects
     this.lights = lights; // array of LightSouce objects
+    this.p_1m;            // vector in direction from eye to pixel at i=1, j=m
     this.shiftX;
     this.shiftY;
-    this.p_1m;            // vector in direction from eye to pixel at i=1, j=m
     this.defaultColor = new Vec3D(0, 0, 0);
     this.ambientColor = new Vec3D(0.33, 0.35, 0.35);
     this.setShiftVectors();
@@ -116,11 +294,11 @@ class RayTracer {
       }
     }
     if (nearestObjIndex > -1) {
-      let pt = rayBase.plus(rayDir.scale(tMin));
+      //let pt = rayBase.plus(rayDir.scale(tMin));
       // basic version -> no shading:
       //return this.scene[nearestObjIndex].colorFn(pt);
       // more advanced -> some shading:
-      return this.scene[nearestObjIndex].shadeFn(pt, rayDir, this.lights, this.scene, this.ambientColor);
+      return this.scene[nearestObjIndex].shadeFn(tMin, rayBase, rayDir, this.lights, this.scene, this.ambientColor);
     }
     return this.defaultColor;
   }
@@ -132,7 +310,7 @@ class RayTracer {
       for (let j=1; j<=this.camera.m; j++) {
         let rayDir = this.rayDirection(i, j);
         let color = this.trace(this.camera.eyePos, rayDir);
-        let pixelIndex = ((this.camera.m - j) * this.camera.k + i) * 4;
+        let pixelIndex = ((this.camera.m - j) * this.camera.k + i) * 4; // flip y-axis to account for canvas layout
         imageData.data[pixelIndex] = Math.floor(256 * color.x);
         imageData.data[pixelIndex+1] = Math.floor(256 * color.y);
         imageData.data[pixelIndex+2] = Math.floor(256 * color.z);
@@ -161,20 +339,62 @@ class Material {
 
 
 class Surface {
-  constructor(p0, colorFn, material) {
-    this.p0 = p0;             // Vec3D, point used to define the surface (may or may not actually be on the surace)
-    this.colorFn = colorFn;   // Vec3D -> Color
-    this.material = material; // Material object
+  constructor(p0, baseColorFn, material, transformation) {
+    this.p0 = p0;                         // Vec3D, point used to define the surface (may or may not actually be on the surace)
+    this.baseColorFn = baseColorFn;       // Vec3D -> Color
+    this.material = material;             // Material object
+    this.transformation = transformation; // SurfaceTransformation object
+    this.baseDomainFn = p => true;        // function that determines if a point on the suface is valid (in the desired domain) or not (optional)
   }
+
+  colorFn(p) {
+    if (this.transformation) {
+      let newP = this.transformation.invTransformPoint(p);
+      return this.baseColorFn(p);
+    } else {
+      return this.baseColorFn(p);
+    }
+  }
+
+  domainFn(p) {
+    if (this.transformation) {
+      let newP = this.transformation.invTransformPoint(p);
+      return this.baseDomainFn(p);
+    } else {
+      return this.baseDomainFn(p);
+    }
+  }
+
+  baseNormalFn(p) {}
 
   normalFn(p) {
     // return the normal vector at a point p (assumed to be on the surface)
+    let baseNormal = this.baseNormalFn(p);
+    if (this.transformation) {
+      return this.transformation.transformNormal(baseNormal);
+    } else {
+      return baseNormal;
+    }
   }
 
-  shadeFn(point, rayDir, lights, scene, ambient) {
+  baseRayIntersects(rayBase, rayDir) {}
+
+  rayIntersects(rayBase, rayDir) {
+    if (this.transformation) {
+      let [newRayBase, newRayDir] = this.transformation.transformRay(rayBase, rayDir);
+      return this.baseRayIntersects(newRayBase, newRayDir);
+    } else {
+      return this.baseRayIntersects(rayBase, rayDir);
+    }
+  }
+
+  shadeFn(t, origRayBase, origRayDir, lights, scene, ambient) {
     // calculate the color at a given point on the surface
+    let origPoint = origRayBase.plus(origRayDir.scale(t));
+    let [rayBase, rayDir] = this.transformation ? this.transformation.transformRay(origRayBase, origRayDir) : [origRayBase, origRayDir];
+    let point = rayBase.plus(rayDir.scale(t));
     let eyeDir = rayDir.scale(-1); // to eye
-    let lightContrib = ambient; // will accumulate lighting contributions starting with this initial value
+    let lightContrib = ambient; // accumulate lighting contributions starting with this initial value
     for (let r=0; r<lights.length; r++) {
       let lightVec = lights[r].pos.minus(point); // to light source
       let lightDir = lightVec.toUnitVector();
@@ -183,8 +403,8 @@ class Surface {
       // check to see if path to light is blocked
       let blocked = false;
       for (let k=0; k<scene.length; k++) {
-        let t = scene[k].rayIntersects(point, lightDir);
-        if (t && EPSILON < t && t < distToLight) { // limit from below t to avoid shadow acne
+        let t = scene[k].rayIntersects(origPoint, lightDir);
+        if (EPSILON < t && t < distToLight) { // limit t from below to avoid shadow acne
           blocked = true;
           k = scene.length; // enough to know that anything is blocking
         }
@@ -205,17 +425,17 @@ class Surface {
 
 class Plane extends Surface {
   // given normal n and point p0 on the plane, point p is on plane iff n.(p-p0)=0
-  constructor(p0, colorFn, material, normal) {
-    super(p0, colorFn, material);
+  constructor(p0, colorFn, material, normal, transformation) {
+    super(p0, colorFn, material, transformation);
     this.normal = normal.toUnitVector(); // Vec3D
   }
 
-  normalFn(p) {
+  baseNormalFn(p) {
     // the normal vector is constant for a plane
     return this.normal;
   }
 
-  rayIntersects(rayBase, rayDir) {
+  baseRayIntersects(rayBase, rayDir) {
     // a ray r(t) = r0 + t*d intersects the plane iff n.d != 0:
     // n.p0 = n.r(t0) = n.r0 + t0*n.d
     // =>  t0 = n.(p0-r0) / n.d
@@ -230,23 +450,24 @@ class Plane extends Surface {
   }
 
   toString() {
-    return `Plane: p0 = ${this.p0}; ${this.material.toString()}; normal = ${this.normal}`;
+    let transStr = this.transformation ? this.transformation.toString() : "none";
+    return `Plane: p0 = ${this.p0}; ${this.material.toString()}; normal = ${this.normal}; transformation = ${transStr}`;
   }
 }
 
 
 class Sphere extends Surface {
   // p0 is the center of the sphere
-  constructor(p0, colorFn, material, radius) {
-    super(p0, colorFn, material);
+  constructor(p0, colorFn, material, radius, transformation) {
+    super(p0, colorFn, material, transformation);
     this.radius = radius;
   }
 
-  normalFn(p) {
+  baseNormalFn(p) {
     return p.minus(this.p0).toUnitVector();
   }
 
-  rayIntersects(rayBase, rayDir) {
+  baseRayIntersects(rayBase, rayDir) {
     // a ray R(t) = R0 + t*d intesects a sphere
     // let v = R0 - c
     // => r^2 = |R(t) - c|^2 = |R0 + t*d - c|^2 = |v + t*d|^2 = |v|^2 + 2t * v.d + t^2 |d|^2
@@ -265,15 +486,16 @@ class Sphere extends Surface {
   }
 
   toString() {
-    return `Sphere: center = ${this.p0}; ${this.material}; radius = ${this.radius}`;
+    let transStr = this.transformation ? this.transformation.toString() : "none";
+    return `Sphere: center = ${this.p0}; ${this.material}; radius = ${this.radius}; transformation = ${transStr}`;
   }
 }
 
 
 class Box extends Surface {
-  constructor(p0, colorFn, material, p1) {
+  constructor(p0, colorFn, material, p1, transformation) {
     // p0 is one corner of box
-    super(p0, colorFn, material);
+    super(p0, colorFn, material, transformation);
     this.p1 = p1; // Vec3D, opposite corner of box
     this.xMin = Math.min(p0.x, p1.x);
     this.xMax = Math.max(p0.x, p1.x);
@@ -283,7 +505,7 @@ class Box extends Surface {
     this.zMax = Math.max(p0.z, p1.z);
   }
 
-  normalFn(p) {
+  baseNormalFn(p) {
     if (near(p.x, this.xMax)) {
       return vecI;
     } else if (near(p.x, this.xMin)) {
@@ -299,7 +521,7 @@ class Box extends Surface {
     }
   }
 
-  rayIntersects(rayBase, rayDir) {
+  baseRayIntersects(rayBase, rayDir) {
     // check for ray intersections with 3 slabs, defined by x-, y-, z-ranges
     let tXmin = (this.xMin - rayBase.x) / rayDir.x;
     let tXmax = (this.xMax - rayBase.x) / rayDir.x;
@@ -331,15 +553,16 @@ class Box extends Surface {
   }
 
   toString() {
-    return `Box: [${this.xMin}, ${this.xMax}] x [${this.yMin}, ${this.yMax}] x [${this.zMin}, ${this.zMax}]; material = ${this.material}`;
+    let transStr = this.transformation ? this.transformation.toString() : "none";
+    return `Box: [${this.xMin}, ${this.xMax}] x [${this.yMin}, ${this.yMax}] x [${this.zMin}, ${this.zMax}]; material = ${this.material}; transformation = ${transStr}`;
   }
 }
 
 
 class VerticalCylinder extends Surface {
   // p0 is bottom center of cylinder
-  constructor(p0, colorFn, material, height, radius, hasTop, hasBottom) {
-    super(p0, colorFn, material);
+  constructor(p0, colorFn, material, height, radius, hasTop, hasBottom, transformation) {
+    super(p0, colorFn, material, transformation);
     this.height = height;
     this.topZ = p0.z + height;
     this.bottomZ = p0.z;
@@ -349,7 +572,7 @@ class VerticalCylinder extends Surface {
     this.hasBottom = hasBottom;
   }
 
-  normalFn(p) {
+  baseNormalFn(p) {
     if (near(p.z, this.topZ)) {
       return vecK;
     } else if (near(p.z, this.bottomZ)) {
@@ -362,7 +585,7 @@ class VerticalCylinder extends Surface {
     }
   }
 
-  rayIntersects(rayBase, rayDir) {
+  baseRayIntersects(rayBase, rayDir) {
     // a ray R(t) = R0 + t*d intesects cylinder |x-c|^2 = r^2 (c has z=0)
     // project c, R0, d to xy-plane, let v = R0 - c (d is not unit anymore!)
     // => r^2 = |R(t) - c|^2 = |R0 + t*d - c| = |v + t*d|^2 = |v|^2 + 2t * v.d + t^2 |d|^2
@@ -426,7 +649,10 @@ class VerticalCylinder extends Surface {
   }
 
   toString() {
-    return `Cylinder: p0 = ${this.p0.toString()}; height = ${this.height}; radius = ${this.radius}}; has top ? ${this.hasTop}; has bottom ? ${this.hasBottom}`;
+    let transStr = this.transformation ? this.transformation.toString() : "none";
+    let topStr = this.hasTop ? "has top;" : "";
+    let bottomStr = this.hasBottom ? "has bottom;" : "";
+    return `Cylinder: p0 = ${this.p0.toString()}; height = ${this.height}; radius = ${this.radius}}; ${topStr} ${bottomStr} transformation = ${transStr}`;
   }
 }
 
@@ -435,17 +661,17 @@ class Paraboloid extends Surface {
   // a * (x-x0)^2 + b * (y-y0)^2 - (z-z0) = 0
   // signs of a, b make this elliptic or hyperbolic
   // p0 is (x0, y0, z0)
-  constructor(p0, colorFn, material, a, b, domainFn) {
-    super(p0, colorFn, material);
+  constructor(p0, colorFn, material, a, b, baseDomainFn, transformation) {
+    super(p0, colorFn, material, transformation);
     this.a = a;
     this.b = b;
-    this.domainFn = domainFn; // Vec2D -> Boolean
+    this.baseDomainFn = baseDomainFn; // Vec2D -> Boolean
     this.f = v => this.a * (v.x - this.p0.x) * (v.x - this.p0.x) + this.b * (v.y - this.p0.y) * (v.y - this.p0.y) + this.p0.z;
     this.f_x = v => 2 * this.a * (v.x - this.p0.x); // partial derivative WRT x
     this.f_y = v => 2 * this.b * (v.y - this.p0.y); // partial derivative WRT y
   }
 
-  normalFn(p) {
+  baseNormalFn(p) {
     // this is always the upward-pointing normal
     // let F(x, y, z) = z - f(x, y)
     // N' = grad F = (-f_x, -f_y, 1) = (2*a*(vx - x0), 2*b*(vy - y0), 1) is non-unit normal
@@ -454,7 +680,7 @@ class Paraboloid extends Surface {
     return (new Vec3D(-1 * this.f_x(p), -1 * this.f_y(p), 1)).toUnitVector(); // TODO: can this be optimized?
   }
 
-  rayIntersects(rayBase, rayDir) {
+  baseRayIntersects(rayBase, rayDir) {
     // ray R(t) = r0 + t*d, surface eqn: a(x-x0)^2 + b(y-y0)^2 - (z-z0) = 0
     // => 0 = a*(rx + t*dx - x0)^2 + b*(ry + t*dy - y0)^2 - (rz + t*dz - z0)
     //      = a*(rx-x0)^2 + a*dx^2*t^2 + 2a*(rx-x0)*dx*t + b*(ry-y0)^2 + b*dy^2*t^2 + 2b*(ry-y0)*dy*t - (rz-z0) - dz*t
@@ -480,9 +706,11 @@ class Paraboloid extends Surface {
   }
 
   toString() {
-    return `Paraboloid: a = ${this.a}; b = ${this.b}; p0 = ${this.p0}; material = ${this.material.toString()};`
+    let transStr = this.transformation ? this.transformation.toString() : "none";
+    return `Paraboloid: a = ${this.a}; b = ${this.b}; p0 = ${this.p0}; material = ${this.material.toString()}; transformation = ${transStr};`
   }
 }
+
 
 class LightSource {
   constructor(position, color) {
@@ -549,22 +777,26 @@ function drawScene() {
       lights = boxTestLights;
       break;
     case 4:
-      scene = cylinderTestScene;
-      lights = cylinderTestLights;
+      scene = cylinderTestScene1;
+      lights = cylinderTestLights1;
       break;
     case 5:
+      scene = cylinderTestScene2;
+      lights = cylinderTestLights2;
+      break;
+    case 6:
       scene = paraboloidTestScene1;
       lights = paraboloidTestLights1;
       break;
-    case 6:
+    case 7:
       scene = paraboloidTestScene2;
       lights = paraboloidTestLights2;
       break;
-    case 7:
+    case 8:
       scene = paraboloidTestScene3;
       lights = paraboloidTestLights3;
       break;
-    case 8:
+    case 9:
       scene = paraboloidTestScene4;
       lights = paraboloidTestLights4;
       break;
