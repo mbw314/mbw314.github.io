@@ -12,10 +12,11 @@ const planeTestScene = [
     vecK
   ),
   new Plane( // back
-    new Vec3D(5, 0, 0),
+    new Vec3D(0, 0, 0),
     p => lightGray.minus(purple).scale(0.5 * Math.sin(0.5 * p.z + 0.5 * p.y) + 1).plus(purple), // smoothed stripes
     m1,
-    negVecI
+    negVecI,
+    new SurfaceTransformation(new Transformation(), [new RotationAroundZ(0.1 * Math.PI)], new Translation(vecI, 5))
   ),
   new Plane( // left
     new Vec3D(0, 5, 0),
@@ -82,33 +83,50 @@ const boxTestScene = [
     m1,
     negVecI
   ),
-  new Plane( // left
-    new Vec3D(0, -5, 0),
-    p => lightGray,
-    m1,
-    vecJ
-  ),
   new Box(
-    new Vec3D(5, 2, 0),
+    new Vec3D(-4, -4, 0),
     v => blueGreen,
     m1,
-    new Vec3D(2, 3, 1.5)
+    new Vec3D(4, 4, 0.5),
   ),
   new Box(
-    new Vec3D(1.5, -3.0, 1.75),
-    v => green,
+    new Vec3D(-2*Math.sqrt(2), -2*Math.sqrt(2), 0.5),
+    v => blueGreen,
     m1,
-    new Vec3D(5.5, -0.75, 2.5)
+    new Vec3D(2*Math.sqrt(2), 2*Math.sqrt(2), 1),
+    new SurfaceTransformation(new Transformation(), [new RotationAroundZ(0.25 * Math.PI)], new Transformation())
+  ),
+  new Box(
+    new Vec3D(-2, -2, 1),
+    v => blueGreen,
+    m1,
+    new Vec3D(2, 2, 1.5),
+    new SurfaceTransformation(new Transformation(), [new RotationAroundZ(0.5 * Math.PI)], new Transformation())
+  ),
+  new Box(
+    new Vec3D(-Math.sqrt(2), -Math.sqrt(2), 1.5),
+    v => blueGreen,
+    m1,
+    new Vec3D(Math.sqrt(2), Math.sqrt(2), 2),
+    new SurfaceTransformation(new Transformation(), [new RotationAroundZ(0.75 * Math.PI)], new Transformation())
+  ),
+  new Box(
+    new Vec3D(-0.5, -0.5, -0.5),
+    v => red,
+    m1,
+    new Vec3D(0.5, 0.5, 0.5),
+    new SurfaceTransformation(new Transformation(),
+      [new RotationAroundY(0.25 * Math.PI), new RotationAroundX(0.25 * Math.PI)], new Translation(new Vec3D(0, 0, 1), 3))
   )
 ];
 
 const boxTestLights = [
-  new LightSource(new Vec3D(0, 0, 10), new Vec3D(0.65, 0.55, 0.72)),
-  new LightSource(new Vec3D(0, 5, 5), new Vec3D(0.75, 0.75, 0.52))
+  new LightSource(new Vec3D(3, -3, 10), new Vec3D(0.65, 0.55, 0.72)),
+  new LightSource(new Vec3D(0, 5, 10), new Vec3D(0.75, 0.75, 0.52))
 ];
 
 
-const cylinderTestScene = [
+const cylinderTestScene1 = [
   new Plane( // bottom
     new Vec3D(0, 0, -5),
     p => (parseInt(Math.round(p.x) + Math.round(p.y)) % 2 == 0) ? blue : lightGray, // checkerboard
@@ -156,9 +174,118 @@ const cylinderTestScene = [
   )
 ];
 
-const cylinderTestLights = [
+const cylinderTestLights1 = [
   new LightSource(new Vec3D(0, 0, 0.5), new Vec3D(0.65, 0.65, 0.72)),
   new LightSource(new Vec3D(0, 0, 5), new Vec3D(0.75, 0.75, 0.62))
+];
+
+const cylinderTestScene2 = [
+  new Plane( // back
+    new Vec3D(10, 0, 0),
+    p => lightGray,
+    m1,
+    negVecI
+  ),
+  new Plane( // left
+    new Vec3D(0, -8, 0),
+    p => lightGray,
+    m1,
+    vecJ
+  ),
+  new VerticalCylinder(
+    new Vec3D(0, 0, -3),
+    v => purple,
+    m2,
+    6,  // height
+    0.25,    // radius
+    true,
+    true
+  ),
+  new VerticalCylinder(
+    new Vec3D(0, 0, -3),
+    v => purple,
+    m2,
+    6,  // height
+    0.25,    // radius
+    true,
+    true,
+    new SurfaceTransformation(new Transformation(), [new RotationAroundX(0.25 * Math.PI)], new Transformation())
+  ),
+  new VerticalCylinder(
+    new Vec3D(0, 0, -3),
+    v => purple,
+    m2,
+    6,  // height
+    0.25,    // radius
+    true,
+    true,
+    new SurfaceTransformation(new Transformation(), [new RotationAroundX(0.5 * Math.PI)], new Transformation())
+  ),
+  new VerticalCylinder(
+    new Vec3D(0, 0, -3),
+    v => purple,
+    m2,
+    6,  // height
+    0.25,    // radius
+    true,
+    true,
+    new SurfaceTransformation(new Transformation(), [new RotationAroundX(0.75 * Math.PI)], new Transformation())
+  ),
+  new VerticalCylinder(
+    new Vec3D(0, 0, -3),
+    v => purple,
+    m2,
+    6,  // height
+    0.25,    // radius
+    true,
+    true,
+    new SurfaceTransformation(new Transformation(), [new RotationAroundY(0.25 * Math.PI)], new Transformation())
+  ),
+  new VerticalCylinder(
+    new Vec3D(0, 0, -3),
+    v => purple,
+    m2,
+    6,  // height
+    0.25,    // radius
+    true,
+    true,
+    new SurfaceTransformation(new Transformation(), [new RotationAroundY(0.5 * Math.PI)], new Transformation())
+  ),
+  new VerticalCylinder(
+    new Vec3D(0, 0, -3),
+    v => purple,
+    m2,
+    6,  // height
+    0.25,    // radius
+    true,
+    true,
+    new SurfaceTransformation(new Transformation(), [new RotationAroundY(0.75 * Math.PI)], new Transformation())
+  ),
+  new VerticalCylinder(
+    new Vec3D(0, 0, -3),
+    v => purple,
+    m2,
+    6,  // height
+    0.25,    // radius
+    true,
+    true,
+    new SurfaceTransformation(new Transformation(), [new RotationAroundX(0.5 * Math.PI), new RotationAroundZ(0.25 * Math.PI)], new Transformation())
+  ),
+  new VerticalCylinder(
+    new Vec3D(0, 0, -3),
+    v => purple,
+    m2,
+    6,  // height
+    0.25,    // radius
+    true,
+    true,
+    new SurfaceTransformation(new Transformation(), [new RotationAroundX(0.5 * Math.PI), new RotationAroundZ(0.75 * Math.PI)], new Transformation())
+  ),
+];
+
+const cylinderTestLights2 = [
+  new LightSource(new Vec3D(-10, -3, 10), new Vec3D(0.65, 0.65, 0.72)),
+  new LightSource(new Vec3D(-5, 10, 5), new Vec3D(0.75, 0.75, 0.62))
 ];
 
 
@@ -189,7 +316,6 @@ const paraboloidTestLights1 = [
   new LightSource(new Vec3D(0, 0, 10), new Vec3D(0.65, 0.65, 0.72)),
  ];
 
-
 // rim issue
 const paraboloidTestScene2 = [
   new Plane( // bottom
@@ -206,11 +332,21 @@ const paraboloidTestScene2 = [
   ),
   new Paraboloid(
     new Vec3D(0, 0, 0),
+    p => (parseInt(Math.round(p.x) + Math.round(p.y)) % 2 == 0) ? red : green, // checkerboard
+    m2,
+    -0.15,
+    0.15,
+    p => -2 <= p.x && p.x <= 2 && -2 <= p.y && p.y <= 2, // rectangle
+    new SurfaceTransformation(new Transformation(), [new RotationAroundZ(0.25 * Math.PI)], new Translation(new Vec3D(1, 1, 0), 4))
+  ),
+  new Paraboloid(
+    new Vec3D(0, 0, 0),
     p => (parseInt(Math.round(5 * p.z)) % 2 == 0) ? red : lightGray, // stripes
     m2,
     -0.15,
     0.15,
-    p => -2 <= p.x && p.x <= 2 && -2 <= p.y && p.y <= 2 // rectangle
+    p => -2 <= p.x && p.x <= 2 && -2 <= p.y && p.y <= 2, // rectangle
+    new SurfaceTransformation(new Transformation(), [new RotationAroundY(0.5 * Math.PI)], new Translation(new Vec3D(1, -1, 0), 4))
   )
 ];
 
@@ -234,17 +370,27 @@ const paraboloidTestScene3 = [
     negVecI
   ),
   new Paraboloid(
-    new Vec3D(0, 0, 2),
+    origin,
     p => (parseInt(Math.round(5 * p.z)) % 2 == 0) ? red : lightGray, // stripes
     m2,
-    0.15,
-    0.15,
-    p => p.x * p.x + p.y * p.y < 3 * 3 // disk
+    0.5,
+    0.5,
+    p => p.x * p.x + p.y * p.y < 3 * 3, // disk
+    new SurfaceTransformation(new Transformation(), [new RotationAroundY(0.5 * Math.PI)], new Translation(new Vec3D(1, 1, 0), 4))
+  ),
+  new Paraboloid(
+    origin,
+    p => (parseInt(Math.round(5 * p.z)) % 2 == 0) ? red : lightGray, // stripes
+    m2,
+    -0.5,
+    -0.5,
+    p => p.x * p.x + p.y * p.y < 3 * 3, // disk
+    new SurfaceTransformation(new Scaling(1, 2, 1), [new RotationAroundY(0.5 * Math.PI)], new Translation(new Vec3D(1, -1, 0), 4))
   )
 ];
 
 const paraboloidTestLights3 = [
-  new LightSource(new Vec3D(0, 0, 10), new Vec3D(0.65, 0.65, 0.72)),
+  new LightSource(new Vec3D(-4, 0, 5), new Vec3D(0.65, 0.65, 0.72)),
 ];
 
 
