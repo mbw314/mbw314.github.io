@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Michael Bradford Williams | Boids </title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
+  <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
+  <script type="text/javascript" src="./js/range.js"></script>
+  <script type="text/javascript" src="./js/timer.js"></script>
+  <script type="text/javascript" src="./js/slider.js"></script>
+  <script type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script type="text/javascript" src="./js/boids.js"></script>
+</head>
+
+ <body onload="init();">
+
+<div class="container">
+
+<div class="topsmall">
+
+<div class="topleftsmall">
+   <a href="./index.html">
+  <script type="text/javascript">
+          showRandomImage("300x50");
+     </script>
+   </a>
+</div>
+
+<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+</div>
+
+<div class="middle">
+
+<h2>Boids: FLocking behavior</h2>
+
+<p>...</p>
+
+<p>Here's a <a href="./boids_xl.html">larger version</a> of this program.</p> </div>
+
+<div class="middle">
+  <table border="0" align="center">
+    <tr>
+      <td align="right"><p>Number of Boids:</p></td>
+      <td><div class="slider" id="partSlider" tabIndex="1">
+        <input class="slider-input" id="partSliderInput"/></div></td>
+      <td><input id="part-view" size="2" /></td>
+      <td></td>
+      <td><input type="button" name="refresh-part" value="Refresh Particles" onClick="refreshParticles();" /></td>
+    </tr>
+
+    <tr>
+      <td align="right"><p>Number of Obstacles:</p></td>
+      <td><div class="slider" id="attSlider" tabIndex="1">
+        <input class="slider-input" id="attSliderInput"/></div></td>
+      <td><input id="att-view" size="2" /></td>
+      <td></td>
+      <td><input type="button" name="refresh-att" value="Refresh Attractors" onClick="refreshAttractors();" /></td>
+    </tr>
+
+    <tr>
+      <td align="right"><p>Gravity Strength:</p></td>
+      <td><div class="slider" id="gSlider" tabIndex="1">
+        <input class="slider-input" id="gSliderInput"/></div></td>
+      <td><input id="g-view" size="2" /></td>
+      <td></td>
+      <td><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();">
+    </tr>
+  </table>
+<script type="text/javascript">
+
+var partSl = new Slider(document.getElementById("partSlider"), document.getElementById("partSliderInput"));
+var attSl  = new Slider(document.getElementById("attSlider"),  document.getElementById("attSliderInput"));
+var gSl    = new Slider(document.getElementById("gSlider"),    document.getElementById("gSliderInput"));
+
+partSl.setMinimum(NUM_BOIDS_MIN);
+partSl.setValue(NUM_BOIDS);
+partSl.setMaximum(NUM_BOIDS_MAX);
+document.getElementById("part-view").value = NUM_BOIDS;
+
+attSl.setMinimum(NUM_OBSTACLES_MIN);
+attSl.setValue(NUM_OBSTACLES);
+attSl.setMaximum(NUM_OBSTACLES_MAX);
+document.getElementById("att-view").value = NUM_OBSTACLES;
+
+gSl.setMinimum(G_POW_MIN);
+gSl.setValue(G_POW);
+gSl.setMaximum(G_POW_MAX);
+document.getElementById("g-view").value = G_POW;
+
+partSl.onchange = function () {
+  document.getElementById("part-view").value = partSl.getValue();
+  NUM_BOIDS = parseInt(partSl.getValue());
+    canvasUtil.println(`new number of particles = ${NUM_BOIDS}`);
+};
+
+attSl.onchange = function () {
+  document.getElementById("att-view").value = attSl.getValue();
+  NUM_OBSTACLES = parseInt(attSl.getValue());
+  canvasUtil.println(`new number of attractors = ${NUM_OBSTACLES}`);
+};
+
+gSl.onchange = function () {
+  document.getElementById("g-view").value = gSl.getValue();
+  G_POW = parseInt(gSl.getValue());
+  canvasUtil.println(`new Gravity exponent = ${G_POW}`);
+};
+
+window.onresize = function () {
+  partSl.recalculate();
+  attSl.recalculate();
+  gSl.recalculate();
+  init();
+};
+
+</script>
+
+</div>
+
+<div class="middle">
+    <canvas id="canvas" width="750" height="750">
+        <p>Your browser is currently unsupported.</p>
+    </canvas>
+</div>
+
+<div class="middle">
+<table align="center">
+  <tr>
+    <td><form name="outform">
+        <textarea rows="5" cols="80" name="output"></textarea>
+        </form>
+    </td>
+  </tr>
+</table>
+</div>
+
+<div class="bottom">
+<p>last modified: 02/23/2020</p>
+</div>
+
+</div>
+
+</body>
+</html>
