@@ -314,7 +314,7 @@ class Point3D {
     let new_x = this.x + unit_dir.x * dist;
     let new_y = this.y + unit_dir.y * dist;
     let new_z = this.z + unit_dir.z * dist;
-    return new Point(new_x, new_y, new_z);
+    return new Point3D(new_x, new_y, new_z);
   }
 
   toString() {
@@ -384,13 +384,90 @@ class Vec3D extends Point3D {
   }
 }
 
+
+class Point4D {
+  constructor(x, y, z, w) {
+    this.x = x; // float
+    this.y = y; // float
+    this.z = z; // float
+    this.w = w; // float
+  }
+
+  translate(dir, dist) { // vec4D and float
+    let unit_dir = dir.scale(1 / dir.norm());
+    let new_x = this.x + unit_dir.x * dist;
+    let new_y = this.y + unit_dir.y * dist;
+    let new_z = this.z + unit_dir.z * dist;
+    let new_w = this.w + unit_dir.w * dist;
+    return new Point4D(new_x, new_y, new_z, new_w);
+  }
+
+  toString() {
+    return `(${this.x.toFixed(3)}, ${this.y.toFixed(3)}, ${this.z.toFixed(3)}, ${this.w.toFixed(3)})`;
+  }
+
+  distanceSq(p) {
+    return (this.x - p.x) * (this.x - p.x) + (this.y - p.y) * (this.y - p.y) + (this.z - p.z) * (this.z - p.z) + (this.w - p.w) * (this.w - p.w);
+  }
+
+  distance(p) {
+    return Math.sqrt(this.distanceSq(p));
+  }
+}
+
+class Vec4D extends Point4D {
+  constructor(x, y, z, w) {
+    super(x, y, z, w);
+  }
+
+  scale(a) {
+    return new Vec3D(a * this.x, a * this.y, a * this.z, a * this.w);
+  }
+
+  plus(v) {
+    return new Vec3D(this.x + v.x, this.y + v.y, this.z + v.z, this.w + v.w);
+  }
+
+  times(v) {
+    return new Vec3D(this.x * v.x, this.y * v.y, this.z * v.z, this.w * v.w);
+  }
+
+  minus(v) {
+    return new Vec3D(this.x - v.x, this.y - v.y, this.z - v.z, this.w - v.w);
+  }
+
+  normSq() {
+    return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
+  }
+
+  norm() {
+    return Math.sqrt(this.normSq());
+  }
+
+  toUnitVector() {
+    return this.scale(1.0 / this.norm());
+  }
+
+  dot(v) {
+    return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
+  }
+
+  projXY() {
+    return new Vec2D(this.x, this.y);
+  }
+
+  near(v) {
+    return this.minus(v).normSq() < EPSILON * EPSILON;
+  }
+}
+
 class AnimatedCurve {
   constructor(p0, updateFn, projectionFn, colorFn) {
-    this.p0 = p0; // Point3D -- initial data for curve
+    this.p0 = p0; // PointND -- initial data for curve
     this.points = new Array(MAX_POINTS).fill(p0); // array of Point3D objects, e.g., solution of ODE; most recent stored first, at most maxPoints items
-    this.updateFn = updateFn; // function R^3 -> R^3 (e.g, the system of ODE)
+    this.updateFn = updateFn; // function R^N -> R^N (e.g, the system of ODE)
     this.maxPoints = MAX_POINTS;
-    this.projectionFn = projectionFn; // function R^3 -> R^2 mapping space to canvas
+    this.projectionFn = projectionFn; // function R^N -> R^2 mapping space to canvas
     this.colorFn = colorFn; // function from points array index to color
     console.log(`initialized with p0=${this.p0}; num points = ${this.points.length}; updateFn = ${updateFn}`);
   }
