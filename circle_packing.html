@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Michael Bradford Williams | Random Circle Packing</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/circlePacking.js"></script>
+</head>
+
+<body onload="init();">
+<div class="container">
+
+  <div class="topsmall">
+    <div class="topleftsmall">
+       <a href="./index.html">
+      <script type="text/javascript">
+              showRandomImage("300x50");
+         </script>
+       </a>
+    </div>
+    <h1><a href="./index.html">Michael Bradford Williams</a></h1>
+  </div>
+
+  <div class="middle">
+    <h2>Creating a Random Circle Packing</h2>
+    <p>
+There are several related definitions, but let is say that <i>circle packing</i> is a collection of circless in the plane,
+whose interiors do not overlap. This page demonstrates an algorithm to create a random circle packing with the added property
+that no circle in the packing can be enlarged without creating an overlap. The basic idea is to build the packing one circle at
+a time, in a <a href="https://en.wikipedia.org/wiki/Greedy_algorithm">greedy</a> fashion, meaning each circle is made to be as
+large as possible, given the previously existing circles. There is a built-in overall maximum radius size, and a maximum number
+of circles allowed in the circle packing.
+    </p>
+
+    <p>
+There are three visualization modes for the circle packing: (1) simple, meaning just the circle is drawn; (2) simple, but with
+connections between connected circles drawn (e.g., this is the <a href="https://en.wikipedia.org/wiki/Contact_graph">contact graph</a>
+of the circle packing), and (3) circles represented by randomly colored disks.
+    </p>
+
+    <p>Here is a <a href="./circle_packing_xl.html">larger version</a> of the program.</p>
+  </div>
+
+  <div class="middle">
+    <form name="parameters" action="#">
+      <table border="0" align="center" id="controls_table">
+        <tr>
+          <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
+          <td colspan="2" align="center"><input type="button" name="reset" value="Reset Animation" onClick="resetDrawing();"></td>
+          <td>
+            <select name="drawing_style">
+              <option value="simple" selected="selected">simple</option>
+              <option value="connections">simple, with connections</option>
+              <option value="colorful">colorful</option>
+            </select>
+          </td>
+          <td colspan="2" align="center"><input type="button" name="labels" value="Toggle Labels (if simple)" onClick="drawSimpleLabels();"></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+
+  <div class="middle">
+  <center>
+    <canvas id="canvas" width="750" height="500">
+      <p>Your browser is currently unsupported.</p>
+    </canvas>
+  </center>
+  </div>
+
+
+  <div class="middle">
+    <form name="outform" action="#">
+      <textarea rows="5" cols="80" name="output"></textarea>
+    </form>
+  </div>
+
+  <div class="bottom">
+    <p>last modified: 10/11/2021</p>
+  </div>
+
+</div>
+</body>
+</html>
