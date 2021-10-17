@@ -271,8 +271,8 @@ function draw() {
 
   canvasUtil.clearText();
   //let avgRadius = circles.map(d => d.radius).reduce((x, y) => x + y) / circles.length).toFixed(3);
-  let avgDegree = (circles.map(d => d.numNeighbors()).reduce((x, y) => x + y) / circles.length).toFixed(3)
-  let minDegree = Math.min(...circles.map(d => d.numNeighbors()));
+  let avgDegree = (circles.slice(0, circles.length - 1).map(d => d.numNeighbors()).reduce((x, y) => x + y) / circles.length).toFixed(3)
+  let minDegree = Math.min(...circles.slice(0, circles.length - 1).map(d => d.numNeighbors()));
   canvasUtil.println(`${circles.length} circles; min degree = ${minDegree}; avg degree = ${avgDegree}`); //`; average radius is ${(avgRadius}; average number of neighbors is ${avgDegree}`);
 }
 
