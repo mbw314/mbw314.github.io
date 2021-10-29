@@ -4,6 +4,7 @@
   <title>Michael Bradford Williams - Spirographs</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles_xl.css" />
   <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
   <link rel="shortcut icon" href="favicon.ico" />
   <script type="text/javascript" src="./js/range.js"></script>
@@ -15,23 +16,24 @@
 
 <body onload="init(1);">
 
-<div id="content" width="100%">
-
-<table border="0" align="center" id="controls_table">
-  <tr>
-    <form name="parameters" action="#">
-  	<td><p>k</p></td>
-  	<td><div class="slider" id="kSlider" tabIndex="1"><input class="slider-input" id="kSliderInput"/></div></td>
-  	<td> </td>
-  	<td><p>l</p></td>
-  	<td><div class="slider" id="lSlider" tabIndex="2"><input class="slider-input" id="lSliderInput"/></div></td>
-    <td> </td>
-    <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td></form>
-    <td><form name="outform" action="#">
-      <textarea rows="1" cols="80" name="output"></textarea>
-    </form></td>
-  </tr>
-</table>
+<div class="content-row" id="controls">
+  <form name="parameters" action="#">
+    <table border="0" align="center">
+      <tr>
+    	  <td><p>k</p></td>
+          <td><div class="slider" id="kSlider" tabIndex="1"><input class="slider-input" id="kSliderInput"/></div></td>
+          <td> </td>
+          <td><p>l</p></td>
+          <td><div class="slider" id="lSlider" tabIndex="2"><input class="slider-input" id="lSliderInput"/></div></td>
+          <td> </td>
+          <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td></form>
+          <td><form name="outform" action="#">
+          <textarea rows="1" cols="25" name="output"></textarea>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
 
 <script type="text/javascript">
 var kSlider = new Slider(document.getElementById("kSlider"), document.getElementById("kSliderInput"));
@@ -86,12 +88,10 @@ window.onresize = function () {
   lSlider.recalculate();
 };
 </script>
-</form>
 
-<canvas id="canvas" width="750" height="500"></canvas>
-
+<div class="canvas-row">
+  <canvas id="canvas" width="750" height="500"></canvas>
 </div>
 
-</div>
 </body>
 </html>

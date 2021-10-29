@@ -4,6 +4,7 @@
   <title>Michael Bradford Williams | Particles</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles_xl.css" />
   <link rel="shortcut icon" href="favicon.ico" />
   <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
   <script type="text/javascript" src="./js/range.js"></script>
@@ -15,8 +16,8 @@
 
  <body onload="init(1);">
 
- <div id="content" width="100%">
- <table border="0" align="center" id="controls_table">
+ <div class="content-row" id="controls">
+  <table border="0" align="center" id="controls_table">
     <tr>
       <td align="right"><p>Number of Particles:</p></td>
       <td><div class="slider" id="partSlider" tabIndex="1">
@@ -60,6 +61,8 @@
         </select></td>
     </tr>
   </table>
+</div>
+
 <script type="text/javascript">
 
 var partSl = new Slider(document.getElementById("partSlider"), document.getElementById("partSliderInput"));
@@ -107,8 +110,8 @@ window.onresize = function () {
 };
 </script>
 
-<canvas id="canvas" width="750" height="750"></canvas>
-
+<div class="canvas-row">
+  <canvas id="canvas" width="750" height="750"></canvas>
 </div>
 
 </body>

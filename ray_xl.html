@@ -4,6 +4,7 @@
   <title>Michael Bradford Williams | Ray Tracer</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles_xl.css" />
   <link rel="shortcut icon" href="favicon.ico" />
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/ray.js"></script>
@@ -12,9 +13,9 @@
 
 <body onload="init(1);">
 
-<div id="content" width="100%">
+<div class="content-row" width="100%" id="controls">
   <form name="parameters" action="#">
-    <table border="1" align="center" id="controls_table">
+    <table border="0" align="center">
       <tr>
         <td colspan="1" align="right">
           Scene: <select name="scene_select">
@@ -36,13 +37,16 @@
         <td colspan="2" align="center">
           <input type="button" name="draw" value="Draw Scene" onClick="drawScene();">
         </td>
+      </tr>
     </table>
   </form>
+</div>
 
+<div class="canvas-row">
   <center><canvas id="canvas" width="750" height="750"></canvas></center>
 </div>
 
-<div class="middle">
+<div class="content-row">
   <form name="outform" action="#">
     <textarea rows="25" cols="80" name="output"></textarea>
   </form>

@@ -12,7 +12,6 @@ let g;
 let dragging = false;
 let dragIndex = 0;
 
-
 let COLOR_DEFAULT = "#000000";
 let COLOR_SELECTED = "#FF0000";
 let COLOR_HALO = "#0000FF";
@@ -235,8 +234,18 @@ function updateGraph(type, n, m) {
   }
 }
 
-function init() {
+function init(adjustSize) {
   let canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = 0.66 * WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext) {

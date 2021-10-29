@@ -4,6 +4,7 @@
 	<title>Michael Bradford Williams | Mandelbrot Set</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="./css/styles_xl.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/mand.js"></script>
@@ -11,25 +12,25 @@
 
 <body onload="init(1);">
 
-<div id="content" width="100%">
+<div class="content-row" id="controls" width="100%">
+	<table border="0" align="center">
+	  <tr>
+	    <td align="center">
+	      <form name="controls">
+	        <input type="button" name="reset" value="Reset" onclick="resetState();" />
+	      </form>
+	    </td>
+	    <td align="center">
+	      <form name="outform">
+	        <textarea rows="2" cols="50" name="output"></textarea>
+	      </form>
+	    </td>
+	  </tr>
+	</table>
+</div>
 
-<table border="0" align="center" id="controls_table">
-  <tr>
-    <td align="center">
-      <form name="controls">
-        <input type="button" name="reset" value="Reset" onclick="resetState();" />
-      </form>
-    </td>
-    <td align="center">
-      <form name="outform">
-        <textarea rows="2" cols="50" name="output"></textarea>
-      </form>
-    </td>
-  </tr>
-</table>
-
-<canvas id="canvas" width="750" height="750"></canvas>
-
+<div class="canvas-row">
+	<canvas id="canvas" width="750" height="750"></canvas>
 </div>
 
 </body>

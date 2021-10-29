@@ -259,8 +259,17 @@ function draw() {
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = parseInt(document.getElementById("content").clientWidth / 30) * 30; // round width to 30 = LCM of magnification values
-    HEIGHT = window.innerHeight - parseInt(1.25 * document.getElementById("controls_table").clientHeight);
+    WIDTH = parseInt(document.getElementById("controls").clientWidth / 30) * 30; // round width to 30 = LCM of magnification values
+    // WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = 1.5 * WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.25 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
+    // WIDTH = parseInt(document.getElementById("content").clientWidth / 30) * 30; // round width to 30 = LCM of magnification values
+    // HEIGHT = window.innerHeight - parseInt(1.25 * document.getElementById("controls_table").clientHeight);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;

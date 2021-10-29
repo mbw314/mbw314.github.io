@@ -1,0 +1,23 @@
+body {
+  background: #dff2f7;
+  font-family: verdana,tahoma,sans-serif;
+  text-align: left;
+  color: #000000;
+}
+
+.content-row {
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.canvas-row {
+  border-style: solid;
+  border-width: 1px;
+}
+
+canvas {
+  display: block;
+}

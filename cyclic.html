@@ -12,7 +12,7 @@
   <script language="JavaScript" type="text/javascript" src="./js/cyclic.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
 <div class="content-row" id="header-row">
   <h2>Michael Bradford Williams</h2>
@@ -42,11 +42,13 @@ Every integer \(c \in \mathbb{Z}\) gives rise to a
 \[
 \phi_c : \mathbb{Z} / n \mathbb{Z} \longrightarrow \mathbb{Z} / n \mathbb{Z}
 \]
-defined by \(\phi_c([a]_n) := [ca]_n\). We check that it is indeed a homomorphism:
+defined by \(\phi_c([a]_n) := [ca]_n\).
+
+<!-- We check that it is indeed a homomorphism:
 \[
 \phi_c([a]_n + [b]_n) = \phi_c([a + b]_n) = [c(a + b)]_n = [ca + cb]_n = [ca]_n + [cb]_n
 = \phi_c([a]_n) + \phi_c([b]_n)
-\]
+\] -->
 </p>
 
 <p>
@@ -55,7 +57,7 @@ with the \(n\)th <a href="https://en.wikipedia.org/wiki/Root_of_unity">roots of 
 \[
 U_n := \{e^{2\pi i / k} | i=0,\dots,n-1\} \subset \mathbb{C}
 \]
-which is a subgroup of the init circle group \(S^1 \subset \mathbb{C}\). To do this,
+which is a subgroup of the unit circle group \(S^1 \subset \mathbb{C}\). To do this,
 define \(\psi: \mathbb{Z} / n \mathbb{Z} \rightarrow U_n\) by \(\psi([a]_n) = e^{2\pi i a / n}\).
 One can check that this is a homomorphism, and that it is injective. By construction
 the image is \(U_n\), so we have an isomorphism \(\mathbb{Z} / n \mathbb{Z} \simeq U_n\).
@@ -77,7 +79,7 @@ the parameter \(c\) varies over time. The group has \(n=512\). There is also a <
 
 </div>
 
-<div class="content-row">
+<div class="content-row" id="controls">
   <form name="parameters" action="#">
     <table border="0" align="center">
       <tr>
@@ -97,7 +99,7 @@ the parameter \(c\) varies over time. The group has \(n=512\). There is also a <
 <div class="content-row">
   <center>
   <form name="outform" action="#">
-    <textarea rows="1" cols="80" name="output"></textarea>
+    <textarea rows="1" cols="30" name="output"></textarea>
   </form>
   </center>
 </div>

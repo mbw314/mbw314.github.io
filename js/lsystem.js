@@ -1,5 +1,5 @@
-const WIDTH = 750;
-const HEIGHT = 750;
+let WIDTH = 750;
+let HEIGHT = 750;
 let canvasUtil;
 let sysDrawer;
 const MAX_ITERATIONS = 8;
@@ -292,7 +292,7 @@ class LSystemDrawer {
     //this.turtle.printSegments();
     this.turtle.draw();
     let time1 = (new Date()).getTime();
-    canvasUtil.println(`drew iteration ${this.iteration} with ${this.turtle.segments.length} line segments in ${(time1 - time0) / 1000.0} seconds`);
+    canvasUtil.println(`drew iteration ${this.iteration} with ${this.turtle.segments.length} segments in ${(time1 - time0) / 1000.0} s`);
     this.iteration += 1;
   }
 }
@@ -518,10 +518,15 @@ function load_example(ex) {
   sysDrawer.draw();
 }
 
-function init() {
+function init(adjustSize) {
   let canvas = document.getElementById('canvas');
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("controls").clientWidth;
+    HEIGHT = WIDTH;
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
+
   if (canvas.getContext) {
     let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);

@@ -14,7 +14,7 @@
   <script type="text/javascript" src="./js/strings.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
 <div class="content-row" id="header-row">
   <h2>Michael Bradford Williams</h2>
@@ -39,7 +39,7 @@ Below are controls for the applet, which should be self-explanatory. Here is a
 
 </div>
 
-<div class="content-row">
+<div class="content-row" id="controls">
   <table border="0" cell-padding="0">
     <tr>
       <td align="right"><p>Maximum Splits:</p></td>
@@ -185,7 +185,7 @@ window.onresize = function () {
 <div class="content-row">
   <center>
     <form name="outform">
-      <textarea rows="10" cols="80" name="output"></textarea>
+      <textarea rows="1" cols="30" name="output"></textarea>
     </form>
   </center>
 </div>

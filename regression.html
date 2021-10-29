@@ -12,7 +12,7 @@
   <script language="JavaScript" type="text/javascript" src="./js/regression.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
 <div class="content-row" id="header-row">
   <h2>Michael Bradford Williams</h2>
@@ -57,9 +57,11 @@ Again think of the variables \(m\) and \(b\) as a point \((m,b)\) in the plane.<
 <li>Repeat Step 2 as many times as needed.</li>
 </ol>
 <p>The gradient is just the vector of partial derivatives of \(J\):
-\[ \nabla J(m, b)
-= \left( \frac{\partial J}{\partial m}(m, b), \frac{\partial J}{\partial b}(m, b) \right)
-= \left( \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i) x_i, \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i) \right). \]
+\[ \begin{align*}
+\nabla J(m, b)
+&= \left( \frac{\partial J}{\partial m}(m, b), \frac{\partial J}{\partial b}(m, b) \right) \\
+&= \left( \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i) x_i, \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i) \right).
+\end{align*} \]
 </p>
 
 <p>
@@ -76,17 +78,28 @@ called the "learning rate" and can also be controlled.
 
 </div>
 
-<div class="content-row">
+<div class="content-row" id="controls">
+	<form name="controls">
 	<table border="0" align="center">
 		<tr>
-			<td><b>Regression Type:</b>
+			<td align="right">
+				<b>Regression Type:</b>
 			</td>
 			<td>
-				<form name="controls">
+
 				Linear<input type="radio" name="regtype" value="linear" checked="yes">
 				Quadratic<input type="radio" name="regtype" value="quadratic">
 	      Cubic<input type="radio" name="regtype" value="cubic">
-	      <b>Learning Rate</b>
+      </td>
+      <td>
+        <input type="button" name="iter" value="Iterate/Pause" onClick="pauseDrawing();">
+			</td>
+		</tr>
+		<tr>
+			<td align="right">
+				<b>Learning Rate:</b>
+			</td>
+			<td>
 	      <select name="learning_rate">
 	        <option value="0.1">0.1</option>
 	        <option value="0.3">0.3</option>
@@ -94,15 +107,14 @@ called the "learning rate" and can also be controlled.
 	        <option value="1.3">1.3</option>
 	        <option value="2.0">2.0</option>
 	      </select>
-				</form>
 			</td>
 			<td align="left">
-				<input type="button" name="iter" value="Iterate/Pause" onClick="pauseDrawing();">
 				<input type="button" name="reset" value="Reset" onClick="refreshData();">
 				</form>
 			</td>
 		</tr>
 	</table>
+	</form>
 </div>
 
 <div class="canvas-row">
@@ -116,7 +128,7 @@ called the "learning rate" and can also be controlled.
 		<tr>
 			<td>
 				<form name="outform">
-			    <textarea rows="25" cols="80" name="output"></textarea>
+			    <textarea rows="3" cols="45" name="output"></textarea>
 		    </form>
 			</td>
 		</tr>

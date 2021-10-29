@@ -137,12 +137,12 @@ function resetState() {
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = document.getElementById("header-row").clientWidth;
+    WIDTH = document.getElementById("controls").clientWidth;
     console.log(WIDTH);
-    if (WIDTH < 750) {
+    if (WIDTH <= 750) {
       HEIGHT = WIDTH;
     } else {
-      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls_table").clientHeight);
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
     }
     console.log(HEIGHT);
   }
