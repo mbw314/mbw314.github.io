@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Michael Bradford Williams | Ray Tracer</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   <link rel="shortcut icon" href="favicon.ico" />
   <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
@@ -13,30 +13,28 @@
 </head>
 
 <body onload="init();">
-<div class="container">
 
-  <div class="topsmall">
-    <div class="topleftsmall">
-       <a href="./index.html">
-      <script type="text/javascript">
-              showRandomImage("300x50");
-         </script>
-       </a>
-    </div>
-    <h1><a href="./index.html">Michael Bradford Williams</a></h1>
-  </div>
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Ray Tracer</h3>
+</div>
 
-  <div class="middle">
-    <h2>Ray Tracer</h2>
-    <p><a href="">Ray tracing</a> is a technique for rendering image. The main idea
+<div class="content-row">
+
+<p>
+<a href="">Ray tracing</a> is a technique for rendering image. The main idea
 is to trace (backwards) the path of rays of light from a virtual camera (a point in 3D space),
 through each pixel in a virtual image (a rectangular region of a plane), and into a
 virtual scene containing the objects that will appear in the image. One advantage of
 this approach is that a high degree of realism can be attained with pysically accurate
 models of how light interacts with various types of materials (e.g., shadows, reflections,
-refraction, etc.). One disadvantage is that it can be very computationally expensive.</p>
+refraction, etc.). One disadvantage is that it can be very computationally expensive.
+</p>
 
-<p>Below is a (relatively) basic implementation of the ray tracing algorithm. It has the following features:</p>
+<p>
+Below is a (relatively) basic implementation of the ray tracing algorithm. It has the following features:
+</p>
+
 <ul>
   <li>Objects:</li>
     <ul>
@@ -58,60 +56,57 @@ refraction, etc.). One disadvantage is that it can be very computationally expen
 <a href="https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model">Binn-Phong</a>
 (specular) reflectance</li>
 </ul>
-<p>A number of different scenes (mostly basic ones for testing) can be selected, and the position
+
+<p>
+A number of different scenes (mostly basic ones for testing) can be selected, and the position
 of the camera can be controlled. The camera is always pointed at the origin. WARNING: performance in
-Firefox, at least in my experiments, has been very poor.</p>
+Firefox, at least in my experiments, has been very poor.
+</p>
 
-    <p>Here is a <a href="./ray_xl.html">larger version</a> of this program.</a>
-  </div>
-
-  <div class="middle">
-    <form name="parameters" action="#">
-      <table border="0" align="center" id="controls_table">
-        <tr>
-          <td colspan="1" align="right">
-            Scene: <select name="scene_select">
-              <option value="0" selected="selected">scene 1</option>
-              <option value="1">Test: Planes</option>
-              <option value="2">Test: Spheres</option>
-              <option value="3">Test: Boxes</option>
-              <option value="4">Test: Cylinders 1</option>
-              <option value="5">Test: Cylinders 2</option>
-              <option value="6">Test: Hyperbolic Paraboloids 1</option>
-              <option value="7">Test: Hyperbolic Paraboloids 2</option>
-              <option value="8">Test: Elliptic Paraboloids 1</option>
-              <option value="9">Test: Elliptic Paraboloids 2</option>
-            </select>
-          </td>
-          <td>Camera X: <input type="text" id="camera_x" value="-5" size="5">
-               Y: <input type="text" id="camera_y" value="1" size="5">
-               Z: <input type="text" id="camera_z" value="3" size="5"></td>
-          <td colspan="2" align="center">
-            <input type="button" name="draw" value="Draw Scene" onClick="drawScene();">
-          </td>
-      </table>
-    </form>
-  </div>
-
-  <div class="middle">
-  <center>
-    <canvas id="canvas" width="750" height="750">
-      <p>Your browser is currently unsupported.</p>
-    </canvas>
-  </center>
-  </div>
-
-
-  <div class="middle">
-    <form name="outform" action="#">
-      <textarea rows="25" cols="80" name="output"></textarea>
-    </form>
-  </div>
-
-  <div class="bottom">
-    <p>last modified: 01/01/2020</p>
-  </div>
+<p>Here is a <a href="./ray_xl.html">larger version</a> of this program.
+</a>
 
 </div>
+
+<div class="content-row">
+  <form name="parameters" action="#">
+    <table border="0" align="center" id="controls_table">
+      <tr>
+        <td colspan="1" align="right">
+          Scene: <select name="scene_select">
+            <option value="0" selected="selected">scene 1</option>
+            <option value="1">Test: Planes</option>
+            <option value="2">Test: Spheres</option>
+            <option value="3">Test: Boxes</option>
+            <option value="4">Test: Cylinders 1</option>
+            <option value="5">Test: Cylinders 2</option>
+            <option value="6">Test: Hyperbolic Paraboloids 1</option>
+            <option value="7">Test: Hyperbolic Paraboloids 2</option>
+            <option value="8">Test: Elliptic Paraboloids 1</option>
+            <option value="9">Test: Elliptic Paraboloids 2</option>
+          </select>
+        </td>
+        <td>Camera X: <input type="text" id="camera_x" value="-5" size="5">
+             Y: <input type="text" id="camera_y" value="1" size="5">
+             Z: <input type="text" id="camera_z" value="3" size="5"></td>
+        <td colspan="2" align="center">
+          <input type="button" name="draw" value="Draw Scene" onClick="drawScene();">
+        </td>
+    </table>
+  </form>
+</div>
+
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
+</div>
+
+<div class="content-row">
+  <form name="outform" action="#">
+    <textarea rows="25" cols="80" name="output"></textarea>
+  </form>
+</div>
+
 </body>
 </html>

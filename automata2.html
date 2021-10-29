@@ -1,46 +1,42 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
+  <title>Michael Bradford Williams | Cellular Automata</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Michael Bradford Williams | Cellular Automata</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
-	<script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/automata.js"></script>
 </head>
 
 <body onload="init(); drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);">
 
-<div class="container">
+	<div class="content-row" id="header-row">
+	<h2>Michael Bradford Williams</h2>
+	<h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Cellular Automata</h3>
+	</div>
 
-<div class="topsmall">
-<div class="topleftsmall">
-   <a href="./index.html">
-	<script type="text/javascript">
-      		showRandomImage("300x50");
-   	</script>
-   </a>
-</div>
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
-</div>
+<div class="content-row">
 
-<div class="middle">
+<p>
+See <a href="./automata.html">this page</a> for more information about what this program is all about.
+</p>
 
-<h2>Cellular Automata</h2>
-
-<p>See <a href="./automata.html">this page</a> for more information about what this program is all about.</p>
-
-<p>Click "Draw New" to begin with a random rule. "Refresh Current" will keep the same rule from the previous
+<p>
+Click "Draw New" to begin with a random rule. "Refresh Current" will keep the same rule from the previous
 drawing (but any change in the number of colors is ignored), but adjust the other options if they have been
 changed. "Reset" returns the form elements to their defaults, but doesn't redraw the image. "Pause Scrolling"
-will toggle animation of the image (slower for lower magnification levels).</p>
+will toggle animation of the image (slower for lower magnification levels).
+</p>
 
-<p>Here is a <a href="./automata2_xl.html">larger version</a> of this program.</p>
+<p>
+Here is a <a href="./automata2_xl.html">larger version</a> of this program.
+</p>
+
 </div>
 
-<div class="middle">
+<div class="content-row">
 
 <form name="parameters">
 
@@ -108,26 +104,18 @@ will toggle animation of the image (slower for lower magnification levels).</p>
 </table>
 </form>
 
-<br />
-
-<center>
-<canvas id="canvas" width="750" height="250"></canvas>
-
-<br />
-<br />
-
-<form name="outform">
-<textarea rows="5" cols="70" name="output"></textarea>
-</form>
-
-</center>
-
 </div>
 
-<div class="bottom">
-<p>last modified: 02/21/2020</p>
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
 </div>
 
+<div class="content-row">
+	<form name="outform">
+		<textarea rows="5" cols="70" name="output"></textarea>
+	</form>
 </div>
 
 </body>
