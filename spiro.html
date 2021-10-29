@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
+  <title>Michael Bradford Williams | Spirographs</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>Michael Bradford Williams - Spirographs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
   <link rel="shortcut icon" href="favicon.ico" />
@@ -12,34 +12,29 @@
   <script type="text/javascript" src="./js/range.js"></script>
   <script type="text/javascript" src="./js/timer.js"></script>
   <script type="text/javascript" src="./js/slider.js"></script>
-  <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/spiro.js"></script>
 </head>
 
 <body onload="init();">
-<div class="container">
 
-  <div class="topsmall">
-    <div class="topleftsmall">
-       <a href="./index.html">
-      <script type="text/javascript">
-              showRandomImage("300x50");
-         </script>
-       </a>
-    </div>
-    <h1><a href="./index.html">Michael Bradford Williams</a></h1>
-  </div>
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Spirographs</h3>
+</div>
 
-  <div class="middle">
-    <h2>Spirographs</h2>
-<p>A <a href="https://en.wikipedia.org/wiki/Spirograph">Spirograph</a> is a well-known toy that
+<div class="content-row">
+
+<p>
+A <a href="https://en.wikipedia.org/wiki/Spirograph">Spirograph</a> is a well-known toy that
 allows one to draw a variety of beautiful curves. Each curve follows the trajectory of a point inside a small
 gear that moves inside of a larger gear (with inward facing teeth). The curves have a very
 interesting and long-studied mathematical basis, which is explained well
-<a href="https://en.wikipedia.org/wiki/Spirograph#Mathematical_basis">here</a>.</p>
+<a href="https://en.wikipedia.org/wiki/Spirograph#Mathematical_basis">here</a>.
+</p>
 
-<p>If we assume that the gears are circles, and the larger circle has radius 1, then let \(k \in [0, 1]\) represent the
+<p>
+If we assume that the gears are circles, and the larger circle has radius 1, then let \(k \in [0, 1]\) represent the
 radius of the smaller circle. Let \(\ell \in [0, 1]\) represent the proportional distance from the center of the
 smaller circle to the curve, at the start of the drawing. Then the resulting curve can be parametrized
 by time: \(c(t) = (x(t), y(t))\). It turns out that the functions \(x(t)\) and \(y(t)\) have a nice form (see the
@@ -50,31 +45,37 @@ x(t) &= (1-k) \cos(t) + k \ell \cos\left( \frac{1-k}{k} t \right) \\
 y(t) &= (1-k) \sin(t) + k \ell \sin\left( \frac{1-k}{k} t \right)
 \end{align*} \]
 </p>
-<p>The time parameter \(t\) of the curve can range over all real numbers, but we only need one period of the curve, which is
+<p>
+The time parameter \(t\) of the curve can range over all real numbers, but we only need one period of the curve, which is
 \(2\pi\) times the least common multiple of the periods of the trig functions involved.  Also, technically, we
 should have \(k \in [0, 1]\) and \(\ell \in [0, 1]\), but there is no mathematical reason for such restrictions
-in the above equations (except when \(k=0\)).</p>
+in the above equations (except when \(k=0\)).
+</p>
 
-<p>Below is a program to draw Spirograph-like curves, where \(k\) and \(\ell\) can be adjusted. Here is a
-<a href="./spiro_xl.html">larger version</a> of the program.</p>
+<p>
+Below is a program to draw Spirograph-like curves, where \(k\) and \(\ell\) can be adjusted. Here is a
+<a href="./spiro_xl.html">larger version</a> of the program.
+</p>
 
-  </div>
+</div>
 
-  <div class="middle">
-    <form name="parameters" action="#">
-      <table border="0" align="center">
-        <tr>
-        	<td><p>\(k\)</p></td>
-        	<td><div class="slider" id="speedSlider" tabIndex="1"><input class="slider-input" id="speedSliderInput"/></div></td>
-        	<td> </td>
-        	<td><p>\(\ell\)</p></td>
-        	<td><div class="slider" id="angleSlider" tabIndex="2"><input class="slider-input" id="angleSliderInput"/></div></td>
-          <td> </td>
-          <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td>
-        </tr>
-      </table>
+<div class="content-row">
+  <form name="parameters" action="#">
+    <table border="0" align="center">
+      <tr>
+      	<td><p>\(k\)</p></td>
+      	<td><div class="slider" id="speedSlider" tabIndex="1"><input class="slider-input" id="speedSliderInput"/></div></td>
+      	<td> </td>
+      	<td><p>\(\ell\)</p></td>
+      	<td><div class="slider" id="angleSlider" tabIndex="2"><input class="slider-input" id="angleSliderInput"/></div></td>
+        <td> </td>
+        <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td>
+      </tr>
+    </table>
+  </form>
+</div>
 
-      <script type="text/javascript">
+<script type="text/javascript">
 var speedSl = new Slider(document.getElementById("speedSlider"), document.getElementById("speedSliderInput"));
 speedSl.setMinimum(SLIDER_MIN);
 speedSl.setMaximum(SLIDER_MAX);
@@ -126,32 +127,21 @@ window.onresize = function () {
   speedSl.recalculate();
   angleSl.recalculate();
 };
-      </script>
+</script>
 
-    </form>
-  </div>
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
+</div>
 
-  <div class="middle">
+<div class="content-row">
   <center>
-    <canvas id="canvas" width="750" height="750">
-      <p>Your browser is currently unsupported.</p>
-    </canvas>
-  </center>
-  </div>
-
-
-  <div class="middle">
-    <center>
     <form name="outform" action="#">
       <textarea rows="1" cols="80" name="output"></textarea>
     </form>
   </center>
-  </div>
-
-  <div class="bottom">
-    <p>last modified: 03/01/2020</p>
-  </div>
-
 </div>
+
 </body>
 </html>

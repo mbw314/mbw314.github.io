@@ -1,88 +1,81 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
+  <title>Michael Bradford Williams | Mandelbrot Set</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Michael Bradford Williams | Mandelbrot Set</title>
-	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
-	<link rel="shortcut icon" href="favicon.ico" />
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-	<script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/mand.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
-
-<div class="container">
-
-<div class="topsmall">
-
-<div class="topleftsmall">
-   <a href="./index.html">
-	<script type="text/javascript">
-      		showRandomImage("300x50");
-   	</script>
-   </a>
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Mandelbrot Set</h3>
 </div>
 
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+<div class="content-row">
 
-</div>
-
-<div class="middle">
-
-<h2>Mandelbrot Set</h2>
-
-<p>The <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is one of the
+<p>
+The <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is one of the
 most well-known fractals. It is the subset of the plane (treated as the set of complex
 numbers \(\mathbb{C}\)) that behaves in a controlled way under repeated applications of a
 certain function from the plane to itself. More specifically, for \(c \in \mathbb{C}\), define the
 function \(f_c: \mathbb{C} \rightarrow \mathbb{C}\) by \(f_{c}(z) = z^{2} + c\). We can repeatedly apply
-this function, starting at \(z_0=0\), to get a sequence \(\{z_n\}_{n=0}^\infty\) defined by
-\[ z_0 = 0, z_1 = f_c(z_0), z_2 = f_c(z_1), z_3 = f_c(z_2), \dots, z_n = f_c(z_{n-1}), \dots \]
-The Mandelbrot set is
-\[ M = \{ c \in \mathbb{C} : \{z_n\} \text{ is a bounded sequence}\}. \]
+this function, starting at \(z_0=0\), to get a sequence \((z_n)_{n=0}^\infty\) defined by
+\[
+\begin{align*}
+z_0 &= 0 \\
+z_1 &= f_c(z_0) = 0^2 + c = c \\
+z_2 &= f_c(z_1) = c^2 + c \\
+z_3 &= f_c(z_2) = (c^2 + c)^2 + c \\
+&\vdots \\
+z_n &= f_c(z_{n-1}) \\
+&\vdots
+\end{align*}
+\]
+Finally, the Mandelbrot set is defined as the set
+\[ M := \{ c \in \mathbb{C} : (z_n)_{n=0}^\infty \text{ is a bounded sequence}\}. \]
 </p>
 
-<p>Below is an app to draw the Mandelbrot set. Click to zoom, and shift-click to zoom out. Technically,
+<p>
+Below is an app to draw the Mandelbrot set. Click to zoom, and shift-click to zoom out. Technically,
 only the black portion of the drawing is the Mandelrot set. The colors are points whose sequences are
 unbounded, with a color assigned based on how many iterations of \(f_c\) are needed before the point's
-sequence reaches a certain distance from the origin.</p>
+sequence reaches a certain distance from the origin.
+</p>
 
-<p>Here is a <a href="./mand_xl.html">larger version</a> of the program.</p>
-</div>
-
-<div class="middle">
-    <canvas id="canvas" width="750" height="750">
-        <p>Your browser is currently unsupported.</p>
-    </canvas>
-</div>
-
-<div class="middle">
-  <table border="0" align="center">
-    <tr>
-      <td align="center" colspan="2">
-        <form name="controls">
-          <input type="button" name="reset" value="Reset" onclick="resetState();" />
-        </form>
-      </td>
-      <td align="center">
-        <form name="outform">
-          <textarea rows="2" cols="50" name="output"></textarea>
-        </form>
-      </td>
-    </tr>
-  </table>
-</div>
-
-<div class="bottom">
-<p>last modified: 02/21/2020</p>
-</div>
+<p>
+Here is a <a href="./mand_xl.html">larger version</a> of the program.
+</p>
 
 </div>
+
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
+</div>
+
+<div class="content-row">
+	<div id="controls_table">
+  	<form name="controls">
+	    <input type="button" name="reset" value="Reset" onclick="resetState();" />
+	  </form>
+	  <form name="outform">
+	    <textarea rows="2" cols="45" name="output"></textarea>
+	  </form>
+	</div>
+</div>
+
+<!-- <div class="content-row">
+<p>last modified: 05/06/2019</p>
+</div> -->
 
 </body>
 </html>

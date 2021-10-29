@@ -1,44 +1,36 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Michael Bradford Williams | Vector Fields</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   <link rel="shortcut icon" href="favicon.ico" />
-  <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/vectors.js"></script>
 </head>
 
 <body onload="init();">
 
-<div class="container">
-
-<div class="topsmall">
-
-<div class="topleftsmall">
-   <a href="./index.html">
-  <script type="text/javascript">
-          showRandomImage("300x50");
-     </script>
-   </a>
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Vector Fields</h3>
 </div>
 
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+<div class="content-row">
+
+<p>
+In yet another <a href="https://en.wikipedia.org/wiki/Canvas_element">HTML canvas</a> experiment, I
+explored a few types of vector fields based on attraction to the mouse cursor.
+</p>
+
+<p>
+Here is a <a href="./vectors_xl.html">larger version</a> of this program.
+</p>
 
 </div>
 
-<div class="middle">
-
-<h2>Vector Fields</h2>
-
-<p>In yet another <a href="https://en.wikipedia.org/wiki/Canvas_element">HTML canvas</a> experiment, I
-explored a few types of vector fields based on attraction to the mouse cursor.</p>
-
-<p>Here is a <a href="./vectors_xl.html">larger version</a> of this program.</p> </div>
-
-<div class="middle">
+<div class="content-row">
   <table>
     <tr>
       <td><p>Style:</p></td>
@@ -59,13 +51,13 @@ explored a few types of vector fields based on attraction to the mouse cursor.</
   </table>
 </div>
 
-<div class="middle">
-  <canvas id="canvas" width="750" height="750">
-        <p>Your browser is currently unsupported.</p>
-    </canvas>
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
 </div>
 
-<div class="middle">
+<div class="content-row">
   <table align="center">
     <tr>
       <td>
@@ -75,12 +67,6 @@ explored a few types of vector fields based on attraction to the mouse cursor.</
       </td>
     </tr>
   </table>
-</div>
-
-<div class="bottom">
-<p>last modified: 02/21/2020</p>
-</div>
-
 </div>
 
 </body>
