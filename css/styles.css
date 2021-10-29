@@ -48,6 +48,17 @@ h3 {
 
 }
 
+.canvas-row {
+  margin-bottom: 10px;
+  border-style: solid;
+  border-width: 1px;
+  max-width: 810px;
+}
+
+canvas {
+  display: block;
+}
+
 .flex-row {
   display: flex;
   margin-bottom: 10px;

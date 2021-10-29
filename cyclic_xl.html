@@ -4,6 +4,7 @@
   <title>Michael Bradford Williams | Endomorphisms of Cylic Groups</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles_xl.css" />
   <link rel="shortcut icon" href="favicon.ico" />
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/cyclic.js"></script>
@@ -11,21 +12,21 @@
 
 <body onload="init(1);">
 
-<div id="content" width="100%">
-  <table border="0" align="center" id="controls_table">
+<div class="content-row" id="controls">
+  <table border="0" align="center">
     <tr>
       <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
       <td><form name="outform" action="#">
-        <textarea rows="1" cols="50" name="output"></textarea>
+        <textarea rows="1" cols="30" name="output"></textarea>
       </form></td>
     </tr>
   </table>
+</div>
 
-  <center>
+<div class="canvas-row">
     <canvas id="canvas" width="750" height="500">
       <p>Your browser is currently unsupported.</p>
     </canvas>
-  </center>
 </div>
 
 </body>

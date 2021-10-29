@@ -12,7 +12,7 @@
   <script language="JavaScript" type="text/javascript" src="./js/circlePacking.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
 
 <div class="content-row" id="header-row">
@@ -77,16 +77,16 @@ of the circle packing), and (3) circles represented by randomly colored disks.
 
 </div>
 
-<div class="content-row">
+<div class="content-row" id="controls">
   <form name="parameters" action="#">
-    <table border="0" align="center" id="controls_table">
+    <table border="0" align="center">
       <tr>
-        <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
-        <td colspan="2" align="center"><input type="button" name="reset" value="Reset Animation" onClick="resetDrawing();"></td>
+        <td colspan="2" align="center"><input type="button" name="pause" value="Pause" onClick="pauseDrawing();"></td>
+        <td colspan="2" align="center"><input type="button" name="reset" value="Reset" onClick="resetDrawing();"></td>
         <td>
           <select name="drawing_style">
             <option value="simple" selected="selected">simple</option>
-            <option value="connections">simple, with connections</option>
+            <option value="connections">with tangency</option>
             <option value="colorful">colorful</option>
           </select>
         </td>
@@ -104,7 +104,7 @@ of the circle packing), and (3) circles represented by randomly colored disks.
 
 <div class="content-row">
   <form name="outform" action="#">
-    <textarea rows="5" cols="80" name="output"></textarea>
+    <textarea rows="1" cols="48" name="output"></textarea>
   </form>
 </div>
 

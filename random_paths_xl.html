@@ -4,6 +4,7 @@
 	<title>Michael Bradford Williams | Random Paths in a Graph</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="./css/styles_xl.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/graph.js"></script>
@@ -12,25 +13,27 @@
 
 <body onload="init(1);">
 
-<div id="content" width="100%">
-  <table border="0" align="center" id="controls_table">
-    <form name="controls">
-    <tr>
-    	<td colspan="1" align="right">Graph:</td>
-    	<td colspan="1" align="center">
-    	    <select id="graph">
-    			<option value="grid" selected>rectangular grid</option>
-    			<option value="tri_grid">triangular grid</option>
-    			<option value="hex_grid">hexagonal grid</option>
-    		</select></td>
-    	<td colspan="1" align="center">
-    	    <input type="button" name="draw" value="Draw" onClick="updateGraph(controls.graph.value);"></td>
-      <td colspan="1" align="center">
-          <input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
-    </tr>
-    </form>
-  </table>
+<div class="content-row" id="controls">
+	<form name="controls">
+		<table border="0" align="center">
+	    <tr>
+	    	<td colspan="1" align="right">Graph:</td>
+	    	<td colspan="1" align="center">
+	    	    <select id="graph">
+	    			<option value="grid" selected>rectangular grid</option>
+	    			<option value="tri_grid">triangular grid</option>
+	    			<option value="hex_grid">hexagonal grid</option>
+	    		</select></td>
+	    	<td colspan="1" align="center">
+	    	    <input type="button" name="draw" value="Draw" onClick="updateGraph(controls.graph.value);"></td>
+	      <td colspan="1" align="center">
+	          <input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
+	    </tr>
+  	</table>
+	</form>
+</div>
 
+<div class="canvas-row">
   <canvas id="canvas" width="750" height="750"></canvas>
 </div>
 

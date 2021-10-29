@@ -4,6 +4,7 @@
   <title>Michael Bradford Williams | Vector Fields</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles_xl.css" />
   <link rel="shortcut icon" href="favicon.ico" />
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/vectors.js"></script>
@@ -11,28 +12,30 @@
 
 <body onload="init(1);">
 
-<div id="content" width="100%">
-  <table border="0" align="center" id="controls_table">
+<div class="content-row" id="controls">
   <form name="controls">
-  <tr>
-    <td>Style:</td>
-    <td><select id="style">
-        <option value="0" selected>constant attractor force</option>
-        <option value="1">bounded force + remembering vectors</option>
-        <option value="2">gravity-like force</option>
-        <!--<option value="3">gravity-like force with global gravity</option>-->
-      </select></td>
-      <td> </td>
-    <td>Direction:</td>
-    <td><select id="direction">
-        <option value="1" selected>towards</option>
-        <option value="-1">away</option>
-      </select></td>
-      <td> </td>
-  </tr>
+    <table border="0" align="center" id="controls_table">
+      <tr>
+        <td>Style:</td>
+        <td><select id="style">
+            <option value="0" selected>constant attractor force</option>
+            <option value="1">bounded force + remembering vectors</option>
+            <option value="2">gravity-like force</option>
+            <!--<option value="3">gravity-like force with global gravity</option>-->
+          </select></td>
+          <td> </td>
+        <td>Direction:</td>
+        <td><select id="direction">
+            <option value="1" selected>towards</option>
+            <option value="-1">away</option>
+          </select></td>
+          <td> </td>
+      </tr>
+    </table>
   </form>
-  </table>
+</div>
 
+<div class="canvas-row">
   <canvas id="canvas" width="750" height="750"></canvas>
 </div>
 

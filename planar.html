@@ -13,7 +13,7 @@
   <script language="JavaScript" type="text/javascript" src="./js/planar.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
 <div class="content-row" id="header-row">
   <h2>Michael Bradford Williams</h2>
@@ -59,7 +59,7 @@ select it.  You can test whether the current subgraph is isomorphic to \(K_5\) o
 
 </div>
 
-<div class="content-row">
+<div class="content-row" id="controls">
   <form name="parameters" action="#">
     <table border="0" align="center">
       <tr>
@@ -130,15 +130,14 @@ select it.  You can test whether the current subgraph is isomorphic to \(K_5\) o
 </div>
 
 <div class="canvas-row">
-  <canvas id="canvas" width="250" height="500">
+  <canvas id="canvas" width="500" height="500">
     <p>Your browser is currently unsupported.</p>
   </canvas>
 </div>
 
-
 <div class="content-row">
   <form name="outform" action="#">
-    <textarea rows="5" cols="75" name="output"></textarea>
+    <textarea rows="5" cols="45" name="output"></textarea>
   </form>
 </div>
 

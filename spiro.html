@@ -16,7 +16,7 @@
   <script language="JavaScript" type="text/javascript" src="./js/spiro.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
 <div class="content-row" id="header-row">
   <h2>Michael Bradford Williams</h2>
@@ -59,7 +59,7 @@ Below is a program to draw Spirograph-like curves, where \(k\) and \(\ell\) can 
 
 </div>
 
-<div class="content-row">
+<div class="content-row" id="controls">
   <form name="parameters" action="#">
     <table border="0" align="center">
       <tr>
@@ -138,7 +138,7 @@ window.onresize = function () {
 <div class="content-row">
   <center>
     <form name="outform" action="#">
-      <textarea rows="1" cols="80" name="output"></textarea>
+      <textarea rows="1" cols="20" name="output"></textarea>
     </form>
   </center>
 </div>

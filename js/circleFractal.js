@@ -1,11 +1,11 @@
-const WIDTH = 750;
-const HEIGHT = 750;
+let WIDTH = 750;
+let HEIGHT = 750;
 let canvasUtil;
 
 const MAX_ITER = 10;
-const x0 = WIDTH / 2;
-const y0 = HEIGHT / 2;
-const r0 = WIDTH / 2;
+let x0 = WIDTH / 2;
+let y0 = HEIGHT / 2;
+let r0 = WIDTH / 2;
 const THETA = Math.PI;
 const BLACK = new Color(0, 0, 0);
 const WHITE = new Color(255, 255, 255);
@@ -44,6 +44,9 @@ class CircleFractal {
 }
 
 function refreshData() {
+  x0 = WIDTH / 2;
+  y0 = HEIGHT / 2;
+  r0 = WIDTH / 2;
   circleFractal = new CircleFractal(Color.random());
   canvasUtil.clearCanvas();
   canvasUtil.clearText();
@@ -55,16 +58,25 @@ function iterate() {
   circleFractal.iterateAndDraw();
 }
 
-function init() {
+function init(adjustSize) {
   let canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
     let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     refreshData();
-  }
-  else {
+  } else {
     alert('You need a better web browser to see this.');
   }
 }

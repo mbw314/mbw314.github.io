@@ -1,5 +1,5 @@
-const WIDTH = 750;
-const HEIGHT = 750;
+let WIDTH = 750;
+let HEIGHT = 750;
 let canvasUtil;
 let kme; // k-means ensemble
 const BLACK = Color.colorString(0, 0, 0);
@@ -184,8 +184,18 @@ function iterate() {
   kme.drawPoints();
 }
 
-function init() {
+function init(adjustSize) {
   let canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){

@@ -15,7 +15,7 @@
   <script type="text/javascript" src="./js/particles.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
 <div class="content-row" id="header-row">
   <h2>Michael Bradford Williams</h2>
@@ -34,7 +34,7 @@ Here's a <a href="./particles_xl.html">larger version</a> of this program.
 
 </div>
 
-<div class="content-row">
+<div class="content-row" id="controls">
   <table border="0" align="center">
     <tr>
       <td align="right"><p>Number of Particles:</p></td>
@@ -139,7 +139,7 @@ window.onresize = function () {
   <table align="center">
     <tr>
       <td><form name="outform">
-          <textarea rows="5" cols="80" name="output"></textarea>
+          <textarea rows="1" cols="30" name="output"></textarea>
           </form>
       </td>
     </tr>

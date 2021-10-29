@@ -11,7 +11,7 @@
   <script language="JavaScript" type="text/javascript" src="./js/randomPaths.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
 <div class="content-row" id="header-row">
   <h2>Michael Bradford Williams</h2>
@@ -38,9 +38,9 @@ Here is a <a href="./random_paths_xl.html">larger version</a> of this program.
 
 </div>
 
-<div class="middle">
-	<table border="0" align="center">
-		<form name="controls">
+<div class="content-row" id="controls">
+  <form name="controls">
+	  <table border="0" align="center">
 			<tr>
 				<td colspan="1" align="right">Graph:</td>
 				<td colspan="1" align="left">
@@ -55,8 +55,8 @@ Here is a <a href="./random_paths_xl.html">larger version</a> of this program.
 				    <input type="button" name="draw" value="Draw" onClick="updateGraph(controls.graph.value);"></td>
 			      <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
 			</tr>
-		</form>
-	</table>
+	  </table>
+	</form>
 </div>
 
 <div class="canvas-row">
@@ -65,11 +65,11 @@ Here is a <a href="./random_paths_xl.html">larger version</a> of this program.
   </canvas>
 </div>
 
-<div class="content-row">
+<!-- <div class="content-row">
   <form name="outform" action="#">
-    <textarea rows="5" cols="80" name="output"></textarea>
+    <textarea rows="5" cols="30" name="output"></textarea>
   </form>
-</div>
+</div> -->
 
 </body>
 </html>

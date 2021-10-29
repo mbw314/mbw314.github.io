@@ -10,7 +10,7 @@
   <script language="JavaScript" type="text/javascript" src="./js/automata.js"></script>
 </head>
 
-<body onload="init(); drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);">
+<body onload="init(1); drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);">
 
 	<div class="content-row" id="header-row">
 	<h2>Michael Bradford Williams</h2>
@@ -36,87 +36,82 @@ Here is a <a href="./automata2_xl.html">larger version</a> of this program.
 
 </div>
 
-<div class="content-row">
-
-<form name="parameters">
-
-<table border="0" align="center">
-<tr>
-	<td colspan="1" align="right">Number of colors:</td>
-	<td colspan="1" align="right">
-	    <select name="num_colors">
-    		<option value="2">2</option>
-    		<option value="3" selected="selected">3</option>
-    		<option value="4">4</option>
-    		<option value="5">5</option>
-    		<option value="6">6</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="1" align="right">Input cell configuration:</td>
-	<td colspan="1" align="right">
-	    <select name="cell_config">
-		    <option value="TWO_ABOVE">two above</option>
-        <option value="THREE_ABOVE" selected="selected">three above</option>
-		    <option value="FIVE_ABOVE">five above</option>
-		    <option value="THREE_AND_ONE_ABOVE">three above, one above those</option>
-		    <option value="THREE_AND_THREE_ABOVE">three above, three above those</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="1" align="right">First Line:</td>
-	<td colspan="1" align="right">
-	    <select name="first_rows_style">
-		    <option value="CENTERED">Centered</option>
-		    <option value="RANDOM" selected="selected">Random</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="1" align="right">Magnification:</td>
-	<td colspan="1" align="right">
-	    <select name="magnification">
-		    <option value="1x">1x</option>
-		    <option value="2x">2x</option>
-        <option value="3x">3x</option>
-		    <option value="5x" selected="selected">5x</option>
-		    <option value="10x">10x</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="2" align="center">
-	    <input type="button" name="draw" value="Draw New"
-        onClick="drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);" />
-	    <input type="button" name="refresh_current" value="Refresh Current Rule"
-        onClick="refresh(parameters.first_rows_style.value, parameters.magnification.value);" />
-      <input type="button" name="pause" value="Pause Scrolling"
-       onClick="pauseDrawing();" />
-      <input type="reset" name="resetButton" value="Reset" />
-	</td>
-</tr>
-</table>
-</form>
-
+<div class="content-row" id="controls">
+  <form name="parameters">
+    <table border="0" align="center">
+      <tr>
+      	<td colspan="1" align="right">Number of colors:</td>
+      	<td colspan="1" align="right">
+      	    <select name="num_colors">
+          		<option value="2">2</option>
+          		<option value="3" selected="selected">3</option>
+          		<option value="4">4</option>
+          		<option value="5">5</option>
+          		<option value="6">6</option>
+      	    </select>
+      	</td>
+      </tr>
+      <tr>
+      	<td colspan="1" align="right">Input cell configuration:</td>
+      	<td colspan="1" align="right">
+      	    <select name="cell_config">
+      		    <option value="TWO_ABOVE">two above</option>
+              <option value="THREE_ABOVE" selected="selected">three above</option>
+      		    <option value="FIVE_ABOVE">five above</option>
+      		    <option value="THREE_AND_ONE_ABOVE">three above, one above those</option>
+      		    <option value="THREE_AND_THREE_ABOVE">three above, three above those</option>
+      	    </select>
+      	</td>
+      </tr>
+      <tr>
+      	<td colspan="1" align="right">First Line:</td>
+      	<td colspan="1" align="right">
+      	    <select name="first_rows_style">
+      		    <option value="CENTERED">Centered</option>
+      		    <option value="RANDOM" selected="selected">Random</option>
+      	    </select>
+      	</td>
+      </tr>
+      <tr>
+      	<td colspan="1" align="right">Magnification:</td>
+      	<td colspan="1" align="right">
+      	    <select name="magnification">
+      		    <option value="1x">1x</option>
+      		    <option value="2x">2x</option>
+              <option value="3x">3x</option>
+      		    <option value="5x" selected="selected">5x</option>
+      		    <option value="10x">10x</option>
+      	    </select>
+      	</td>
+      </tr>
+      <tr>
+      	<td colspan="2" align="center">
+      	    <input type="button" name="draw" value="Draw New"
+              onClick="drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);" />
+      	    <input type="button" name="refresh_current" value="Refresh Current Rule"
+              onClick="refresh(parameters.first_rows_style.value, parameters.magnification.value);" />
+            <input type="button" name="pause" value="Pause Scrolling"
+             onClick="pauseDrawing();" />
+            <input type="reset" name="resetButton" value="Reset" />
+      	</td>
+      </tr>
+    </table>
+  </form>
 </div>
 
 <div class="canvas-row">
-  <canvas id="canvas" width="250" height="500">
-    <p>Your browser is currently unsupported.</p>
-  </canvas>
+  <center>
+    <canvas id="canvas" width="250" height="500">
+      <p>Your browser is currently unsupported.</p>
+    </canvas>
+  </center>
 </div>
 
-<div class="content-row">
+<!-- <div class="content-row">
 	<form name="outform">
 		<textarea rows="5" cols="70" name="output"></textarea>
 	</form>
-</div>
+</div> -->
 
 </body>
 </html>
