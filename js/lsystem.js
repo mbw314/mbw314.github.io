@@ -292,7 +292,7 @@ class LSystemDrawer {
     //this.turtle.printSegments();
     this.turtle.draw();
     let time1 = (new Date()).getTime();
-    canvasUtil.println(`drew iteration ${this.iteration} with ${this.turtle.segments.length} segments in ${(time1 - time0) / 1000.0} s`);
+    canvasUtil.println(`iteration ${this.iteration}; ${this.turtle.segments.length} segments; ${(time1 - time0) / 1000.0} s`);
     this.iteration += 1;
   }
 }

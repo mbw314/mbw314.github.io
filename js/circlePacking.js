@@ -7,7 +7,7 @@ let drawLabels = false;
 let MAX_RADIUS = 150;
 let circles = [];
 let RADIUS_INCREMENT = 0.5;
-let MAX_CIRCLES = 200;
+let MAX_CIRCLES = 150;
 
 let DISTANCE_BUFFER = 2;
 let keepCirclesInCanvas = false;
@@ -100,7 +100,7 @@ function drawSimpleLabels() {
 
 function resetDrawing() {
   circles = [];
-  d = new Circle(new Point(Math.random() * WIDTH, Math.random() * HEIGHT), 1.5 * MAX_RADIUS, Color.random(), 0, false);
+  d = new Circle(new Point(Math.random() * WIDTH, Math.random() * HEIGHT), MAX_RADIUS, Color.random(), 0, false);
   circles.push(d);
 }
 
@@ -291,51 +291,16 @@ function init(adjustSize) {
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
+  MAX_RADIUS = (WIDTH + HEIGHT) / (2 * 10);
+  console.log(MAX_RADIUS);
+  MAX_CIRCLES = (WIDTH + HEIGHT) / (2 * 5);
+  console.log(MAX_CIRCLES);
 
   if (canvas.getContext){
     let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     resetDrawing();
-
-    // canvasUtil.clearCanvas();
-    // let x1 = 375;
-    // let y1 = -1000;
-    // let r1 = 1350;
-    // let c1 = new Circle(new Point(x1, y1), r1, new Color(200, 200, 200), 0, true);
-    // circles.push(c1);
-    //
-    // let x2 = -150;
-    // let y2 = 375;
-    // let r2 = 250;
-    // let c2 = new Circle(new Point(x2, y2), r2, new Color(200, 200, 200), 1, true);
-    // circles.push(c2);
-    //
-    // let x3 = 900;
-    // let y3 = 375;
-    // let r3 = 250;
-    // let c3 = new Circle(new Point(x3, y3), r3, new Color(200, 200, 200), 2, true);
-    // circles.push(c3);
-    //
-    // let x4 = 300;
-    // let y4 = 1200;
-    // let r4 = 800;
-    // let c4 = new Circle(new Point(x4, y4), r4, new Color(200, 200, 200), 3, true);
-    // circles.push(c4);
-    //
-    // let x5 = 205;
-    // let y5 = 375;
-    // let r5 = 1;
-    // let c5 = new Circle(new Point(x5, y5), r5, new Color(200, 200, 200), 4, false);
-    // circles.push(c5);
-    //
-    // let r = 75;
-    // let ps = getCenterCandidates(x1, y1, r1, x2, y2, r2, r);
-    // let cs = ps.map(p => new Circle(p, r, Color.random(), 2, false));
-    // cs.forEach(c => canvasUtil.println(c.toString()));
-    // cs.forEach(c => c.drawSimple());
-
     return setInterval(draw, 5);
-
   } else {
     alert('You need a better web browser to see this.');
   }

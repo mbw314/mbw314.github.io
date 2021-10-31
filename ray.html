@@ -63,16 +63,16 @@ of the camera can be controlled. The camera is always pointed at the origin. WAR
 Firefox, at least in my experiments, has been very poor.
 </p>
 
-<p>Here is a <a href="./ray_xl.html">larger version</a> of this program.
+<p>Here is a <a href="./ray_xl.html">larger version</a> of this program more suited to desktop browsers.
 </a>
 
 </div>
 
 <div class="content-row" id="controls">
   <form name="parameters" action="#">
-    <table border="0" align="center">
+    <table border="1" align="center">
       <tr>
-        <td colspan="1" align="right">
+        <td>
           Scene: <select name="scene_select">
             <option value="0" selected="selected">scene 1</option>
             <option value="1">Test: Planes</option>
@@ -86,12 +86,16 @@ Firefox, at least in my experiments, has been very poor.
             <option value="9">Test: Elliptic Paraboloids 2</option>
           </select>
         </td>
-        <td>Camera X: <input type="text" id="camera_x" value="-5" size="5">
-             Y: <input type="text" id="camera_y" value="1" size="5">
-             Z: <input type="text" id="camera_z" value="3" size="5"></td>
-        <td colspan="2" align="center">
+        <td align="center">
           <input type="button" name="draw" value="Draw Scene" onClick="drawScene();">
         </td>
+      </tr>
+      <tr>
+        <td colspan="2">Camera X: <input type="text" id="camera_x" value="-5" size="4">
+             Y: <input type="text" id="camera_y" value="1" size="4">
+             Z: <input type="text" id="camera_z" value="3" size="4"></td>
+
+      </td>
     </table>
   </form>
 </div>

@@ -20,12 +20,12 @@
 <div class="content-row">
 
 <p>
-In yet another <a href="https://en.wikipedia.org/wiki/Canvas_element">HTML canvas</a> experiment, I
-explored a few types of vector fields based on attraction to the mouse cursor.
+This program explores a few types of vector fields that interact with a force determined by the mouse cursor.
 </p>
 
 <p>
-Here is a <a href="./vectors_xl.html">larger version</a> of this program.
+Note: this program has not been optimized for mobile web browsers.
+Here is a <a href="./vectors_xl.html">larger version</a> that is more suited to desktop browsers.
 </p>
 
 </div>
@@ -33,18 +33,18 @@ Here is a <a href="./vectors_xl.html">larger version</a> of this program.
 <div class="content-row" id="controls">
   <table>
     <tr>
-      <td><p>Style:</p></td>
+      <td><p>Force:</p></td>
       <td><select id="style">
-          <option value="0" selected>constant attractor force</option>
-          <option value="1">bounded force + remembering vectors</option>
-          <option value="2">gravity-like force</option>
+          <option value="0" selected>constant</option>
+          <option value="1">bounded</option>
+          <option value="2">gravity-like</option>
           <!--<option value="3">gravity-like force with global gravity</option>-->
         </select></td>
         <td> </td>
-      <td><p>Direction:</p></td>
+      <td><p>Cursor:</p></td>
       <td><select id="direction">
-          <option value="1" selected>towards</option>
-          <option value="-1">away</option>
+          <option value="1" selected>attractive</option>
+          <option value="-1">repulsive</option>
         </select></td>
         <td> </td>
     </tr>

@@ -56,12 +56,18 @@ Again think of the variables \(m\) and \(b\) as a point \((m,b)\) in the plane.<
 \[ (m, b) \longleftarrow (m, b) - \alpha \nabla J(m, b). \]
 <li>Repeat Step 2 as many times as needed.</li>
 </ol>
-<p>The gradient is just the vector of partial derivatives of \(J\):
-\[ \begin{align*}
+<p>The gradient is the vector of partial derivatives of \(J\):
+\[
 \nabla J(m, b)
-&= \left( \frac{\partial J}{\partial m}(m, b), \frac{\partial J}{\partial b}(m, b) \right) \\
-&= \left( \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i) x_i, \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i) \right).
-\end{align*} \]
+= \left( \frac{\partial J}{\partial m}(m, b), \frac{\partial J}{\partial b}(m, b) \right)
+\]
+where
+\[ \frac{\partial J}{\partial m}(m, b)
+= \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i) x_i
+\]
+\[  \frac{\partial J}{\partial b}(m, b)
+= \frac{1}{m} \sum_{i=1}^m (m x_i + b - y_i)
+\]
 </p>
 
 <p>
