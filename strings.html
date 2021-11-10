@@ -6,10 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   <link rel="shortcut icon" href="favicon.ico" />
-  <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
-  <script type="text/javascript" src="./js/range.js"></script>
-  <script type="text/javascript" src="./js/timer.js"></script>
-  <script type="text/javascript" src="./js/slider.js"></script>
   <script type="text/javascript" src="./js/canvasUtil.js"></script>
   <script type="text/javascript" src="./js/strings.js"></script>
 </head>
@@ -38,110 +34,77 @@ Here is a <a href="./strings_xl.html">larger version</a> that is more suited to 
 </div>
 
 <div class="content-row" id="controls">
-  <table border="0" cell-padding="0">
-    <tr>
-      <td align="right"><p>Maximum Splits:</p></td>
-      <td><div class="slider" id="splitSlider" tabIndex="1"><input class="slider-input" id="splitSliderInput"/></div></td>
-      <td> </td>
-      <td align="right"><p>Split Probability:</p></td>
-      <td><div class="slider" id="splitProbSlider" tabIndex="1"><input class="slider-input" id="splitProbSliderInput"/></div></td>
-      <td> </td>
-      <td> </td>
-      <td><input type="button" name="refresh" value="Refresh" onClick="init();">
-    </tr>
-    <tr>
-      <td align="right"><p>Average Speed:</p></td>
-      <td><div class="slider" id="speedSlider" tabIndex="1"><input class="slider-input" id="speedSliderInput"/></div></td>
-      <td> </td>
-      <td align="right"><p>Turning Angle:</p></td>
-      <td><div class="slider" id="angleSlider" tabIndex="1"><input class="slider-input" id="angleSliderInput"/></div></td>
-      <td> </td>
-      <td> </td>
-      <td><input type="button" name="stop" value="Pause" onClick="stopDrawing();">
-    </tr>
+	<table border="0" width="100%">
+		<tr>
+			<td align="right" width="1px" style="white-space: nowrap"><p>Maximum Splits:</p></td>
+			<td>
+				<div class="slider-container">
+          <input type="range" id="splitSliderInput" class="slider" step="0.1">
+        </div>
+			</td>
+		</tr>
+		<tr>
+			<td align="right" width="1px" style="white-space: nowrap"><p>Split Probability:</p></td>
+			<td>
+				<div class="slider-container">
+          <input type="range" id="splitProbSliderInput" class="slider" step="0.1">
+        </div>
+			</td>
+		</tr>
+		<tr>
+			<td align="right" width="1px" style="white-space: nowrap"><p>Average Speed:</p></td>
+			<td>
+				<div class="slider-container">
+          <input type="range" id="speedSliderInput" class="slider" step="0.1">
+        </div>
+			</td>
+		</tr>
+		<tr>
+			<td align="right" width="1px" style="white-space: nowrap"><p>Turning Angle:</p></td>
+			<td>
+				<div class="slider-container">
+          <input type="range" id="angleSliderInput" class="slider" step="0.1">
+        </div>
+			</td>
+		</tr>
   </table>
+  <table width=100%>
+    <tr>
+      <td align="right"><input type="button" name="refresh" value="Refresh" onClick="init();"></td>
+      <td align="left"><input type="button" name="stop" value="Pause" onClick="stopDrawing();"></td>
+    </tr>
+	</table>
 </div>
 
 <script type="text/javascript">
 
-function printData() {
-  document.outform.output.value = `splitLimit = ${splitLimit.toFixed(4)}; splitProb = ${splitProb.toFixed(4)}; dsAvg = ${dsAvg.toFixed(4)}; angle = ${angle.toFixed(4)}`;
+let splitSlider = document.getElementById("splitSliderInput");
+splitSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, SPLIT_LIMIT_MIN, SPLIT_LIMIT_MAX, SPLIT_LIMIT_DEFAULT);
+
+let splitProbSlider = document.getElementById("splitProbSliderInput");
+splitProbSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, SPLIT_PROB_MIN, SPLIT_PROB_MAX, SPLIT_PROB_DEFAULT);
+
+let speedSlider = document.getElementById("speedSliderInput");
+speedSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, SPEED_MIN, SPEED_MAX, SPEED_DEFAULT);
+
+let angleSlider = document.getElementById("angleSliderInput");
+angleSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, ANGLE_MIN, ANGLE_MAX, ANGLE_DEFAULT);
+
+function update() {
+	let actualSplit = sliderToActual(SLIDER_MIN, SLIDER_MAX, SPLIT_LIMIT_MIN, SPLIT_LIMIT_MAX, splitSlider.value);
+	let actualSplitProb = sliderToActual(SLIDER_MIN, SLIDER_MAX, SPLIT_PROB_MIN, SPLIT_PROB_MAX, splitProbSlider.value);
+	let actualSpeed = sliderToActual(SLIDER_MIN, SLIDER_MAX, SPEED_MIN, SPEED_MAX, speedSlider.value);
+	let actualAngle = sliderToActual(SLIDER_MIN, SLIDER_MAX, ANGLE_MIN, ANGLE_MAX, angleSlider.value);
+  draw(actualSplit, actualSplitProb, actualSpeed, actualAngle);
 }
 
-var splitSl = new Slider(document.getElementById("splitSlider"), document.getElementById("splitSliderInput"));
-splitSl.setMinimum(SLIDER_MIN);
-splitSl.setMaximum(SLIDER_MAX);
-splitSl.setValue(
-  actualToSlider(
-    splitSl.getMinimum(),
-    splitSl.getMaximum(),
-    SPLIT_LIMIT_MIN,
-    SPLIT_LIMIT_MAX,
-    SPLIT_LIMIT_DEFAULT
-  )
-);
+splitSlider.oninput = update;
+splitProbSlider.oninput = update;
+speedSlider.oninput = update;
+angleSlider.oninput = update;
+</script>
 
-var splitProbSl = new Slider(document.getElementById("splitProbSlider"), document.getElementById("splitProbSliderInput"));
-splitProbSl.setMinimum(SLIDER_MIN);
-splitProbSl.setMaximum(SLIDER_MAX);
-splitProbSl.setValue(
-  actualToSlider(
-    splitProbSl.getMinimum(),
-    splitProbSl.getMaximum(),
-    SPLIT_PROB_MIN,
-    SPLIT_PROB_MAX,
-    SPLIT_PROB_DEFAULT
-  )
-);
-
-var speedSl = new Slider(document.getElementById("speedSlider"), document.getElementById("speedSliderInput"));
-speedSl.setMinimum(SLIDER_MIN);
-speedSl.setMaximum(SLIDER_MAX);
-speedSl.setValue(
-  actualToSlider(
-    speedSl.getMinimum(),
-    speedSl.getMaximum(),
-    SPEED_MIN,
-    SPEED_MAX,
-    SPEED_DEFAULT
-  )
-);
-
-var angleSl = new Slider(document.getElementById("angleSlider"), document.getElementById("angleSliderInput"));
-angleSl.setMinimum(SLIDER_MIN);
-angleSl.setMaximum(SLIDER_MAX);
-angleSl.setValue(
-  actualToSlider(
-    angleSl.getMinimum(),
-    angleSl.getMaximum(),
-    ANGLE_MIN,
-    ANGLE_MAX,
-    ANGLE_DEFAULT
-  )
-);
-
-splitSl.onchange = function () {
-  splitLimit = sliderToActual(
-    splitSl.getMinimum(),
-    splitSl.getMaximum(),
-    SPLIT_LIMIT_MIN,
-    SPLIT_LIMIT_MAX,
-    splitSl.getValue()
-  );
-  printData();
-};
-
-splitProbSl.onchange = function () {
-  splitProb = sliderToActual(
-    splitProbSl.getMinimum(),
-    splitProbSl.getMaximum(),
-    SPLIT_PROB_MIN,
-    SPLIT_PROB_MAX,
-    splitProbSl.getValue()
-  );
-  printData();
-};
-
+<!-- <script type="text/javascript">
 speedSl.onchange = function () {
   dsAvg = sliderToActual(
     speedSl.getMinimum(),
@@ -153,26 +116,7 @@ speedSl.onchange = function () {
   dsVar = dsAvg/3;
   printData();
 };
-
-angleSl.onchange = function () {
-  angle = sliderToActual(
-    angleSl.getMinimum(),
-    angleSl.getMaximum(),
-    ANGLE_MIN,
-    ANGLE_MAX,
-    angleSl.getValue()
-  );
-  printData();
-};
-
-window.onresize = function () {
-  splitSl.recalculate();
-  splitProbSl.recalculate();
-  speedSl.recalculate();
-  angleSl.recalculate();
-};
-
-</script>
+</script> -->
 
 <div class="canvas-row">
   <canvas id="canvas" width="250" height="500">
