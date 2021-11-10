@@ -3,10 +3,11 @@
 <head>
 <title>Michael Bradford Williams | Complex Mappings</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link type="text/css" rel="StyleSheet" href="css/winclassic.css" />
-  <script type="text/javascript" src="js/range.js"></script>
-  <script type="text/javascript" src="js/timer.js"></script>
-  <script type="text/javascript" src="js/slider.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/styles_xl.css" />
   <script type="text/javascript" src="js/canvasUtil.js"></script>
 </head>
 
@@ -22,484 +23,407 @@
 </div>
 
 
-<div class="middle">
-<table border="1" cell-padding="0">
+<div id="controls">
+<table border="0" cell-padding="0" width="100%">
   <tr>
-    <td>Domain: [a,b] x [c,d]</td>
+    <td class="control-label">Domain: \([a,b] \times [c,d]\)</td>
     <td align="right"><p>a:</p></td>
-    <td><div class="slider" id="domASlider" tabIndex="1"><input class="slider-input" id="domASliderInput"/></div></td>
-    <td> </td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="dom-a-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
     <td align="right"><p>b:</p></td>
-    <td><div class="slider" id="domBSlider" tabIndex="1"><input class="slider-input" id="domBSliderInput"/></div></td>
-    <td> </td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="dom-b-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
     <td align="right"><p>c:</p></td>
-    <td><div class="slider" id="domCSlider" tabIndex="1"><input class="slider-input" id="domCSliderInput"/></div></td>
-    <td> </td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="dom-c-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
     <td align="right"><p>d:</p></td>
-    <td><div class="slider" id="domDSlider" tabIndex="1"><input class="slider-input" id="domDSliderInput"/></div></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="dom-d-slider" class="slider" step="0.1">
+      </div>
+    </td>
   </tr>
 </table>
-<table border="1" cell-padding="0">
+
+<table border="0" cell-padding="0" width="100%">
   <tr>
-    <td>Viewing Windows: [a,b] x [c,d]</td>
+    <td class="control-label">Viewing Windows: \([a,b] \times [c,d]\)</td>
     <td align="right"><p>a:</p></td>
-    <td><div class="slider" id="ranASlider" tabIndex="1"><input class="slider-input" id="ranASliderInput"/></div></td>
-    <td> </td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="ran-a-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
     <td align="right"><p>b:</p></td>
-    <td><div class="slider" id="ranBSlider" tabIndex="1"><input class="slider-input" id="ranBSliderInput"/></div></td>
-    <td> </td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="ran-b-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
     <td align="right"><p>c:</p></td>
-    <td><div class="slider" id="ranCSlider" tabIndex="1"><input class="slider-input" id="ranCSliderInput"/></div></td>
-    <td> </td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="ran-c-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
     <td align="right"><p>d:</p></td>
-    <td><div class="slider" id="ranDSlider" tabIndex="1"><input class="slider-input" id="ranDSliderInput"/></div></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="ran-d-slider" class="slider" step="0.1">
+      </div>
+    </td>
   </tr>
 </table>
-<table border="1" cell-padding="0">
+
+<table border="0" cell-padding="0"  width="100%">
   <tr>
-    <td>Mesh size: m x n</td>
-    <td align="right"><p>m:</p></td>
-    <td><div class="slider" id="meshMSlider" tabIndex="1"><input class="slider-input" id="meshMSliderInput"/></div></td>
-    <td> </td>
-    <td align="right"><p>n:</p></td>
-    <td><div class="slider" id="meshNSlider" tabIndex="1"><input class="slider-input" id="meshNSliderInput"/></div></td>
+    <td class="control-label">Mesh size: \(m \times n\)</td>
+    <td class="control-label"><p>m:</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="mesh-m-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
+    <td class="control-label"><p>n:</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="mesh-n-slider" class="slider" step="0.1">
+      </div>
+    </td>
   </tr>
 </table>
 <form name="controls">
-<table border="1" cell-padding="0">
+<table border="0" cell-padding="0" width="100%">
   <tr>
     <td>Mapping type: </td>
-    <td colspan="10">Polynomial (Az^3 + Bz^2 + Cz + D)<input type="radio" name="mapping" value="pol" checked="yes">
-      Mobius ( Az+B/Cz+D)<input type="radio" name="mapping" value="mob">
-      Exponential (A exp(Bz+C) + D)<input type="radio" name="mapping" value="exp"></td>
+    <td>
+      <select id="mapping" name="mapping">
+        <option value="pol" selected>Polynomial: Az^3 + Bz^2 + Cz + D</option>
+        <option value="mob">Mobius: Az+B/Cz+D</option>
+        <option value="exp">Exponential: A exp(Bz+C) + D</option>
+      </select>
+    </td>
     <td><input type="button" name="defaults" value="Apply" onClick="draw();"></td>
     <td><input type="button" name="defaults" value="Reset" onClick="refresh();"></td>
   </tr>
 </table>
 </form>
-<table border="1" cell-padding="0">
+
+<table border="0" cell-padding="0" width="100%">
   <tr>
-    <td>Mapping parameters</td>
-    <td align="right"><p>Re(A):</p></td>
-    <td><div class="slider" id="parASlider" tabIndex="1"><input class="slider-input" id="parASliderInput"/></div></td>
-    <td> </td>
-    <td align="right"><p>Re(B):</p></td>
-    <td><div class="slider" id="parBSlider" tabIndex="1"><input class="slider-input" id="parBSliderInput"/></div></td>
-    <td> </td>
-    <td align="right"><p>Re(C):</p></td>
-    <td><div class="slider" id="parCSlider" tabIndex="1"><input class="slider-input" id="parCSliderInput"/></div></td>
-    <td> </td>
-    <td align="right"><p>Re(D):</p></td>
-    <td><div class="slider" id="parDSlider" tabIndex="1"><input class="slider-input" id="parDSliderInput"/></div></td>
+    <td class="control-label">Mapping parameters</td>
+    <td align="right"><p>\(\mathrm{Re}(A)\):</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="par-a-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
+    <td align="right"><p>\(\mathrm{Re}(B)\):</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="par-b-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
+    <td align="right"><p>\(\mathrm{Re}(C)\):</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="par-c-slider" class="slider" step="0.1">
+      </div>
+      </div>
+    </td>
+
+    <td align="right"><p>\(\mathrm{Re}(D)\):</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="par-d-slider" class="slider" step="0.1">
+      </div>
   </tr>
   <tr>
     <td></td>
-    <td align="right"><p>Im(A):</p></td>
-    <td><div class="slider" id="parAimSlider" tabIndex="1"><input class="slider-input" id="parAimSliderInput"/></div></td>
-    <td> </td>
-    <td align="right"><p>Im(B):</p></td>
-    <td><div class="slider" id="parBimSlider" tabIndex="1"><input class="slider-input" id="parBimSliderInput"/></div></td>
-    <td> </td>
-    <td align="right"><p>Im(C):</p></td>
-    <td><div class="slider" id="parCimSlider" tabIndex="1"><input class="slider-input" id="parCimSliderInput"/></div></td>
-    <td> </td>
-    <td align="right"><p>Im(D):</p></td>
-    <td><div class="slider" id="parDimSlider" tabIndex="1"><input class="slider-input" id="parDimSliderInput"/></div></td>
+    <td align="right"><p>\(\mathrm{Im}(A)\):</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="par-a-im-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
+    <td align="right"><p>\(\mathrm{Im}(B)\):</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="par-b-im-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
+    <td align="right"><p>\(\mathrm{Im}(C)\):</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="par-c-im-slider" class="slider" step="0.1">
+      </div>
+    </td>
+
+    <td align="right"><p>\(\mathrm{Im}(D)\):</p></td>
+    <td>
+      <div class="slider-container">
+        <input type="range" id="par-d-im-slider" class="slider" step="0.1">
+      </div>
+    </td>
   </tr>
 </table>
 
 <script type="text/javascript">
 
-var domainCtx;
-var imageCtx;
-var WIDTH = 500;
-var HEIGHT = 500;
-var domainCanvasUtil;
-var imageCanvasUtil;
-var mesh;
+let domainCtx;
+let imageCtx;
+let WIDTH = 500;
+let HEIGHT = 500;
+let domainCanvasUtil;
+let imageCanvasUtil;
+let mesh;
 
 // domain variables
-var domA_default = -1;
-var domA = domA_default;
-var domA_min = -5;
-var domA_max = 0;
+let domA_default = -1;
+let domA = domA_default;
+let domA_min = -5;
+let domA_max = 0;
 
-var domB_default = 1;
-var domB = domB_default;
-var domB_min = 0;
-var domB_max = 5;
+let domB_default = 1;
+let domB = domB_default;
+let domB_min = 0;
+let domB_max = 5;
 
-var domC_default = -1;
-var domC = domC_default;
-var domC_min = -5;
-var domC_max = 0;
+let domC_default = -1;
+let domC = domC_default;
+let domC_min = -5;
+let domC_max = 0;
 
-var domD_default = 1;
-var domD = domD_default;
-var domD_min = 0;
-var domD_max = 5;
+let domD_default = 1;
+let domD = domD_default;
+let domD_min = 0;
+let domD_max = 5;
 
 // image variables
-var ranA_default = -2;
-var ranA = ranA_default;
-var ranA_min = -10;
-var ranA_max = 0;
+let ranA_default = -2;
+let ranA = ranA_default;
+let ranA_min = -10;
+let ranA_max = 0;
 
-var ranB_default = 2;
-var ranB = ranB_default;
-var ranB_min = 0;
-var ranB_max = 10;
+let ranB_default = 2;
+let ranB = ranB_default;
+let ranB_min = 0;
+let ranB_max = 10;
 
-var ranC_default = -2;
-var ranC = ranC_default;
-var ranC_min = -10;
-var ranC_max = 0;
+let ranC_default = -2;
+let ranC = ranC_default;
+let ranC_min = -10;
+let ranC_max = 0;
 
-var ranD_default = 2;
-var ranD = ranD_default;
-var ranD_min = 0;
-var ranD_max = 10;
+let ranD_default = 2;
+let ranD = ranD_default;
+let ranD_min = 0;
+let ranD_max = 10;
 
 // parameter variables
-var parA_default = 0;
-var parA = parA_default;
-var parA_min = -5;
-var parA_max = 5;
+let parA_default = 0;
+let parA = parA_default;
+let parA_min = -5;
+let parA_max = 5;
 
-var parAim_default = 0;
-var parAim = parAim_default;
-var parAim_min = -5;
-var parAim_max = 5;
+let parAim_default = 0;
+let parAim = parAim_default;
+let parAim_min = -5;
+let parAim_max = 5;
 
-var parB_default = 1;
-var parB = parB_default;
-var parB_min = -5;
-var parB_max = 5;
+let parB_default = 1;
+let parB = parB_default;
+let parB_min = -5;
+let parB_max = 5;
 
-var parBim_default = 0;
-var parBim = parBim_default;
-var parBim_min = -5;
-var parBim_max = 5;
+let parBim_default = 0;
+let parBim = parBim_default;
+let parBim_min = -5;
+let parBim_max = 5;
 
-var parC_default = 1;
-var parC = parC_default;
-var parC_min = -5;
-var parC_max = 5;
+let parC_default = 1;
+let parC = parC_default;
+let parC_min = -5;
+let parC_max = 5;
 
-var parCim_default = 0;
-var parCim = parCim_default;
-var parCim_min = -5;
-var parCim_max = 5;
+let parCim_default = 0;
+let parCim = parCim_default;
+let parCim_min = -5;
+let parCim_max = 5;
 
-var parD_default = 0;
-var parD = parD_default;
-var parD_min = -5;
-var parD_max = 5;
+let parD_default = 0;
+let parD = parD_default;
+let parD_min = -5;
+let parD_max = 5;
 
-var parDim_default = 0;
-var parDim = parDim_default;
-var parDim_min = -5;
-var parDim_max = 5;
+let parDim_default = 0;
+let parDim = parDim_default;
+let parDim_min = -5;
+let parDim_max = 5;
 
 // mesh variables
-var meshM_default = 30;
-var meshM = meshM_default;
-var meshM_min = 2;
-var meshM_max = 75;
+let meshM_default = 30;
+let meshM = meshM_default;
+let meshM_min = 2;
+let meshM_max = 75;
 
-var meshN_default = 30;
-var meshN = meshN_default;
-var meshN_min = 2;
-var meshN_max = 75;
+let meshN_default = 30;
+let meshN = meshN_default;
+let meshN_min = 2;
+let meshN_max = 75;
 
-var slider_min = 0;
-var slider_max = 100;
-
+let slider_min = 0;
+let slider_max = 100;
 
 // domain controls
-var domASl = new Slider(document.getElementById("domASlider"), document.getElementById("domASliderInput"));
-domASl.setMinimum(slider_min);
-domASl.setMaximum(slider_max);
-domASl.setValue(actualToSlider(domASl.getMinimum(), domASl.getMaximum(), domA_min, domA_max, domA_default));
-
-var domBSl = new Slider(document.getElementById("domBSlider"), document.getElementById("domBSliderInput"));
-domBSl.setMinimum(slider_min);
-domBSl.setMaximum(slider_max);
-domBSl.setValue(actualToSlider(domBSl.getMinimum(), domBSl.getMaximum(), domB_min, domB_max, domB_default));
-
-var domCSl = new Slider(document.getElementById("domCSlider"), document.getElementById("domCSliderInput"));
-domCSl.setMinimum(slider_min);
-domCSl.setMaximum(slider_max);
-domCSl.setValue(actualToSlider(domCSl.getMinimum(), domCSl.getMaximum(), domC_min, domC_max, domC_default));
-
-var domDSl = new Slider(document.getElementById("domDSlider"), document.getElementById("domDSliderInput"));
-domDSl.setMinimum(slider_min);
-domDSl.setMaximum(slider_max);
-domDSl.setValue(actualToSlider(domDSl.getMinimum(), domDSl.getMaximum(), domD_min, domD_max, domD_default));
-
-domASl.onchange = function () {
-  domA = sliderToActual(
-    domASl.getMinimum(),
-    domASl.getMaximum(),
-    domA_min,
-    domA_max,
-    domASl.getValue()
-  );
+let domASlider = document.getElementById("dom-a-slider");
+domASlider.value = actualToSlider(slider_min, slider_max, domA_min, domA_max, domA_default);
+domASlider.oninput = function() {
+  domA = sliderToActual(slider_min, slider_max, domA_min, domA_max, domASlider.value);
   draw();
 };
 
-domBSl.onchange = function () {
-  domB = sliderToActual(
-    domBSl.getMinimum(),
-    domBSl.getMaximum(),
-    domB_min,
-    domB_max,
-    domBSl.getValue()
-  );
+let domBSlider = document.getElementById("dom-b-slider");
+domBSlider.value = actualToSlider(slider_min, slider_max, domB_min, domB_max, domB_default);
+domBSlider.oninput = function() {
+  domB = sliderToActual(slider_min, slider_max, domB_min, domB_max, domBSlider.value);
   draw();
 };
 
-domCSl.onchange = function () {
-  domC = sliderToActual(
-    domCSl.getMinimum(),
-    domCSl.getMaximum(),
-    domC_min,
-    domC_max,
-    domCSl.getValue()
-  );
+let domCSlider = document.getElementById("dom-c-slider");
+domCSlider.value = actualToSlider(slider_min, slider_max, domC_min, domC_max, domC_default);
+domCSlider.oninput = function() {
+  domC = sliderToActual(slider_min, slider_max, domC_min, domC_max, domCSlider.value);
   draw();
 };
 
-domDSl.onchange = function () {
-  domD = sliderToActual(
-    domDSl.getMinimum(),
-    domDSl.getMaximum(),
-    domD_min,
-    domD_max,
-    domDSl.getValue()
-  );
+let domDSlider = document.getElementById("dom-d-slider");
+domDSlider.value = actualToSlider(slider_min, slider_max, domD_min, domD_max, domD_default);
+domDSlider.oninput = function() {
+  domD = sliderToActual(slider_min, slider_max, domD_min, domD_max, domDSlider.value);
   draw();
 };
 
 // image controls
-var ranASl = new Slider(document.getElementById("ranASlider"), document.getElementById("ranASliderInput"));
-ranASl.setMinimum(slider_min);
-ranASl.setMaximum(slider_max);
-ranASl.setValue(actualToSlider(ranASl.getMinimum(), ranASl.getMaximum(), ranA_min, ranA_max, ranA_default));
+let rangeASlider = document.getElementById("ran-a-slider");
+rangeASlider.value = actualToSlider(slider_min, slider_max, ranA_min, ranA_max, ranA_default);
+rangeASlider.oninput = function() {
+  ranA = sliderToActual(slider_min, slider_max, ranA_min, ranA_max, rangeASlider.value);
+  draw();
+}
 
-var ranBSl = new Slider(document.getElementById("ranBSlider"), document.getElementById("ranBSliderInput"));
-ranBSl.setMinimum(slider_min);
-ranBSl.setMaximum(slider_max);
-ranBSl.setValue(actualToSlider(ranBSl.getMinimum(), ranBSl.getMaximum(), ranB_min, ranB_max, ranB_default));
-
-var ranCSl = new Slider(document.getElementById("ranCSlider"), document.getElementById("ranCSliderInput"));
-ranCSl.setMinimum(slider_min);
-ranCSl.setMaximum(slider_max);
-ranCSl.setValue(actualToSlider(ranCSl.getMinimum(), ranCSl.getMaximum(), ranC_min, ranC_max, ranC_default));
-
-var ranDSl = new Slider(document.getElementById("ranDSlider"), document.getElementById("ranDSliderInput"));
-ranDSl.setMinimum(slider_min);
-ranDSl.setMaximum(slider_max);
-ranDSl.setValue(actualToSlider(ranDSl.getMinimum(), ranDSl.getMaximum(), ranD_min, ranD_max, ranD_default));
-
-ranASl.onchange = function () {
-  ranA = sliderToActual(
-    ranASl.getMinimum(),
-    ranASl.getMaximum(),
-    ranA_min,
-    ranA_max,
-    ranASl.getValue()
-  );
+let rangeBSlider = document.getElementById("ran-b-slider");
+rangeBSlider.value = actualToSlider(slider_min, slider_max, ranB_min, ranB_max, ranB_default);
+rangeBSlider.oninput = function() {
+  ranB = sliderToActual(slider_min, slider_max, ranB_min, ranB_max, rangeBSlider.value);
   draw();
 };
 
-ranBSl.onchange = function () {
-  ranB = sliderToActual(
-    ranBSl.getMinimum(),
-    ranBSl.getMaximum(),
-    ranB_min,
-    ranB_max,
-    ranBSl.getValue()
-  );
+let rangeCSlider = document.getElementById("ran-c-slider");
+rangeCSlider.value = actualToSlider(slider_min, slider_max, ranC_min, ranC_max, ranC_default);
+rangeCSlider.oninput = function() {
+  ranC= sliderToActual(slider_min, slider_max, ranC_min, ranC_max, rangeCSlider.value);
   draw();
 };
 
-ranCSl.onchange = function () {
-  ranC = sliderToActual(
-    ranCSl.getMinimum(),
-    ranCSl.getMaximum(),
-    ranC_min,
-    ranC_max,
-    ranCSl.getValue())
-    ;
-  draw();
-};
-
-ranDSl.onchange = function () {
-  ranD = sliderToActual(
-    ranDSl.getMinimum(),
-    ranDSl.getMaximum(),
-    ranD_min,
-    ranD_max,
-    ranDSl.getValue()
-  );
+let rangeDSlider = document.getElementById("ran-d-slider");
+rangeDSlider.value = actualToSlider(slider_min, slider_max, ranD_min, ranD_max, ranD_default);
+rangeDSlider.oninput = function() {
+  ranD = sliderToActual(slider_min, slider_max, ranD_min, ranD_max, rangeDSlider.value);
   draw();
 };
 
 // parameter controls
-var parASl = new Slider(document.getElementById("parASlider"), document.getElementById("parASliderInput"));
-parASl.setMinimum(slider_min);
-parASl.setMaximum(slider_max);
-parASl.setValue(actualToSlider(parASl.getMinimum(), parASl.getMaximum(), parA_min, parA_max, parA_default));
-
-var parBSl = new Slider(document.getElementById("parBSlider"), document.getElementById("parBSliderInput"));
-parBSl.setMinimum(slider_min);
-parBSl.setMaximum(slider_max);
-parBSl.setValue(actualToSlider(parBSl.getMinimum(), parBSl.getMaximum(), parB_min, parB_max, parB_default));
-
-var parCSl = new Slider(document.getElementById("parCSlider"), document.getElementById("parCSliderInput"));
-parCSl.setMinimum(slider_min);
-parCSl.setMaximum(slider_max);
-parCSl.setValue(actualToSlider(parCSl.getMinimum(), parCSl.getMaximum(), parC_min, parC_max, parC_default));
-
-var parDSl = new Slider(document.getElementById("parDSlider"), document.getElementById("parDSliderInput"));
-parDSl.setMinimum(slider_min);
-parDSl.setMaximum(slider_max);
-parDSl.setValue(actualToSlider(parDSl.getMinimum(), parDSl.getMaximum(), parD_min, parD_max, parD_default));
-
-var parAimSl = new Slider(document.getElementById("parAimSlider"), document.getElementById("parAimSliderInput"));
-parAimSl.setMinimum(slider_min);
-parAimSl.setMaximum(slider_max);
-parAimSl.setValue(actualToSlider(parAimSl.getMinimum(), parAimSl.getMaximum(), parAim_min, parAim_max, parAim_default));
-
-var parBimSl = new Slider(document.getElementById("parBimSlider"), document.getElementById("parBimSliderInput"));
-parBimSl.setMinimum(slider_min);
-parBimSl.setMaximum(slider_max);
-parBimSl.setValue(actualToSlider(parBimSl.getMinimum(), parBimSl.getMaximum(), parBim_min, parBim_max, parBim_default));
-
-var parCimSl = new Slider(document.getElementById("parCimSlider"), document.getElementById("parCimSliderInput"));
-parCimSl.setMinimum(slider_min);
-parCimSl.setMaximum(slider_max);
-parCimSl.setValue(actualToSlider(parCimSl.getMinimum(), parCimSl.getMaximum(), parCim_min, parCim_max, parCim_default));
-
-var parDimSl = new Slider(document.getElementById("parDimSlider"), document.getElementById("parDimSliderInput"));
-parDimSl.setMinimum(slider_min);
-parDimSl.setMaximum(slider_max);
-parDimSl.setValue(actualToSlider(parDimSl.getMinimum(), parDimSl.getMaximum(), parDim_min, parDim_max, parDim_default));
-
-parASl.onchange = function () {
-  parA = sliderToActual(
-    parASl.getMinimum(),
-    parASl.getMaximum(),
-    parA_min,
-    parA_max,
-    parASl.getValue()
-  );
+let parASlider = document.getElementById("par-a-slider");
+parASlider.value = actualToSlider(slider_min, slider_max, parA_min, parA_max, parA_default);
+parASlider.oninput = function() {
+  parA = sliderToActual(slider_min, slider_max, parA_min, parA_max, parASlider.value);
   draw();
 };
 
-parBSl.onchange = function () {
-  parB = sliderToActual(
-    parBSl.getMinimum(),
-    parBSl.getMaximum(),
-    parB_min,
-    parB_max,
-    parBSl.getValue()
-  );
+let parAImSlider = document.getElementById("par-a-im-slider");
+parAImSlider.value = actualToSlider(slider_min, slider_max, parAim_min, parAim_max, parAim_default);
+parAImSlider.oninput = function() {
+  parAim = sliderToActual(slider_min, slider_max, parAim_min, parAim_max, parAImSlider.value);
   draw();
 };
 
-parCSl.onchange = function () {
-  parC = sliderToActual(
-    parCSl.getMinimum(),
-    parCSl.getMaximum(),
-    parC_min,
-    parC_max,
-    parCSl.getValue()
-  );
+let parBSlider = document.getElementById("par-b-slider");
+parBSlider.value = actualToSlider(slider_min, slider_max, parB_min, parB_max, parB_default);
+parBSlider.oninput = function() {
+  parB = sliderToActual(slider_min, slider_max, parB_min, parB_max, parBSlider.value);
   draw();
 };
 
-parDSl.onchange = function () {
-  parD = sliderToActual(
-    parDSl.getMinimum(),
-    parDSl.getMaximum(),
-    parD_min,
-    parD_max,
-    parDSl.getValue()
-  );
+let parBImSlider = document.getElementById("par-b-im-slider");
+parBImSlider.value = actualToSlider(slider_min, slider_max, parBim_min, parBim_max, parBim_default);
+parBImSlider.oninput = function() {
+  parBim = sliderToActual(slider_min, slider_max, parBim_min, parBim_max, parBImSlider.value);
   draw();
 };
 
-parAimSl.onchange = function () {
-  parAim = sliderToActual(
-    parAimSl.getMinimum(),
-    parAimSl.getMaximum(),
-    parAim_min,
-    parAim_max,
-    parAimSl.getValue()
-  );
+let parCSlider = document.getElementById("par-c-slider");
+parCSlider.value = actualToSlider(slider_min, slider_max, parC_min, parC_max, parC_default);
+parCSlider.oninput = function() {
+  parC = sliderToActual(slider_min, slider_max, parC_min, parC_max, parCSlider.value);
   draw();
 };
 
-parBimSl.onchange = function () {
-  parBim = sliderToActual(
-    parBimSl.getMinimum(),
-    parBimSl.getMaximum(),
-    parBim_min,
-    parBim_max,
-    parBimSl.getValue()
-  );
+let parCImSlider = document.getElementById("par-c-im-slider");
+parCImSlider.value = actualToSlider(slider_min, slider_max, parCim_min, parCim_max, parCim_default);
+parCImSlider.oninput = function() {
+  parCim = sliderToActual(slider_min, slider_max, parCim_min, parCim_max, parCImSlider.value);
   draw();
 };
 
-parCimSl.onchange = function () {
-  parCim = sliderToActual(
-    parCimSl.getMinimum(),
-    parCimSl.getMaximum(),
-    parCim_min,
-    parCim_max,
-    parCimSl.getValue()
-  );
+let parDSlider = document.getElementById("par-d-slider");
+parDSlider.value = actualToSlider(slider_min, slider_max, parD_min, parD_max, parD_default);
+parDSlider.oninput = function() {
+  parD = sliderToActual(slider_min, slider_max, parD_min, parD_max, parDSlider.value);
   draw();
 };
 
-parDimSl.onchange = function () {
-  parDim = sliderToActual(
-    parDimSl.getMinimum(),
-    parDimSl.getMaximum(),
-    parDim_min,
-    parDim_max,
-    parDimSl.getValue()
-  );
+let parDImSlider = document.getElementById("par-d-im-slider");
+parDImSlider.value = actualToSlider(slider_min, slider_max, parDim_min, parDim_max, parDim_default);
+parDImSlider.oninput = function() {
+  parDim = sliderToActual(slider_min, slider_max, parDim_min, parDim_max, parDImSlider.value);
   draw();
 };
 
 // mesh controls
-var meshMSl = new Slider(document.getElementById("meshMSlider"), document.getElementById("meshMSliderInput"));
-meshMSl.setMinimum(slider_min);
-meshMSl.setMaximum(slider_max);
-meshMSl.setValue(actualToSlider(meshMSl.getMinimum(), meshMSl.getMaximum(), meshM_min, meshM_max, meshM_default));
-
-var meshNSl = new Slider(document.getElementById("meshNSlider"), document.getElementById("meshNSliderInput"));
-meshNSl.setMinimum(slider_min);
-meshNSl.setMaximum(slider_max);
-meshNSl.setValue(actualToSlider(meshNSl.getMinimum(), meshNSl.getMaximum(), meshN_min, meshN_max, meshN_default));
-
-meshMSl.onchange = function () {
-  meshM = Math.round(sliderToActual(meshMSl.getMinimum(), meshMSl.getMaximum(), meshM_min, meshM_max, meshMSl.getValue()));
+let meshMSlider = document.getElementById("mesh-m-slider");
+meshMSlider.value = actualToSlider(slider_min, slider_max, meshM_min, meshM_max, meshM_default);
+meshMSlider.oninput = function() {
+  meshM = sliderToActual(slider_min, slider_max, meshM_min, meshM_max, meshMSlider.value);
   draw();
 };
 
-meshNSl.onchange = function () {
-  meshN = Math.round(sliderToActual(meshNSl.getMinimum(), meshNSl.getMaximum(), meshN_min, meshN_max, meshNSl.getValue()));
+let meshNSlider = document.getElementById("mesh-n-slider");
+meshNSlider.value = actualToSlider(slider_min, slider_max, meshN_min, meshN_max, meshN_default);
+meshNSlider.oninput = function() {
+  meshN = sliderToActual(slider_min, slider_max, meshN_min, meshN_max, meshNSlider.value);
   draw();
 };
-
-window.onresize = function () {
-  domASl.recalculate();
-};
-
 
 class Complex {
   constructor(x, y) {
@@ -541,7 +465,8 @@ class Complex {
     return this.times(w.inverse());
   }
 
-  pow(n) { // n >= 1
+  pow(n) {
+    // dumb integer powers, n >= 1
     let w = this;
     for (let i=1; i<n; i++) {
       w = w.times(this);
@@ -796,12 +721,17 @@ function refresh() {
 
 
 function init() {
+  WIDTH = document.getElementById("controls").clientWidth / 2 - 10;
+  HEIGHT = WIDTH;
+
   domainCanvas = document.getElementById("domain_canvas");
   domainCanvas.width = WIDTH;
   domainCanvas.height = HEIGHT;
+
   imageCanvas = document.getElementById("image_canvas");
   imageCanvas.width = WIDTH;
   imageCanvas.height = HEIGHT;
+
   if (domainCanvas.getContext && imageCanvas.getContext){
     domainCtx = domainCanvas.getContext('2d');
     imageCtx = imageCanvas.getContext('2d');

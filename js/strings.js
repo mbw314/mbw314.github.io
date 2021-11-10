@@ -19,7 +19,7 @@ const BLACK = new Color(0, 0, 0);
 const WHITE = new Color(255, 255, 255);
 
 const SLIDER_MIN = 0;
-const SLIDER_MAX = 50;
+const SLIDER_MAX = 100;
 
 const SPLIT_LIMIT_MIN = 1;
 const SPLIT_LIMIT_DEFAULT = splitLimit;

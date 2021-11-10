@@ -6,10 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="./css/styles_xl.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
-	<link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
-	<script type="text/javascript" src="./js/range.js"></script>
-	<script type="text/javascript" src="./js/timer.js"></script>
-	<script type="text/javascript" src="./js/slider.js"></script>
   <script type="text/javascript" src="./js/canvasUtil.js"></script>
   <script type="text/javascript" src="./js/ngons.js"></script>
 </head>
@@ -17,58 +13,64 @@
 <body onLoad="init(1);">
 
 <div class="content-row" id="controls">
-	<table border="0" align="center">
+	<table border="0" align="center" width="100%">
 		<tr>
-			<td><p>Radius:</p></td>
-			<td><div class="slider" id="radSlider" tabIndex="1"><input class="slider-input" id="radSliderInput"/></div></td>
-			<td> </td>
-			<td><p>Separation:</p></td>
-			<td><div class="slider" id="sepSlider" tabIndex="1"><input class="slider-input" id="sepSliderInput"/></div></td>
+			<td align="right" width="1px" style="white-space: nowrap"><p>Radius:</p></td>
+			<td>
+				<div class="slider-container">
+          <input type="range" id="radSliderInput" class="slider" step="0.1">
+        </div>
+			</td>
+			<td align="right" width="1px" style="white-space: nowrap"><p>Separation:</p></td>
+			<td>
+				<div class="slider-container">
+          <input type="range" id="sepSliderInput" class="slider" step="0.1">
+        </div>
+			</td>
 		</tr>
 		<tr>
-			<td><p>Number of Sides:</p></td>
-			<td><div class="sides" id="sidesSlider" tabIndex="1"><input class="sides-input" id="sidesSliderInput"/></div></td>
-			<td> </td>
-			<td><p>Angle:</p></td>
-			<td><div class="phase" id="phaseSlider" tabIndex="1"><input class="phase-input" id="phaseSliderInput"/></div></td>
+			<td align="right" width="1px" style="white-space: nowrap"><p># of Sides:</p></td>
+			<td>
+				<div class="slider-container">
+          <input type="range" id="sidesSliderInput" class="slider" step="0.1">
+        </div>
+			</td>
+			<td align="right" width="1px" style="white-space: nowrap"><p>Rotation:</p></td>
+			<td>
+				<div class="slider-container">
+          <input type="range" id="phaseSliderInput" class="slider" step="0.1">
+        </div>
+			</td>
 		</tr>
 	</table>
 </div>
 
 <script type="text/javascript">
-var radSl = new Slider(document.getElementById("radSlider"), document.getElementById("radSliderInput"));
-var sepSl = new Slider(document.getElementById("sepSlider"), document.getElementById("sepSliderInput"));
-var sidesSl = new Slider(document.getElementById("sidesSlider"), document.getElementById("sidesSliderInput"));
-var phaseSl = new Slider(document.getElementById("phaseSlider"), document.getElementById("phaseSliderInput"));
 
-radSl.setMinimum(25);
-radSl.setValue(175);
-radSl.setMaximum(300);
+let radSlider = document.getElementById("radSliderInput");
+radSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, RAD_MIN, RAD_MAX, RAD_DEFAULT);
 
-sepSl.setMinimum(20);
-sepSl.setValue(100);
-sepSl.setMaximum(400);
+let sepSlider = document.getElementById("sepSliderInput");
+sepSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, SEP_MIN, SEP_MAX, SEP_DEFAULT);
 
-sidesSl.setMinimum(3);
-sidesSl.setValue(4);
-sidesSl.setMaximum(10);
+let sidesSlider = document.getElementById("sidesSliderInput");
+sidesSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, SIDES_MIN, SIDES_MAX, SIDES_DEFAULT);
 
-phaseSl.setMinimum(0);
-phaseSl.setValue(60);
-phaseSl.setMaximum(360);
+let phaseSlider = document.getElementById("phaseSliderInput");
+phaseSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, PHASE_MIN, PHASE_MAX, PHASE_DEFAULT);
 
-radSl.onchange = function() {draw()};
-sepSl.onchange = function() {draw()};
-sidesSl.onchange = function() {draw()};
-phaseSl.onchange = function() {draw()};
+function update() {
+	let actualRad = sliderToActual(SLIDER_MIN, SLIDER_MAX, RAD_MIN, RAD_MAX, radSlider.value);
+	let actualSep = sliderToActual(SLIDER_MIN, SLIDER_MAX, SEP_MIN, SEP_MAX, sepSlider.value);
+	let actualSides = sliderToActual(SLIDER_MIN, SLIDER_MAX, SIDES_MIN, SIDES_MAX, sidesSlider.value);
+	let actualPhase = sliderToActual(SLIDER_MIN, SLIDER_MAX, PHASE_MIN, PHASE_MAX, phaseSlider.value);
+  draw(actualRad, actualSep, actualSides, actualPhase);
+}
 
-window.onresize = function() {
-  radSl.recalculate();
-  sepSl.recalculate();
-  sidesSl.recalculate();
-  phaseSl.recalculate();
-  draw();
-};
+radSlider.oninput = update;
+sepSlider.oninput = update;
+sidesSlider.oninput = update;
+phaseSlider.oninput = update;
 </script>
 
 <div class="canvas-row">

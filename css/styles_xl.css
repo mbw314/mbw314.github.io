@@ -21,3 +21,30 @@ body {
 canvas {
   display: block;
 }
+
+.slider-container {
+  width: 100%;
+}
+
+.slider {
+  width: 100%;
+  opacity: 0.7;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.flex-container {
+  display: flex;
+  align-items: stretch;
+}
+
+.flex-container > div {
+  text-align: right;
+}
+
+.control-label {
+  width: 1px;
+  white-space: nowrap;
+}

@@ -5,13 +5,9 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-  <link type="text/css" rel="StyleSheet" href="./css/winclassic.css" />
   <link rel="shortcut icon" href="favicon.ico" />
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script type="text/javascript" src="./js/range.js"></script>
-  <script type="text/javascript" src="./js/timer.js"></script>
-  <script type="text/javascript" src="./js/slider.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/spiro.js"></script>
 </head>
@@ -63,74 +59,51 @@ Here is a <a href="./spiro_xl.html">larger version</a> that is more suited to de
 
 </div>
 
+
 <div class="content-row" id="controls">
-  <form name="parameters" action="#">
-    <table border="0" align="center">
-      <tr>
-      	<td><p>\(k\)</p></td>
-      	<td><div class="slider" id="speedSlider" tabIndex="1"><input class="slider-input" id="speedSliderInput"/></div></td>
-      	<td> </td>
-      	<td><p>\(\ell\)</p></td>
-      	<td><div class="slider" id="angleSlider" tabIndex="2"><input class="slider-input" id="angleSliderInput"/></div></td>
-        <td> </td>
-        <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td>
-      </tr>
-    </table>
-  </form>
+  <div class="flex-container">
+    <div style="flex-grow: 1">
+      \(k\):
+    </div>
+    <div style="flex-grow: 15">
+      <div class="slider-container">
+        <input type="range" id="kSliderInput" class="slider" step="0.1">
+      </div>
+    </div>
+  </div>
+  <div class="flex-container">
+    <div style="flex-grow: 1">
+      \(\ell\):
+    </div>
+    <div style="flex-grow: 15">
+      <div class="slider-container">
+        <input type="range" id="lSliderInput" class="slider" step="0.1">
+      </div>
+    </div>
+  </div>
+  <div class="flex-container">
+    <div style="flex-grow: 1">
+      <input type="reset" name="reset" value="Refresh" onClick="resetDrawing();">
+    </div>
+  </div>
 </div>
 
-<script type="text/javascript">
-var speedSl = new Slider(document.getElementById("speedSlider"), document.getElementById("speedSliderInput"));
-speedSl.setMinimum(SLIDER_MIN);
-speedSl.setMaximum(SLIDER_MAX);
-speedSl.setValue(
-  actualToSlider(
-    speedSl.getMinimum(),
-    speedSl.getMaximum(),
-    K_MIN,
-    K_MAX,
-    K_DEFAULT
-  )
-);
 
-var angleSl = new Slider(document.getElementById("angleSlider"), document.getElementById("angleSliderInput"));
-angleSl.setMinimum(SLIDER_MIN);
-angleSl.setMaximum(SLIDER_MAX);
-angleSl.setValue(
-  actualToSlider(
-    angleSl.getMinimum(),
-    angleSl.getMaximum(),
-    L_MIN,
-    L_MAX,
-    L_DEFAULT
-  )
-);
+<script type="text/javascript">
+let kSlider = document.getElementById("kSliderInput");
+kSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, K_MIN, K_MAX, K_DEFAULT);
+
+let lSlider = document.getElementById("lSliderInput");
+kSlider.value = actualToSlider(SLIDER_MIN, SLIDER_MAX, L_MIN, L_MAX, L_DEFAULT);
 
 function update() {
-  let dsAvg = sliderToActual(
-    speedSl.getMinimum(),
-    speedSl.getMaximum(),
-    K_MIN,
-    K_MAX,
-    speedSl.getValue()
-  );
-  let angle = sliderToActual(
-    angleSl.getMinimum(),
-    angleSl.getMaximum(),
-    L_MIN,
-    L_MAX,
-    angleSl.getValue()
-  );
-  draw(dsAvg, angle);
+  let actualK = sliderToActual(SLIDER_MIN, SLIDER_MAX, K_MIN, K_MAX, kSlider.value);
+  let actualL = sliderToActual(SLIDER_MIN, SLIDER_MAX, L_MIN, L_MAX, lSlider.value);
+  draw(actualK, actualL);
 }
 
-speedSl.onchange = update;
-angleSl.onchange = update;
-
-window.onresize = function () {
-  speedSl.recalculate();
-  angleSl.recalculate();
-};
+kSlider.oninput = update;
+lSlider.oninput = update;
 </script>
 
 <div class="canvas-row">
