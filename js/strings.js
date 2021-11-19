@@ -163,10 +163,6 @@ function refreshDrawing() {
 
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
-  // if (parseInt(adjustSize) > 0) {
-  //   WIDTH = document.getElementById("content").clientWidth;
-  //   HEIGHT = window.innerHeight - parseInt(1.2 * document.getElementById("controls_table").clientHeight);
-  // }
   if (parseInt(adjustSize) > 0) {
     WIDTH = document.getElementById("controls").clientWidth;
     console.log(WIDTH);

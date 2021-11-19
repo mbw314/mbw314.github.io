@@ -814,10 +814,6 @@ function drawScene() {
 
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
-  // if (parseInt(adjustSize) > 0) {
-  //   WIDTH = document.getElementById("content").clientWidth;
-  //   HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls").clientHeight) - 10;
-  // }
   if (parseInt(adjustSize) > 0) {
     WIDTH = document.getElementById("controls").clientWidth;
     console.log(WIDTH);

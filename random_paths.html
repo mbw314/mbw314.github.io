@@ -21,10 +21,9 @@
 <div class="content-row">
 
 <p>
-In this <a href="https://en.wikipedia.org/wiki/Canvas_element">HTML canvas</a> experiment,
-I wanted to create random non-self-intersecting paths in a graph: choose a vertex randomly, move along an edge
-to a random neighboring vertex, etc., until there are no possible unoccupied vertices. Then start again
-with a new random vertex, and repeat the process until all vertices of the graph are occupied.
+The goal with this program is to totally cover the vertices of a graph with random, non-self-intersecting paths. The procedure to create a path
+is to choose an unvisited vertex randomly, move along an edge to a random unvisited neighboring vertex, and repeat until the path cannot be
+extended any further. Paths are created in this way until all vertices of the graph have been visited.
 </p>
 
 <p>
@@ -64,12 +63,6 @@ Here is a <a href="./random_paths_xl.html">larger version</a> of this program th
     <p>Your browser is currently unsupported.</p>
   </canvas>
 </div>
-
-<!-- <div class="content-row">
-  <form name="outform" action="#">
-    <textarea rows="5" cols="30" name="output"></textarea>
-  </form>
-</div> -->
 
 </body>
 </html>
