@@ -209,12 +209,12 @@ class Grid {
           // console.log(`...done: concatenated paths ${i} and ${j} (case 4)`);
         }
       }
-    } else {
-      // create loop from path
-      if (this.graph.vertex(p.terminalVertex()).neighbors.includes(p.initialVertex()) && p.numVertices() >= 3) {
-        this.paths[i].extend(this.paths[i].initialVertex());
-      }
-    }
+    } //else {
+    //   // create loop from path
+    //   if (this.graph.vertex(p.terminalVertex()).neighbors.includes(p.initialVertex()) && p.numVertices() >= 3) {
+    //     this.paths[i].extend(this.paths[i].initialVertex());
+    //   }
+    // }
   }
 
   canConcatenatePaths(i, j) {
@@ -228,11 +228,11 @@ class Grid {
           || this.graph.vertex(p.terminalVertex()).neighbors.includes(q.terminalVertex())  // 0--p--1 1--q--0
           || this.graph.vertex(p.initialVertex()).neighbors.includes(q.initialVertex())  // 0--q--1 0--p--1
       }
-    } else {
-      if (p.numVertices() >= 3) {
-        return this.graph.vertex(p.terminalVertex()).neighbors.includes(p.initialVertex())  // can be made into a loop
-      }
-    }
+    } //else {
+    //   if (p.numVertices() >= 3) {
+    //     return this.graph.vertex(p.terminalVertex()).neighbors.includes(p.initialVertex())  // can be made into a loop
+    //   }
+    // }
   }
 
   getConsolidationCandidates() {
