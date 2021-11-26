@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Michael Bradford Williams | Random Circle Packing</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/circlePacking.js"></script>
+</head>
+
+<body onload="init(1);">
+
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Random Circle Packing</h3>
+</div>
+
+<div class="content-row">
+
+<p>
+There are several related definitions, but let us say that a <i>circle packing</i> is a collection of circles in the plane
+whose interiors do not overlap. This page demonstrates an algorithm to create a random circle packing with the added property
+that no circle in the packing can be enlarged without creating an overlap. The basic idea is to build the packing one circle at
+a time, in a <a href="https://en.wikipedia.org/wiki/Greedy_algorithm">greedy</a> fashion, meaning each circle is made to be as
+large as possible given the previously existing circles. There is a built-in overall maximum radius size, and a maximum number
+of circles allowed in the circle packing.
+</p>
+
+<p>
+In a bit more detail, once a center point for a new circle is randomly selected, its circle is given a small radius, in this
+case 1 pixel. Then the radius is iteratively increased according to the following logic.
+</p>
+
+<ul>
+  <li>if the circle is tangent to 0 other circles
+    <ul>
+      <li>increase the radius until the circle is tangent to another circle, or until the radius reaches the maximum allowable radius</li>
+    </ul>
+  </li>
+  <li>if the circle is tangent to 1 or 2 other circles
+    <ul>
+      <li>increase the radius and move the center while maintaining tangency,
+        until the circle is tangent to another circle, or until the radius reaches the maximum allowable radius</li>
+    </ul>
+    </li>
+</ul>
+
+<p>
+In the case where the circle is tangent to 1 other circle, as the radius increases, the center point moves along the straight line joining
+the two centers. In the case where the circle is tangent to 2 other circles, as the radius increases, the center point moves in a more
+complicated way. Namely, if the center is \((x,y)\) and the proposed radius is \(r\), and the tangent circles have centers
+\((x_1,y_1), (x_2,y_2)\) and radii  \(r_1, r_2\),
+then \((x,y)\) is determined by this data by solving two equations that describe tangency:
+\[
+\begin{align*}
+(x-x_1)^2 + (y-y_1)^2 &= (r+r_1)^2 \\
+(x-x_2)^2 + (y-y_2)^2 &= (r+r_2)^2
+\end{align*}
+\]
+The resulting expressions for \(x\) and \(y\) are messy and highly non-linear, but closed-form. This non-linearity introduces the possibility
+that the center moves "too quickly" as the circle's radius increases, and that the circle will end up overlapping another circle, even if the
+change in radius is very small. Care was needed to avoid this, but the solution isn't perfect. (Look closely and you might find a few cases
+where some circles have a small overlap.)
+</p>
+
+<p>
+There are three visualization modes for the circle packing: (1) simple, meaning just the circles are drawn; (2) simple, but with
+connections between tangent circles drawn (e.g., this is the <a href="https://en.wikipedia.org/wiki/Contact_graph">tangency graph</a>
+of the circle packing), and (3) circles represented by randomly colored disks.
+</p>
+
+<p>Here is a <a href="./circle_packing_xl.html">larger version</a> of the program more suited to desktop browsers.</p>
+
+</div>
+
+<div class="content-row" id="controls">
+  <form name="parameters" action="#">
+    <table border="0" align="center">
+      <tr>
+        <td colspan="2" align="center"><input type="button" name="pause" value="Pause" onClick="pauseDrawing();"></td>
+        <td colspan="2" align="center"><input type="button" name="reset" value="Reset" onClick="resetDrawing();"></td>
+        <td>
+          <select name="drawing_style">
+            <option value="simple" selected="selected">simple</option>
+            <option value="connections">with tangency</option>
+            <option value="colorful">colorful</option>
+          </select>
+        </td>
+        <td colspan="2" align="center"><input type="button" name="labels" value="Toggle Labels" onClick="drawSimpleLabels();"></td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
+</div>
+
+<div class="content-row">
+  <form name="outform" action="#">
+    <textarea rows="1" cols="48" name="output"></textarea>
+  </form>
+</div>
+
+</body>
+</html>

@@ -1,247 +1,230 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Michael Bradford Williams | Programming</title>
-	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
-	<link rel="shortcut icon" href="favicon.ico" />
-	<script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
+  <title>Michael Bradford Williams | Programming</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
 </head>
 
 <body>
 
+<div class="content-row">
+<h2>Michael Bradford Williams</h2>
 
-<div class="container">
-
-<div class="topsmall">
-
-<div class="topleftsmall">
-  <a href="./index.html">
-  <script type="text/javascript">showRandomImage("300x50");</script>
-  </a>
+<h3><a href="./index.html">Home</a> / Programming</h3>
 </div>
 
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
-
+<div class="content-row">
+  <p>
+  Here is a collection of programs I've written to investigate certain visual or mathematical ideas, usually involving randomness, and sometimes involving user interaction. They utilize JavaScript and the <a href="http://en.wikipedia.org/wiki/Canvas_(HTML_element)">HTML canvas</a> element. Some attempts were made to ensure proper functionality on mobile web browsers, but desktop browsers will typically give a better experience.
+</p>
 </div>
 
-<div class="middle">
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./circle_packing.html"><img src="./images/circle_packing.png" width="250px" height="auto" alt="circle packing" /></a>
+  </div>
+  <div class="info-col">
+    <p>Random <a href="./circle_packing.html">circle packing generator</a></p>
+  </div>
+</div>
 
-<h2>Programming</h2>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./lsystem.html"><img src="./images/lsystem.png" width="250" height="auto" alt="L-system" /></a>
+  </div>
+  <div class="info-col">
+    <p><a href="./lsystem.html">L-Systems plotter</a> with many examples</p>
+  </div>
+</div>
 
-<p>Here are a few small programs I've written to investigate certain visual or mathematical ideas.  They utilize JavaScript and the <a href="http://en.wikipedia.org/wiki/Canvas_(HTML_element)">HTML canvas</a> element.</p>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./automata2.html"><img src="./images/automata-small.png" width="250px" height="auto" alt="a cellular automaton" /></a>
+  </div>
+  <div class="info-col">
+    <p>Animation of the time evolution of random 1-dimensional <a href="./automata2.html">cellular automata</a></p>
+  </div>
+</div>
 
-<table align="center" border="0" cellpadding="0" cellspacing="5" width="80%">
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./mand.html"><img src="./images/mandelbrot.png" width="250px" height="auto" alt="mandelbrot set"></a>
+  </div>
+  <div class="info-col">
+    <p>Compulsory <a href="./mand.html">Mandelbrot set explorer</a></p>
+  </div>
+</div>
 
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./regression.html"><img src="./images/gd.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Illustration of <a href="./regression.html">linear regression</a> and gradient descent</p>
+  </div>
+</div>
 
-<tr>
-  <td align="right"><p>Here's  <a href="./lsystem.html">a program</a> that illustrates <a href="https://en.wikipedia.org/wiki/L-system">L-Systems</a>.</p></td>
-  <td align="left"><a href="./lsystem.html"><img src="./images/lsystem.png" height="125" width="250" alt="l-system" /></a></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./ray.html"><img src="./images/ray.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Basic <a href="./ray.html">ray tracing</a> program with a variety of example scenes</p>
+  </div>
+</div>
 
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./planar.html"><img src="./images/planar.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Determining the <a href="./planar.html">planarity of various graphs</a></p>
+  </div>
+</div>
 
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./complex.html"><img src="./images/mesh.png" width="250px" height="auto" alt="a complex mapping" /></a>
+  </div>
+  <div class="info-col">
+    <p>Visualizing <a href="./complex.html">mappings from the complex plane to itself</a></p>
+  </div>
+</div>
 
-<tr>
-  <td align="right"><a href="./mand.html"><img src="./images/mandelbrot.png" alt="mandelbrot"></a></td>
-  <td align="left"><p>Here's an <a href="./mand.html">in-browser drawing program</a> that visualizes the <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set</a>.</p></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./lorenz.html"><img src="./images/lorenz.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Animation of the time evolution of the <a href="./lorenz.html">lorenz attractor</a></p>
+  </div>
+</div>
 
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./cyclic.html"><img src="images/cyclic.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Animated visualization of <a href="./cyclic.html">endomorphisms of cyclic groups</a></p>
+  </div>
+</div>
 
-<tr>
-  <td align="right"><p>Here's a program that illustrates <a href="./regression.html">linear regression</a> and gradient descent.</p></td>
-  <td align="left"><a href="./regression.html"><img src="./images/gd.png" height="125" width="250" alt="" /></a></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./laser.html"><img src="images/laser.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Simulation of a <a href="./laser.html">laser beam</a> among circular mirrors</p>
+  </div>
+</div>
 
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./kmeans.html"><img src="./images/kmeans.png" width="250px" height="auto" alt="K-means clustering" /></a>
+  </div>
+  <div class="info-col">
+    <p>Illustration of the <a href="./kmeans.html">K-means clustering algorithm</a></p>
+  </div>
+</div>
 
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./concentric.html"><img src="./images/concentric.png" width="250px" height="auto" alt="concentric polygons" /></a>
+  </div>
+  <div class="info-col">
+    <p>Infinite sequence of  <a href="./concentric.html">concentric polygons</a></p>
+  </div>
+</div>
 
-<tr>
-  <td align="right"><a href="./kmeans.html"><img src="./images/kmeans.png" alt="k-means"></a></td>
-  <td align="left"><p>Here's an <a href="./kmeans.html">in-browser drawing program</a> that illustrates the <a href="http://en.wikipedia.org/wiki/k-means_clustering">K-means clustering algorithm</a>.</p></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./particles.html"><img src="./images/particles.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Simulation of <a href="./particles.html">particles in a gravitational field</a></p>
+  </div>
+</div>
 
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./spiro.html"><img src="./images/spiro.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Drawing <a href="./spiro.html">Spirograph-like</a> curves</p>
+  </div>
+</div>
 
-<tr>
-  <td align="right"><p>Here's a program that <a href="./planar.html">draws various graphs</a> and allows you to check whether or not they are planar.</p></td>
-  <td align="left"><a href="./planar.html"><img src="./images/planar.png" height="150" width="250" alt="" /></a></td> </tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./random_plants.html"><img src="./images/plants.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Growing random <a href="./random_plants.html">plant-like structures</a></p>
+  </div>
+</div>
 
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./vectors.html"><img src="./images/vectors.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p><a href="./vectors.html">Vector fields</a> that interact with the mouse cursor</p>
+  </div>
+</div>
 
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./aerial.html"><img src="./images/aerial.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Procedurally generated images of <a href="./aerial.html">aerial perspective</a></p>
+  </div>
+</div>
 
-<tr>
-  <td align="right"><a href="./automata2.html"><img src="./images/automata-small.png" alt="a cellular automaton" /></a></td>
-  <td align="left"><p>Here's an <a href="./automata2.html">in-browser drawing program</a> that creates pictures of certain <a href="http://en.wikipedia.org/wiki/Cellular_automaton">cellular automata</a>.</p></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./random_paths.html"><img src="./images/grid.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Filling various graphs with <a href="./random_paths.html">random, non-intersecting paths</a></p>
+  </div>
+</div>
 
-<tr>
-    <td height="5"></td>
-    <td height="5"></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./strings.html"><img src="./images/strings.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Trajectories of <a href="./strings.html">particles moving quasi-randomly</a> in the plane</p>
+  </div>
+</div>
 
-<tr>
-	<td align="right"><p>Here's a program that <a href="./circles.html">draws a fractal</a> based on semicircles.</p></td>
-	<td align="left"><a href="./circles.html"><img src="./images/circles.png" height="150" width="150" alt="" /></a></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./n_gons.html"><img src="./images/pattern.png" width="250" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>Patterns with <a href="./n_gons.html">n-gons and circles</a></p>
+  </div>
+</div>
 
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
+<div class="flex-row">
+  <div class="image-col">
+    <a href="./circles.html"><img src="./images/circle_fractal.png" width="250px" height="auto" alt="" /></a>
+  </div>
+  <div class="info-col">
+    <p>A simple fractal <a href="./circles.html">based on semicircles</a></p>
+  </div>
+</div>
 
-<tr>
-  <td align="right"><a href="./complex.html"><img src="./images/mesh.png" alt="a complex mapping" /></a></td>
-  <td align="left"><p>Here is a program to visualize certain <a href="http://en.wikipedia.org/wiki/Complex_analysis">complex</a> <a href="http://en.wikipedia.org/wiki/Map_(mathematics)">mappings</a>.  <a href="./complex.html">This page</a> contains the Java applet and various pretty pictures.</p></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><p>Here is a program to <a href="./n_gons.html">draw some interesting patterns</a> with n-gons and circles.</p></td>
-  <td align="left"><a href="./n_gons.html"><img src="./images/pattern.png" alt="" /></a></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><a href="./lorenz.html"><img src="./images/lorenz.png" alt="" /></a></td>
-  <td align="left"><p>Here is a program that I wrote to <a href="./lorenz.html">draw a lorenz attractor</a>.</p></td>
-
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><p>Here is a program to cover the vertices of a graph with <a href="./random_paths.html">random non-self-intersecting paths</a>.
-    An interesting circuit-like effect is the result.</p></td>
-  <td align="left"><a href="./random_paths.html"><img src="./images/grid.png" alt="" /></a></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><a href="./particles.html"><img src="./images/particles.png" alt="" /></a></td>
-  <td align="left"><p>Here is a program to <a href="./particles.html">simulate particles in a graviational field</a>.</p></td>
-
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><p>Here is a program to <a href="./vectors.html">draw a few types of vector fields</a> that interact with the mouse cursor.</p></td>
-  <td align="left"><a href="./vectors.html"><img src="./images/vectors.png" alt="" /></a></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><a href="./strings.html"><img src="./images/strings.png" alt="" /></a></td>
-  <td align="left"><p>Here is a program that I wrote to <a href="./strings.html">draw the paths of particles</a> moving (almost) randomly in the plane.  A nice string-like effect is the result.</p></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><p>Here is a program that <a href="./spiro.html">draws curves</a> like those produced by a <a href="https://en.wikipedia.org/wiki/Spirograph">Spirograph</a>.</p></td>
-  <td align="left"><a href="./spiro.html"><img src="./images/spiro.png" alt="" /></a></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><a href="./random_plants.html"><img src="./images/plants.png" alt="" /></a></td>
-  <td align="left"><p>Here is a program that grows random <a href="./random_plants.html">plant-like structures</a>.</p></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><p>Here's an animated visualization of <a href="./cyclic.html">endomorphisms of cyclic groups</a>.</p></td>
-  <td align="left"><a href="./cyclic.html"><img src="images/cyclic.png" alt="" /></a></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><a href="./ray.html"><img src="./images/ray.png" alt="" /></a></td>
-  <td align="left"><p>Here's a simple <a href="./ray.html">ray tracing</a> program.</p></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
-<tr>
-  <td align="right"><p><a href="./aerial.html">Here's a program</a> to draw procedurally generated <a href="https://en.wikipedia.org/wiki/Aerial_perspective">aerial perspective</a> images</p></td>
-  <td align="left"><a href="./aerial.html"><img src="./images/aerial.png" alt="" /></a></td>
-</tr>
-
-<tr>
-  <td height="5"></td>
-  <td height="5"></td>
-</tr>
-
+<!--
 <tr>
   <td align="right"><a href="http://projecteuler.net/"><img src="http://projecteuler.net/profile/mbw314.png" alt="" /></a></td>
   <td align="left"><p>I also enjoy solving mathematical programming problems on <a href="http://projecteuler.net/">Project Euler</a>.</p></td>
-</tr>
-
-</table>
-
-</div>
-
-<div class="bottom">
-<p>last modified: 10/07/2020</p>
-</div>
+</tr> -->
 
 </div>
 

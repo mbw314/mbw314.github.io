@@ -8,7 +8,7 @@ const ATTRACTOR_COLOR = "black";
 
 const SPEED_MAX = 20;
 const ACC_MAX = 1;
-const PARTICLE_MASS_MAX = 5;
+const PARTICLE_MASS_MAX = 2;
 
 const NUM_PARTICLES_MIN = 1;
 let NUM_PARTICLES = 2;
@@ -23,9 +23,12 @@ let TAIL = 10;
 let ATT_MASS_MIN = 100;
 let ATT_MASS_MOD = 300;
 
-const G_POW_MIN = 1;
-let G_POW = 5;
-const G_POW_MAX = 10;
+const G_POW_MIN = 0.1;
+let G_POW = 2;
+const G_POW_MAX = 5;
+
+const SLIDER_MIN = 0;
+const SLIDER_MAX = 100;
 
 
 function pauseDrawing() {
@@ -202,7 +205,6 @@ class Ensemble {
 
       // get new position, update previous positions
       let pos = this.particles[i].ps[0].plus(this.particles[i].vel)
-      // TODO: make this more efficient
       this.particles[i].ps = [pos].concat(this.particles[i].ps.slice(0, TAIL - 1));
     }
   }
@@ -223,8 +225,14 @@ function draw() {
 function init(adjustSize){
   let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = document.getElementById("content").clientWidth;
-    HEIGHT = window.innerHeight - parseInt(1.2 * document.getElementById("controls_table").clientHeight);
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;

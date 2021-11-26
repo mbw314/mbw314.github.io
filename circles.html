@@ -1,77 +1,56 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Michael Bradford Williams | Circle Fractal</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   <link rel="shortcut icon" href="favicon.ico" />
-  <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/circleFractal.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
 
-<div class="container">
-
-<div class="topsmall">
-<div class="topleftsmall">
-  <a href="./index.html">
-  <script type="text/javascript">
-          showRandomImage("300x50");
-  </script>
-  </a>
-</div>
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Simple Fractal</h3>
 </div>
 
-<div class="middle">
-
-<h2>A Simple Fractal</h2>
+<div class="content-row">
 
 <p>Here's a simple fractal built from semicircles.</p>
 
-<p>You'll need a modern browser to view it (e.g. <a href="http://www.mozilla.com/firefox/">Firefox</a>,
-<a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.apple.com/safari/">Safari</a>). </p>
 </div>
 
-<div class="middle">
-<table border="0" align="center">
-  <tr>
-    <td align="left">
-      <input type="button" name="iterate" value="Iterate" onClick="iterate();">
-      <input type="button" name="reset" value="Reset" onClick="refreshData();">
-    </td>
-  </tr>
-</table>
-</div>
-
-<div class="middle">
-<center>
-    <canvas id="canvas" width="750" height="750">
-        <p>Your browser is currently unsupported.</p>
-    </canvas>
-</center>
-</div>
-
-<div class="middle">
-  <table align="center">
+<div class="content-row" id="controls">
+  <table border="0" align="center">
     <tr>
-      <td>
-        <form name="outform" action="#">
-          <textarea rows="1" cols="80" name="output"></textarea>
-        </form>
+      <td align="left">
+        <input type="button" name="iterate" value="Iterate" onClick="iterate();">
+        <input type="button" name="reset" value="Reset" onClick="refreshData();">
       </td>
     </tr>
   </table>
 </div>
 
-<div class="bottom">
-<p>last modified: 01/14/2020</p>
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
 </div>
 
+<div class="content-row">
+  <table align="center">
+    <tr>
+      <td>
+        <form name="outform" action="#">
+          <textarea rows="1" cols="20" name="output"></textarea>
+        </form>
+      </td>
+    </tr>
+  </table>
 </div>
 
 </body>

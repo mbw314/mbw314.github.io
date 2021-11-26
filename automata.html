@@ -1,36 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
+  <title>Michael Bradford Williams | Cellular Automata</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Michael Bradford Williams | Cellular Automata</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
-	<script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
 
-
-<div class="container">
-
-<div class="topsmall">
-<div class="topleftsmall">
-   <a href="./index.html">
-	<script type="text/javascript">
-      		showRandomImage("300x50");
-   	</script>
-   </a>
-</div>
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+<div class="content-row" id="header-row">
+	<h2>Michael Bradford Williams</h2>
+	<h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Cellular Automata</h3>
 </div>
 
-<div class="middle">
-
-<h2>Cellular Automata</h2>
-
+<div class="content-row">
 <h3>Introduction</h3>
 
 <p>This page describes my explorations while writing a computer program to draw
@@ -54,7 +41,9 @@ the bottom box depends.</p>
 <p>Continue coloring boxes in this manner, going down one row at a time. For practical purposes,
 it is easy to make the first colored box in the top row, middle column. Also, since the grid will
 have finite width, we have to be careful with the boxes on the edges. I'll say more about that in a moment.</p>
+</div>
 
+<div class="content-row">
 <h3>The Rules</h3>
 
 <p>How do we make the "rules" for creating an automaton? First, let's consider, as above, an individual
@@ -102,7 +91,9 @@ For example, the images above determine a (boring) rule, but here is another.</p
 	<td><img src="./images/automata/example.png" alt=" " /></td>
 </tr>
 </table>
+</div>
 
+<div class="content-row">
 <h3>Fixed Width, Arbitrary Height</h3>
 
 <p>Addressing the above unresolved question, what happens if we want the image to be of arbitary
@@ -156,6 +147,9 @@ can get.  For example, they are random enough to be used as
 in <a href="http://www.wolfram.com/products/mathematica/index.html">Mathematica</a>.
 <a href="http://psoup.math.wisc.edu/mcell/ca_links.html">Here's</a> a bunch of links with way more information.</p>
 
+</div>
+
+<div class="content-row">
 <h3>More Colors</h3>
 
 <p>Another natural question to ask is, "What is so special about two colors?" The answer, of course,
@@ -243,7 +237,10 @@ person on earth! Here are some results.</p>
 			<img src="./images/automata/automata012102002200001012012120100-series-small.png" alt=" " /></a></td>
 </tr>
 </table>
+</div>
 
+
+<div class="content-row">
 <h3>Even More Colors</h3>
 
 <p>To count the number of possible rules of an arbitrary number, say \(n\), of colors, we follow the
@@ -276,7 +273,9 @@ there are too many colors, things look too random, like colorful static. Here ar
 			<img src="./images/automata/n/automata-4-800x1000-1-2132302023130233121301033200121012013031000233003031033322001303-1-thumb.png" alt=" " /></a></td>
 </tr>
 </table>
+</div>
 
+<div class="content-row">
 <h3>Other Types</h3>
 
 <p>There are further generalizations of the rules that were used up to this point. Why limit the effect
@@ -298,17 +297,13 @@ a rule. Here's a picture illustrating the new rules.
         <td><img src="./images/automata/.png" alt=" " /></td>
 </tr>
 </table>
+</div>
 
+<div class="content-row">
 <h3>The Program</h3>
 
 <p>Here is the program, which runs <a href="./automata2.html">inside a webpage</a> (although you'll need a good web browser
 for it to work properly).</p>
-</div>
-
-<div class="bottom">
-<p>last modified: 02/05/2020</p>
-</div>
-
 </div>
 
 </body>

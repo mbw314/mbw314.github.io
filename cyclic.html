@@ -1,35 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Michael Bradford Williams | Endomorphisms of Cylic Groups</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   <link rel="shortcut icon" href="favicon.ico" />
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/cyclic.js"></script>
 </head>
 
-<body onload="init();">
-<div class="container">
+<body onload="init(1);">
 
-  <div class="topsmall">
-    <div class="topleftsmall">
-       <a href="./index.html">
-      <script type="text/javascript">
-              showRandomImage("300x50");
-         </script>
-       </a>
-    </div>
-    <h1><a href="./index.html">Michael Bradford Williams</a></h1>
-  </div>
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Endomorphisms of Cylic Groups</h3>
+</div>
 
-  <div class="middle">
-    <h2>Endomorphisms of Cylic Groups</h2>
-    <p>For a given natural number \(n > 1\), the <a href="https://en.wikipedia.org/wiki/Cyclic_group">cyclic group</a>
+<div class="content-row">
+
+<p>
+For a given natural number \(n > 1\), the <a href="https://en.wikipedia.org/wiki/Cyclic_group">cyclic group</a>
  \(\mathbb{Z} / n \mathbb{Z}\)
 consists of the  <a href="https://en.wikipedia.org/wiki/Modular_arithmetic">residue classes</a> of
 integers, modulo \(n\). If we use the notation \([a]_n\)
@@ -39,32 +32,39 @@ to refer to the residue class of \(a \in \mathbb{Z}\), modulo \(n\), then the el
 \{[0]_n, [1]_n, \dots, [n-1]_n\}
 \]
 The group operation
-(which we call "+") is addition, modulo \(n\), so that \([a]_n + [b]_n := [a+b]_n\).</p>
+(which we call "+") is addition, modulo \(n\), so that \([a]_n + [b]_n := [a+b]_n\).
+</p>
 
-<p>Every integer \(c \in \mathbb{Z}\) gives rise to a
+<p>
+Every integer \(c \in \mathbb{Z}\) gives rise to a
 <a href="https://en.wikipedia.org/wiki/Group_homomorphism">homomorphism</a> from the group to itself
 (a.k.a. an endomorphism)
 \[
 \phi_c : \mathbb{Z} / n \mathbb{Z} \longrightarrow \mathbb{Z} / n \mathbb{Z}
 \]
-defined by \(\phi_c([a]_n) := [ca]_n\). We check that it is indeed a homomorphism:
+defined by \(\phi_c([a]_n) := [ca]_n\).
+
+<!-- We check that it is indeed a homomorphism:
 \[
 \phi_c([a]_n + [b]_n) = \phi_c([a + b]_n) = [c(a + b)]_n = [ca + cb]_n = [ca]_n + [cb]_n
 = \phi_c([a]_n) + \phi_c([b]_n)
-\]
+\] -->
 </p>
 
-<p>We can visualize these endomorphisms by identifying \(\mathbb{Z} / n \mathbb{Z}\)
+<p>
+We can visualize these endomorphisms by identifying \(\mathbb{Z} / n \mathbb{Z}\)
 with the \(n\)th <a href="https://en.wikipedia.org/wiki/Root_of_unity">roots of unity</a>
 \[
 U_n := \{e^{2\pi i / k} | i=0,\dots,n-1\} \subset \mathbb{C}
 \]
-which is a subgroup of the init circle group \(S^1 \subset \mathbb{C}\). To do this,
+which is a subgroup of the unit circle group \(S^1 \subset \mathbb{C}\). To do this,
 define \(\psi: \mathbb{Z} / n \mathbb{Z} \rightarrow U_n\) by \(\psi([a]_n) = e^{2\pi i a / n}\).
 One can check that this is a homomorphism, and that it is injective. By construction
-the image is \(U_n\), so we have an isomorphism \(\mathbb{Z} / n \mathbb{Z} \simeq U_n\).</p>
+the image is \(U_n\), so we have an isomorphism \(\mathbb{Z} / n \mathbb{Z} \simeq U_n\).
+</p>
 
-<p>Under this identification, an endomorphism \(\phi_c\) becomes the mapping
+<p>
+Under this identification, an endomorphism \(\phi_c\) becomes the mapping
 \[
 e^{2\pi i k/n} \longmapsto e^{2\pi i ck / n}
 \]
@@ -72,42 +72,37 @@ We can visualize the endomorophism by drawing a line segment from each input poi
 to the corresponding output point.
 </p>
 
-<p>The visualization below iterpolates between different endomorphisms \(\phi_c\) as
-the parameter \(c\) varies over time. The group has \(n=512\). There is also a <a href="./cyclic_xl.html">larger version</a>.
-
-  </div>
-
-  <div class="middle">
-    <form name="parameters" action="#">
-      <table border="0" align="center">
-        <tr>
-          <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
-        </tr>
-      </table>
-    </form>
-  </div>
-
-  <div class="middle">
-  <center>
-    <canvas id="canvas" width="750" height="500">
-      <p>Your browser is currently unsupported.</p>
-    </canvas>
-  </center>
-  </div>
-
-
-  <div class="middle">
-    <center>
-    <form name="outform" action="#">
-      <textarea rows="1" cols="80" name="output"></textarea>
-    </form>
-    </center>
-  </div>
-
-  <div class="bottom">
-    <p>last modified: 03/11/2020</p>
-  </div>
+<p>
+The visualization below iterpolates between different endomorphisms \(\phi_c\) as
+the parameter \(c\) varies over time. The group has \(n=512\). There is also a <a href="./cyclic_xl.html">larger version,
+more suited to desktop browsers.</a>.
+</p>
 
 </div>
+
+<div class="content-row" id="controls">
+  <form name="parameters" action="#">
+    <table border="0" align="center">
+      <tr>
+        <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
+</div>
+
+<div class="content-row">
+  <center>
+  <form name="outform" action="#">
+    <textarea rows="1" cols="30" name="output"></textarea>
+  </form>
+  </center>
+</div>
+
 </body>
 </html>

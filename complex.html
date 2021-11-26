@@ -1,35 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Michael Bradford Williams | Complex Mappings</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-	<script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
+	<style>.image-col { width: 150px; }</style>
 </head>
 
 <body>
 
-
-<div class="container">
-
-<div class="topsmall">
-<div class="topleftsmall">
-   <a href="./index.html">
-	<script type="text/javascript">
-      		showRandomImage("300x50");
-   	</script>
-   </a>
-</div>
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Complex Mappings</h3>
 </div>
 
-<div class="middle">
-
-<h2>Complex Mappings</h2>
+<div class="content-row">
 
 <h3>What is a complex mapping?</h3>
 
@@ -43,22 +32,25 @@ For example, the picture below illustrates how a complex mapping \(f\) deforms a
 the plane. Complex mappings are the basic objects of study in
 <a href="http://en.wikipedia.org/wiki/Complex_analysis">complex analysis</a>.</p>
 
-<table  align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr align="center">
-	<td><a href="./images/complex/map.png">
-	    <img src="./images/complex/map.png" alt="a complex mapping" /></a>
-	</td>
-</tr>
-</table>
+<a href="./images/complex/map.png"><img src="./images/complex/map.png" alt="a complex mapping" /></a>
+
+</div>
+
+<div class="content-row">
 
 <h3>The Program</h3>
 
-<p>I wrote a <a href="./complex2.html">small program</a> to visualize complex mappings.  It uses <a href="http://en.wikipedia.org/wiki/Canvas_(HTML_element)">HTML canvas</a>
-and you'll need a modern browser to view it (e.g. <a href="http://www.mozilla.com/firefox/">Firefox</a>,
-<a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.apple.com/safari/">Safari</a>).</p>
+<p>
+Here is a <a href="./complex2.html">program to visualize complex mappings</a>. Note that it is not optimized for mobile web browsers.
+<p>
 
-<p>The program can draw three types of mappings, described below.</p>
+<p>
+The program can draw three types of mappings, described below.
+</p>
 
+</div>
+
+<div class="content-row">
 
 <h3>Polynomials</h3>
 
@@ -68,53 +60,47 @@ variables are now complex numbers.  The generic form in the program is a degree 
 \[ A z^3 + B z^2 + C z + D \]
 </p>
 
-
 <p>Here are a few examples of how complex polynomials behave.</p>
 
-<table align="center" border="0" cellpadding="5" cellspacing="0" width="100%">
-<tr>
-	<td align="right">
-		<a href="./images/complex/poly1.png">
-		<img src="./images/complex/poly1_thumb.png" alt="" /></a>
-	</td>
+</div>
 
-	<td align="left">
-    <p>\[f(z) = 2 z^2 + 0.1 z\]</p
-	</td>
-</tr>
-<tr>
-	<td align="right">
-		<a href="./images/complex/poly2.png">
-		<img src="./images/complex/poly2_thumb.png" alt="" /></a>
-	</td>
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/poly1.png"><img src="./images/complex/poly1_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+	   \( f(z) = 2 z^2 + 0.1 z \)
+	</div>
+</div>
 
-	<td align="left">
-    <p>\[f(z) = 0.09 z^3 + 1.5 z\]</p>
-	</td>
-</tr>
-<tr>
-	<td align="right">
-		<a href="./images/complex/poly3.png">
-		<img src="./images/complex/poly3_thumb.png" alt="" /></a>
-	</td>
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/poly2.png"><img src="./images/complex/poly2_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+	  \( f(z) = 0.09 z^3 + 1.5 z \)
+	</div>
+</div>
 
-	<td align="left">
-    <p>\[f(z) = (0.01 + 0.02i) z^3 + 0.03 z^2 + (1.2 + 0.02i) z\]</p>
-	</td>
-</tr>
-<tr>
-	<td align="right">
-		<a href="./images/complex/poly4.png">
-		<img src="./images/complex/poly4_thumb.png" alt="" /></a>
-	</td>
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/poly3.png"><img src="./images/complex/poly3_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+	  \( f(z) = (0.01 + 0.02i) z^3 + 0.03 z^2 + (1.2 + 0.02i) z \)
+	</div>
+</div>
 
-	<td align="left">
-    <p>\[f(z) = (0.2 + 0.3i) z^3 + (1 + 0.2i) z\]</p>
-	</td>
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/poly4.png"><img src="./images/complex/poly4_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+	  \( f(z) = (0.2 + 0.3i) z^3 + (1 + 0.2i) z \)
+	</div>
+</div>
 
-</tr>
-</table>
-
+<div class="content-row">
 
 <h3>Mobius Transforms</h3>
 
@@ -128,44 +114,47 @@ of functions.  An amazing video describing their nature can be found
 
 <p>Here are a few examples of how Mobius transformtions behave.</p>
 
-<table align="center" border="0" cellpadding="5" cellspacing="0" width="100%">
-<tr>
-	<td align="right">
-		<a href="./images/complex/mobius1.png">
-		<img src="./images/complex/mobius1_thumb.png" alt="" /></a>
-	</td>
-	<td align="left">
-    <p>\[f(z) = \frac{(2 + 4i)z + 1}{z + (0.1 + 0.1i)}\]</p>
-	</td>
-</tr>
-<tr>
-	<td align="right">
-		<a href="./images/complex/mobius2.png">
-		<img src="./images/complex/mobius2_thumb.png" alt="" /></a>
-	</td>
-	<td align="left">
-    <p>\[f(z) = \frac{1}{z}\]</p>
-	</td>
-</tr>
-<tr>
-	<td align="right">
-		<a href="./images/complex/mobius3.png">
-		<img src="./images/complex/mobius3_thumb.png" alt="" /></a>
-	</td>
-	<td align="left">
-    <p>\[f(z) = \frac{-5z + 1}{z}\]</p>
-	</td>
-</tr>
-<tr>
-	<td align="right">
-		<a href="./images/complex/mobius4.png">
-		<img src="./images/complex/mobius4_thumb.png" alt="" /></a>
-	</td>
-	<td align="left">
-    <p>\[f(z) = \frac{1}{z}\]</p>
-	</td>
-</tr>
-</table>
+</div>
+
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/mobius1.png"><img src="./images/complex/mobius1_thumb.png" alt="" /></a>
+	</div>
+
+	<div class="info-col">
+	  \( f(z) = \frac{(2 + 4i)z + 1}{z + (0.1 + 0.1i)} \)
+	</div>
+</div>
+
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/mobius2.png"><img src="./images/complex/mobius2_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+	  \( f(z) = \frac{1}{z} \)
+	</div>
+</div>
+
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/mobius3.png"><img src="./images/complex/mobius3_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+	  \( f(z) = \frac{-5z + 1}{z} \)
+	</div>
+</div>
+
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/mobius4.png"><img src="./images/complex/mobius4_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+	  \( f(z) = \frac{1}{z} \)
+	</div>
+</div>
+
+
+<div class="content-row">
 
 <h3>Exponentials</h3>
 
@@ -178,55 +167,44 @@ it is periodic, something one might never guess from looking at the real version
 
 <p>Here are a few examples of how complex exponentials behave.</p>
 
-
-<table align="center" border="0" cellpadding="5" cellspacing="0" width="100%">
-<tr>
-	<td align="right">
-		<a href="./images/complex/exp1.png">
-		<img src="./images/complex/exp1_thumb.png" alt="" /></a>
-	</td>
-	<td align="left">
-    <p>\[f(z) = \exp(z)\]</p>
-	</td>
-</tr>
-<tr>
-	<td align="right">
-		<a href="./images/complex/exp2.png">
-		<img src="./images/complex/exp2_thumb.png" alt="" /></a>
-	</td>
-	<td align="left">
-    <p>\[f(z) = \exp((1 + 0.15i)z)\]</p>
-	</td>
-</tr>
-<tr>
-	<td align="right">
-		<a href="./images/complex/exp3.png">
-		<img src="./images/complex/exp3_thumb.png" alt="" /></a>
-	</td>
-	<td align="left">
-    <p>\[f(z) = (0.1 + 0.5i) \exp((8 + i)z + (1 + 0.2i))\]</p>
-	</td>
-</tr>
-
-<tr>
-	<td align="right">
-		<a href="./images/complex/exp4.png">
-		<img src="./images/complex/exp4_thumb.png" alt="" /></a>
-	</td>
-	<td align="left">
-    <p>\[f(z) = (0.1 + 0.5i) \exp((-1 - 2.5i)z + (1 + 0.2i))\]</p>
-	</td>
-</tr>
-</table>
-
 </div>
 
-
-<div class="bottom">
-<p>last modified: 02/05/2020</p>
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/exp1.png"><img src="./images/complex/exp1_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+    \( f(z) = \exp(z) \)
+	</div>
 </div>
 
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/exp2.png"><img src="./images/complex/exp2_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+    \( f(z) = \exp((1 + 0.15i)z) \)
+	</div>
 </div>
+
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/exp3.png"><img src="./images/complex/exp3_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+    \( f(z) = (0.1 + 0.5i) \exp((8 + i)z + (1 + 0.2i)) \)
+	</div>
+</div>
+
+<div class="flex-row">
+	<div class="image-col">
+		<a href="./images/complex/exp4.png"><img src="./images/complex/exp4_thumb.png" alt="" /></a>
+	</div>
+	<div class="info-col">
+    \( f(z) = (0.1 + 0.5i) \exp((-1 - 2.5i)z + (1 + 0.2i)) \)
+	</div>
+</div>
+
 
 </body>
 </html>

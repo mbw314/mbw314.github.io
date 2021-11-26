@@ -252,15 +252,20 @@ function draw() {
   let t1 = (new Date()).getTime();
   colorMatrix.draw(magnification);
   let t2 = (new Date()).getTime();
-  //console.log(`new frame: iterated in ${t1 - t0} ms; drew in ${t2 - t1} ms`);
 }
 
 
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = parseInt(document.getElementById("content").clientWidth / 30) * 30; // round width to 30 = LCM of magnification values
-    HEIGHT = window.innerHeight - parseInt(1.25 * document.getElementById("controls_table").clientHeight);
+    WIDTH = parseInt(document.getElementById("controls").clientWidth / 30) * 30; // round width to 30 = LCM of magnification values
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = 1.5 * WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.25 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;

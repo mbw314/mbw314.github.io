@@ -12,8 +12,8 @@ let Y_MAX = 1;
 const T = 0.1;
 const OUTER_RADIUS = 1;
 
-const SLIDER_MIN = 1;
-const SLIDER_MAX = 150;
+const SLIDER_MIN = 0;
+const SLIDER_MAX = 100;
 const K_MIN = -1.0;
 const K_DEFAULT = 0.77;
 const K_MAX = 1.0;
@@ -112,8 +112,14 @@ function draw(k, l) {
 function init(adjustSize) {
   canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = document.getElementById("content").clientWidth;
-    HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;

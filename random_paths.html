@@ -1,92 +1,67 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
+	<title>Michael Bradford Williams | Random Paths in a Graph</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Michael Bradford Williams | Random Paths</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
-	<script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/graph.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/randomPaths.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
-
-<div class="container">
-
-<div class="topsmall">
-
-<div class="topleftsmall">
-   <a href="./index.html">
-	<script type="text/javascript">
-      		showRandomImage("300x50");
-   	</script>
-   </a>
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Random Paths in a Graph</h3>
 </div>
 
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+<div class="content-row">
 
-</div>
-
-<div class="middle">
-
-<h2>Random Paths in a Graph</h2>
-
-<p>In this <a href="https://en.wikipedia.org/wiki/Canvas_element">HTML canvas</a> experiment,
-I wanted to create random non-self-intersecting paths in a graph: choose a vertex randomly, move along an edge
-to a random neighboring vertex, etc., until there are no possible unoccupied vertices. Then start again
-with a new random vertex, and repeat the process until all vertices of the graph are occupied.
+<p>
+The goal with this program is to totally cover the vertices of a graph with random, non-self-intersecting paths. The procedure to create a path
+is to choose an unvisited vertex randomly, move along an edge to a random unvisited neighboring vertex, and repeat until the path cannot be
+extended any further. Paths are created in this way until all vertices of the graph have been visited.
 </p>
 
-<p>The process is animated below, and there are a few types of graphs to choose from: rectangular, triangular,
-  or hexagonal grids.</p>
+<p>
+The process is animated below, and there are a few types of graphs to choose from: rectangular, triangular,
+or hexagonal grids.
+</p>
 
-<p>Here is a <a href="./random_paths_xl.html">larger version</a> of this program.</p>
+<p>
+Here is a <a href="./random_paths_xl.html">larger version</a> of this program that is more suited to desktop browsers.
+</p>
+
 </div>
 
-<div class="middle">
-	<table border="0" align="center">
-
-<form name="controls">
-<tr>
-	<td colspan="1" align="right">Graph:</td>
-	<td colspan="1" align="left">
-	    <select id="graph">
-			<option value="grid" selected>rectangular grid</option>
-			<option value="tri_grid">triangular grid</option>
-			<option value="hex_grid">hexagonal grid</option>
-		</select>
-	</td>
-	<td colspan="1" align="center">&nbsp;</td>
-	<td colspan="1" align="left">
-	    <input type="button" name="draw" value="Draw" onClick="updateGraph(controls.graph.value);"></td>
-      <td colspan="2" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
-</tr>
-
-</form>
-
-</table>
+<div class="content-row" id="controls">
+  <form name="controls">
+	  <table border="0" align="center">
+			<tr>
+				<td colspan="1" align="right">Graph:</td>
+				<td colspan="1" align="left">
+				    <select id="graph">
+						<option value="grid" selected>rectangular grid</option>
+						<option value="tri_grid">triangular grid</option>
+						<option value="hex_grid">hexagonal grid</option>
+					</select>
+				</td>
+				<td colspan="1" align="center">&nbsp;</td>
+				<td colspan="1" align="left">
+				    <input type="button" name="draw" value="Draw" onClick="updateGraph(controls.graph.value);"></td>
+			      <td colspan="2" align="center"><input type="button" name="pause" value="Pause" onClick="pauseDrawing();"></td>
+			</tr>
+	  </table>
+	</form>
 </div>
 
-<div class="middle">
-    <canvas id="canvas" width="750" height="750">
-        <p>Your browser is currently unsupported.</p>
-    </canvas>
-</div>
-
-<div class="middle">
-  <form name="outform" action="#">
-    <textarea rows="5" cols="80" name="output"></textarea>
-  </form>
-</div>
-
-<div class="bottom">
-<p>last modified: 02/21/2020</p>
-</div>
-
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
 </div>
 
 </body>

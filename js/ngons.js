@@ -2,16 +2,32 @@ let WIDTH = 750;
 let HEIGHT = 750;
 let canvasUtil;
 
-function draw() {
-  let r = Math.floor(255 * radSl.getValue() / radSl.getMaximum());
-  let g = Math.floor(255 * (sepSl.getMaximum() - sepSl.getValue()) / sepSl.getMaximum());
-  let b = Math.floor(255 * (phaseSl.getMaximum() - phaseSl.getValue()) / phaseSl.getMaximum());
+const SLIDER_MIN = 0;
+const SLIDER_MAX = 100;
+
+RAD_MIN = 25;
+RAD_MAX = 300;
+RAD_DEFAULT = 175;
+
+SEP_MIN = 20;
+SEP_MAX = 400;
+SEP_DEFAULT = 100;
+
+SIDES_MIN = 3;
+SIDES_MAX = 10;
+SIDES_DEFAULT = 4;
+
+PHASE_MIN = 0;
+PHASE_MAX = 360;
+PHASE_DEFAULT = 60;
+
+function draw(rad, sep, numSides, phase) {
+  let r = Math.floor(255 * rad / RAD_MAX);
+  let g = Math.floor(255 * (SEP_MAX - sep) / SEP_MAX);
+  let b = Math.floor(255 * (PHASE_MAX - phase) / PHASE_MAX);
   canvasUtil.clearCanvas(Color.colorString(r, g, b));
 
-  let rad = radSl.getValue();
-  let sep = sepSl.getValue();
-  let numSides = sidesSl.getValue();
-  let phi = phaseSl.getValue() * Math.PI / (numSides * 180);
+  let phi = phase * Math.PI / (numSides * 180);
 
   for (let i = 0 - sep - rad; i <= WIDTH + rad + sep; i = i + sep) {
     for (let j = 0 - sep - rad; j <= HEIGHT + rad + sep; j = j + sep) {
@@ -47,14 +63,24 @@ function drawNGon(numSides, centerX, centerY, rad, phi) {
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = document.getElementById("content").clientWidth;
-    HEIGHT = window.innerHeight - parseInt(1.2 * document.getElementById("controls_table").clientHeight);
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext){
     let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT);
-    draw();
+    let actualRad = sliderToActual(SLIDER_MIN, SLIDER_MAX, RAD_MIN, RAD_MAX, RAD_DEFAULT);
+  	let actualSep = sliderToActual(SLIDER_MIN, SLIDER_MAX, SEP_MIN, SEP_MAX, SEP_DEFAULT);
+  	let actualSides = sliderToActual(SLIDER_MIN, SLIDER_MAX, SIDES_MIN, SIDES_MAX, SIDES_DEFAULT);
+  	let actualPhase = sliderToActual(SLIDER_MIN, SLIDER_MAX, PHASE_MIN, PHASE_MAX, PHASE_DEFAULT);
+    draw(actualRad, actualSep, actualSides, actualPhase);
   }
 }

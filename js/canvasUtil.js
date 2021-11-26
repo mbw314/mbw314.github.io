@@ -72,6 +72,13 @@ class CanvasUtil {
     this.ctx.stroke();
   }
 
+  drawText(text, x, y, px) {
+    this.ctx.font = `${px}px Arial`;
+    //this.ctx.textAlign = "center";
+    this.ctx.fillStyle = "black";
+    this.ctx.fillText(text, x, y);
+  }
+
   clearCanvas(color) {
     // clear the canvas by drawing a rectangle (with an optional color) with the same dimensions as the canvas
     this.ctx.beginPath();
@@ -260,6 +267,10 @@ class Vec2D extends Point {
 
   static unitVector(theta) {
     return new Vec2D(Math.cos(theta), Math.sin(theta));
+  }
+
+  static fromPoint(p) {
+    return new Vec2D(p.x, p.y);
   }
 }
 

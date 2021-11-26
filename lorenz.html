@@ -1,87 +1,78 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Michael Bradford Williams | Lorenz Attractor</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   <link rel="shortcut icon" href="favicon.ico" />
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/lorenz.js"></script>
 </head>
 
-<body onload="init();">
-<div class="container">
+<body onload="init(1);">
 
-  <div class="topsmall">
-    <div class="topleftsmall">
-       <a href="./index.html">
-      <script type="text/javascript">
-              showRandomImage("300x50");
-         </script>
-       </a>
-    </div>
-    <h1><a href="./index.html">Michael Bradford Williams</a></h1>
-  </div>
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Lorenz Attractor</h3>
+</div>
 
-  <div class="middle">
-    <h2>Lorenz Attractor</h2>
-    <p>The Lorenz Attractor is a set of solutions to the followng set of differential
+<div class="content-row">
+
+<p>
+The Lorenz Attractor is a set of solutions to the followng set of differential
 equations, called the <a href="https://en.wikipedia.org/wiki/Lorenz_system">Lorenz system</a>:
 \[ \begin{align*}
 \frac{dx}{dt} &= \sigma(y-x)\\
 \frac{dy}{dt} &= x(\rho - z) - y\\
 \frac{dz}{dt} &= xy - \beta z
 \end{align*} \]
-where \(\sigma, \rho, \beta\) are real-valued parameters. The system is noteworthy because, for
+where \(\sigma\), \(\rho\), \(\beta\) are real-valued parameters. The system is noteworthy because, for
 certain choices of the parameters, solutions exhibit <a href="https://en.wikipedia.org/wiki/Chaos_theory">
 chaotic</a> behavior. If we think of a solution as a particle moving in 3D space, then there are two
 "attractors" around which the particle may orbit, but the orbit alternates back and forth in a
-seemingly random manner.</p>
+seemingly random manner.
+</p>
 
-<p>Below is a visualization of a solution of the system projected onto the \(xy\)-plane.</p>
+<p>
+Below is a visualization of a solution of the system projected onto the \(xy\)-plane.
+</p>
 
-<p>Here is a <a href="./lorenz_xl.html">larger version</a> of the program.</p>
-  </div>
-
-  <div class="middle">
-    <form name="parameters" action="#">
-      <table border="0" align="center">
-        </tr>
-          <td colspan="1" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
-          <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td>
-          <td colspan="1" align="center">Perspective:<select name="projection">
-             <option value="xy" selected="selected">xy-plane</option>
-             <option value="xz">xz-plane</option>
-             <option value="yz">yz-plane</option>
-           </select></td>
-        </tr>
-      </table>
-    </form>
-  </div>
-
-  <div class="middle">
-  <center>
-    <canvas id="canvas" width="750" height="500">
-      <p>Your browser is currently unsupported.</p>
-    </canvas>
-  </center>
-  </div>
-
-
-  <div class="middle">
-    <form name="outform" action="#">
-      <textarea rows="5" cols="80" name="output"></textarea>
-    </form>
-  </div>
-
-  <div class="bottom">
-    <p>last modified: 02/25/2020</p>
-  </div>
+<p>
+Here is a <a href="./lorenz_xl.html">larger version</a> of the program more suited to desktop browsers.
+</p>
 
 </div>
+
+<div class="content-row" id="controls">
+  <form name="parameters" action="#">
+    <table border="0" align="center">
+      </tr>
+        <td colspan="1" align="center"><input type="button" name="pause" value="Pause Animation" onClick="pauseDrawing();"></td>
+        <td colspan="1" align="center"><input type="reset" name="reset" value="Refresh" onClick="resetDrawing();"></td>
+        <td colspan="1" align="center">Perspective:<select name="projection">
+           <option value="xy" selected="selected">xy-plane</option>
+           <option value="xz">xz-plane</option>
+           <option value="yz">yz-plane</option>
+         </select></td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
+</div>
+
+<div class="content-row">
+  <form name="outform" action="#">
+    <textarea rows="4" cols="40" name="output"></textarea>
+  </form>
+</div>
+
 </body>
 </html>

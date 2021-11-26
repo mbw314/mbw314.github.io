@@ -12,8 +12,8 @@ let angle = Math.PI / 12; // controlled by slider
 let splitProb = 0.035; // controlled by slider
 let biasProb = 0.05;
 
-const MAX_WIDTH = 75;
-const MAX_MASS = 200000;
+let MAX_WIDTH = 75;
+let MAX_MASS = 200000;
 
 const BG_COLOR = new Color(225, 225, 250);
 const START_COLOR = new Color(50, 35, 25);
@@ -202,7 +202,7 @@ function draw() {
       )
       branches.push(newBranch);
 
-      // update the existing and new particle
+      // update the existing and new branch
       branches[i].update();
       branches[N-1].update();
     }
@@ -247,11 +247,21 @@ function refreshDrawing() {
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = document.getElementById("content").clientWidth;
-    HEIGHT = window.innerHeight - parseInt(1.2 * document.getElementById("controls_table").clientHeight);
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.25 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
+
+  MAX_MASS = WIDTH * HEIGHT / 5;
+  MAX_WIDTH = WIDTH / 20;
+
   if (canvas.getContext) {
     let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);

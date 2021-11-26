@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Michael Bradford Williams | K-Means Clustering</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
@@ -11,35 +11,23 @@
 	<script language="JavaScript" type="text/javascript" src="./js/kmeans.js"></script>
 </head>
 
-<body onload="init();">
+<body onload="init(1);">
 
-<div class="container">
+	<div class="content-row" id="header-row">
+	  <h2>Michael Bradford Williams</h2>
+	  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / K-means Clustering</h3>
+	</div>
 
-<a href="./index.html">
-<div class="topsmall">
+<div class="content-row">
 
-<div class="topleftsmall">
-  <a href="./index.html">
-   <script type="text/javascript">
-      showRandomImage("300x50");
-   </script>
-  </a>
-</div>
-
-<h1>Michael Bradford Williams</h1>
-
-</div>
-</a>
-
-<div class="middle">
-
-<h2>K-means Clustering</h2>
-
-<p>Below is a visual representation of the <a href="http://en.wikipedia.org/wiki/K-means_clustering">K-means
+<p>
+Below is a visual representation of the <a href="http://en.wikipedia.org/wiki/K-means_clustering">K-means
 clustering</a> algorithm. This is an unsupervised <a href="http://en.wikipedia.org/wiki/Machine_leanring">machine learning</a>
-algorithm that attempts to group a set of (unlabeled) data points into clusters according to proximity.</p>
+algorithm that attempts to group a set of (unlabeled) data points into clusters according to proximity.
+</p>
 
-<p>The algorithm first initializes a set of K "centroids", which are to be the geometric centers of the data
+<p>
+The algorithm first initializes a set of K "centroids", which are to be the geometric centers of the data
 clusters. Then, there is a repeating loop that has two main steps:
 <ol>
 <li>Cluster assignments: decide to which cluster each data point belongs. This is done by finding the centroid
@@ -49,53 +37,43 @@ clusters. Then, there is a repeating loop that has two main steps:
 </ol>
 </p>
 
-<p>Instructions for this demonstration: the data used here consists of 75 randomly selected points
+<p>
+Instructions for this demonstration: the data used here consists of 75 randomly selected points
 in the plane, and the algorithm tries to group those points into 5 clusters. The centroids are initialized
 randomly. Press "Iterate" to step through one iteration of the algorithm. You can see how the centroids
 move, and how data may move from one cluster to another (by changing color). Press "Reset" to reset data
-and clusters.</p>
-
-<p>You'll need a modern browser to view the app. It has been tested in <a
-href="http://www.mozilla.com/firefox/">Firefox</a> (Windows/Linux) and <a
-href="http://www.google.com/chrome">Chrome</a> (Windows).</p>
+and clusters.
+</p>
 
 </div>
 
-<div class="middle">
-<table border="0" align="center">
-	<tr>
-		<td align="left">
-			<input type="button" name="iterate" value="Iterate" onClick="iterate();">
-			<input type="button" name="reset" value="Reset" onClick="refreshData();">
-		</td>
-	</tr>
-</table>
+<div class="content-row" id="controls">
+	<table border="0" align="center">
+		<tr>
+			<td align="left">
+				<input type="button" name="iterate" value="Iterate" onClick="iterate();">
+				<input type="button" name="reset" value="Reset" onClick="refreshData();">
+			</td>
+		</tr>
+	</table>
 </div>
 
-<div class="middle">
-<center>
-    <canvas id="canvas" width="750" height="750">
-        <p>Your browser is currently unsupported.</p>
-    </canvas>
-</center>
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="500">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
 </div>
 
-<div class="middle">
+<div class="content-row">
 	<table align="center">
     <tr>
       <td>
         <form name="outform" action="#">
-          <textarea rows="25" cols="80" name="output"></textarea>
+          <textarea rows="1" cols="30" name="output"></textarea>
         </form>
       </td>
     </tr>
 	</table>
-</div>
-
-<div class="bottom">
-<p>last modified: 02/05/2020</p>
-</div>
-
 </div>
 
 </body>

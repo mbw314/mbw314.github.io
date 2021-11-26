@@ -1,133 +1,110 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
+  <title>Michael Bradford Williams | Cellular Automata</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Michael Bradford Williams | Cellular Automata</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="./css/styles.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
-	<script language="JavaScript" type="text/javascript" src="./js/randomImage.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
   <script language="JavaScript" type="text/javascript" src="./js/automata.js"></script>
 </head>
 
-<body onload="init(); drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);">
+<body onload="init(1); drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);">
 
-<div class="container">
-
-<div class="topsmall">
-<div class="topleftsmall">
-   <a href="./index.html">
-	<script type="text/javascript">
-      		showRandomImage("300x50");
-   	</script>
-   </a>
-</div>
-<h1><a href="./index.html">Michael Bradford Williams</a></h1>
+<div class="content-row" id="header-row">
+	<h2>Michael Bradford Williams</h2>
+	<h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Cellular Automata</h3>
 </div>
 
-<div class="middle">
+<div class="content-row">
 
-<h2>Cellular Automata</h2>
+<p>
+See <a href="./automata.html">this page</a> for more information about what this program is all about.
+</p>
 
-<p>See <a href="./automata.html">this page</a> for more information about what this program is all about.</p>
-
-<p>Click "Draw New" to begin with a random rule. "Refresh Current" will keep the same rule from the previous
+<p>
+Click "Draw New" to begin with a random rule. "Refresh Current Rule" will keep the same rule from the previous
 drawing (but any change in the number of colors is ignored), but adjust the other options if they have been
 changed. "Reset" returns the form elements to their defaults, but doesn't redraw the image. "Pause Scrolling"
-will toggle animation of the image (slower for lower magnification levels).</p>
+will toggle animation of the image (slower for lower magnification levels).
+</p>
 
-<p>Here is a <a href="./automata2_xl.html">larger version</a> of this program.</p>
-</div>
-
-<div class="middle">
-
-<form name="parameters">
-
-<table border="0" align="center">
-<tr>
-	<td colspan="1" align="right">Number of colors:</td>
-	<td colspan="1" align="right">
-	    <select name="num_colors">
-    		<option value="2">2</option>
-    		<option value="3" selected="selected">3</option>
-    		<option value="4">4</option>
-    		<option value="5">5</option>
-    		<option value="6">6</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="1" align="right">Input cell configuration:</td>
-	<td colspan="1" align="right">
-	    <select name="cell_config">
-		    <option value="TWO_ABOVE">two above</option>
-        <option value="THREE_ABOVE" selected="selected">three above</option>
-		    <option value="FIVE_ABOVE">five above</option>
-		    <option value="THREE_AND_ONE_ABOVE">three above, one above those</option>
-		    <option value="THREE_AND_THREE_ABOVE">three above, three above those</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="1" align="right">First Line:</td>
-	<td colspan="1" align="right">
-	    <select name="first_rows_style">
-		    <option value="CENTERED">Centered</option>
-		    <option value="RANDOM" selected="selected">Random</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="1" align="right">Magnification:</td>
-	<td colspan="1" align="right">
-	    <select name="magnification">
-		    <option value="1x">1x</option>
-		    <option value="2x">2x</option>
-        <option value="3x">3x</option>
-		    <option value="5x" selected="selected">5x</option>
-		    <option value="10x">10x</option>
-	    </select>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="2" align="center">
-	    <input type="button" name="draw" value="Draw New"
-        onClick="drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);" />
-	    <input type="button" name="refresh_current" value="Refresh Current Rule"
-        onClick="refresh(parameters.first_rows_style.value, parameters.magnification.value);" />
-      <input type="button" name="pause" value="Pause Scrolling"
-       onClick="pauseDrawing();" />
-      <input type="reset" name="resetButton" value="Reset" />
-	</td>
-</tr>
-</table>
-</form>
-
-<br />
-
-<center>
-<canvas id="canvas" width="750" height="250"></canvas>
-
-<br />
-<br />
-
-<form name="outform">
-<textarea rows="5" cols="70" name="output"></textarea>
-</form>
-
-</center>
+<p>
+Here is a <a href="./automata2_xl.html">larger version</a> of this program more suited to desktop browsers.
+</p>
 
 </div>
 
-<div class="bottom">
-<p>last modified: 02/21/2020</p>
+<div class="content-row" id="controls">
+  <form name="parameters">
+    <table border="0" align="center">
+      <tr>
+      	<td colspan="1" align="right">Number of colors:</td>
+      	<td colspan="1" align="right">
+      	    <select name="num_colors">
+          		<option value="2">2</option>
+          		<option value="3" selected="selected">3</option>
+          		<option value="4">4</option>
+          		<option value="5">5</option>
+          		<option value="6">6</option>
+      	    </select>
+      	</td>
+      </tr>
+      <tr>
+      	<td colspan="1" align="right">Input cell configuration:</td>
+      	<td colspan="1" align="right">
+      	    <select name="cell_config">
+      		    <option value="TWO_ABOVE">two above</option>
+              <option value="THREE_ABOVE" selected="selected">three above</option>
+      		    <option value="FIVE_ABOVE">five above</option>
+      		    <option value="THREE_AND_ONE_ABOVE">three above, one above those</option>
+      		    <option value="THREE_AND_THREE_ABOVE">three above, three above those</option>
+      	    </select>
+      	</td>
+      </tr>
+      <tr>
+      	<td colspan="1" align="right">First Line:</td>
+      	<td colspan="1" align="right">
+      	    <select name="first_rows_style">
+      		    <option value="CENTERED">Centered</option>
+      		    <option value="RANDOM" selected="selected">Random</option>
+      	    </select>
+      	</td>
+      </tr>
+      <tr>
+      	<td colspan="1" align="right">Magnification:</td>
+      	<td colspan="1" align="right">
+      	    <select name="magnification">
+      		    <option value="1x">1x</option>
+      		    <option value="2x">2x</option>
+              <option value="3x">3x</option>
+      		    <option value="5x" selected="selected">5x</option>
+      		    <option value="10x">10x</option>
+      	    </select>
+      	</td>
+      </tr>
+      <tr>
+      	<td colspan="2" align="center">
+      	    <input type="button" name="draw" value="Draw New"
+              onClick="drawNew(parameters.num_colors.value, parameters.cell_config.value, parameters.first_rows_style.value, parameters.magnification.value);" />
+      	    <input type="button" name="refresh_current" value="Refresh Current Rule"
+              onClick="refresh(parameters.first_rows_style.value, parameters.magnification.value);" />
+            <input type="button" name="pause" value="Pause Scrolling"
+             onClick="pauseDrawing();" />
+            <input type="reset" name="resetButton" value="Reset" />
+      	</td>
+      </tr>
+    </table>
+  </form>
 </div>
 
+<div class="canvas-row">
+  <center>
+    <canvas id="canvas" width="250" height="500">
+      <p>Your browser is currently unsupported.</p>
+    </canvas>
+  </center>
 </div>
 
 </body>

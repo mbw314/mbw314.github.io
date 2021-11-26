@@ -52,7 +52,9 @@ function resetDrawing() {
   canvasUtil.clearCanvas();
   canvasUtil.clearText();
   canvasUtil.println(`initial position: (${p0.x.toFixed(3)}, ${p0.y.toFixed(3)}, ${p0.z.toFixed(3)})`);
-  canvasUtil.println(`parameters: sigma = ${SIGMA.toFixed(3)}, rho = ${RHO.toFixed(3)}, beta = ${BETA.toFixed(3)}`);
+  canvasUtil.println(`sigma = ${SIGMA.toFixed(3)}`);
+  canvasUtil.println(`rho = ${RHO.toFixed(3)}`);
+  canvasUtil.println(`beta = ${BETA.toFixed(3)}`);
 }
 
 function lorenzUpdate(p) {
@@ -113,8 +115,14 @@ function prepend(a, item) {
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = document.getElementById("content").clientWidth;
-    HEIGHT = window.innerHeight - parseInt(2 * document.getElementById("controls_table").clientHeight);
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;

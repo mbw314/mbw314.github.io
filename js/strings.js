@@ -19,7 +19,7 @@ const BLACK = new Color(0, 0, 0);
 const WHITE = new Color(255, 255, 255);
 
 const SLIDER_MIN = 0;
-const SLIDER_MAX = 50;
+const SLIDER_MAX = 100;
 
 const SPLIT_LIMIT_MIN = 1;
 const SPLIT_LIMIT_DEFAULT = splitLimit;
@@ -164,8 +164,14 @@ function refreshDrawing() {
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
   if (parseInt(adjustSize) > 0) {
-    WIDTH = document.getElementById("content").clientWidth;
-    HEIGHT = window.innerHeight - parseInt(1.2 * document.getElementById("controls_table").clientHeight);
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
   }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;

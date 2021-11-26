@@ -1,0 +1,57 @@
+body { padding: 0px; margin: 0px; background:#FFFEBD; font-family: verdana,tahoma,sans-serif; text-align: left; color: #000000; }
+
+/* background:#000000 url(./images/meshbg3.png) top center fixed no-repeat; */
+
+/* --- properties of structural containers --- */
+.container    { width: 760px; margin: 15px auto 50px auto; padding: 5px; background: #FFFEBD;} 
+.top          { height: 300px; background: #225954; color: #9FB84F; margin-bottom: 5px; }
+.topleft      { height: 300px; width: 300px; float: left; overflow: hidden; background: url(./images/300x300/04.jpg); padding: 0px; margin-right: 10px; 
+border-right: solid 5px #FFFEBD;  }
+.topsmall     { height: 50px; background: #225954; color: #9FB84F; margin-bottom: 2px; }
+.topleftsmall { height: 50px; width: 300px; float: left; overflow: hidden; background: url(./images/300x50/04.jpg); padding: 0px; margin-right: 10px; 
+border-right: solid 5px #FFFEBD; height:50px;}
+.middle       { clear: both; background: #9FB84F; padding: 5px; margin: 5px 0px; }
+.bottom       { clear: both; background: #225954; color: #FFFEBD; margin-top: 5px; }
+
+/* --- properties of text elements and other html things ---*/
+p      { margin: 10px; font-size:90%; }
+ol, ul { margin: 10px 10px 15px 10px; font-size: 90%; }
+li     { margin: 10px 0px 10px 0px; padding-left: 5px; }
+pre    { margin-left:30px; }
+
+.old { color:#999999; }
+.old a {font-weight:600; text-decoration:none; }
+.old a:hover    { background-color: #FFFEBD; }
+.old a:link     { color: #666666; }
+.old a:visited, 
+.old a:active   { color: #666666; }
+
+h1 { padding: 10px 0px 10px 10px; margin: 0px; text-align: left; font-size:165%; font-weight:500; font-variant: small-caps; letter-spacing:0.1em;}
+h2 { padding: 5px; margin: 10px 10px; text-align: center; font-size:150%; font-weight:500; font-variant: small-caps; letter-spacing:0.1em; border: solid 0px #000000; background-color: #225954; color: #FFFEBD;}
+h3 { margin: 10px 10px 0px 10px; font-size:110%; font-weight:600; letter-spacing:0.1em; }
+h4 { margin: 10px 10px 0px 10px; font-size:100%; font-weight:600; letter-spacing:0.1em; }
+
+img { border: 0px; }
+
+.top h1   { border: solid 0px #000000; background-color: #225954; color: #FFFEBD;}
+.bottom p { text-align: center; font-size: 75%; padding: 5px; margin: 0px;}
+
+/*--- properties of hypertext links --------*/
+.topsmall a, 
+.topsmall a:visited, 
+.topsmall a:hover { color: #9FB84F; background-color: #225954; font-weight:normal; text-decoration:none;} 
+
+a          { font-weight:600; text-decoration:none; }
+a:hover    { background-color: #FFFEBD; }
+a:link     { color: #306F47; }
+a:visited, 
+a:active   { color: #3F853A; }
+
+.front             { color: #225954; }
+.front a           { font-weight:600; text-decoration:none; }
+.front a:hover     { background-color: #FFFEBD; }
+.front a:link,   
+.front a:visited,
+.front a:active    { color: #225954; }
+
+hr {border: 0; color: #225954; background-color: #225954; height: 2px; }

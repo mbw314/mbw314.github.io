@@ -1,5 +1,5 @@
-const WIDTH = 750;
-const HEIGHT = 750;
+let WIDTH = 750;
+let HEIGHT = 750;
 let canvasUtil;
 let paused = true;
 
@@ -137,7 +137,8 @@ class RegressionEnsemble {
     this.f.params = newParams;
     this.numIterations += 1;
     canvasUtil.clearText();
-    canvasUtil.println(`iteration ${this.numIterations}: cost = ${cost.toFixed(5)}; new function = ${this.f.toString()}`); // technically, 2M * cost
+    canvasUtil.println(`iteration ${this.numIterations}: cost = ${cost.toFixed(5)}`); // technically, 2M * cost
+    canvasUtil.println(`y = ${this.f.toString()}`); // technically, 2M * cost
   }
 }
 
@@ -211,8 +212,18 @@ function draw() {
   re.draw();
 }
 
-function init() {
+function init(adjustSize) {
   let canvas = document.getElementById("canvas");
+  if (parseInt(adjustSize) > 0) {
+    WIDTH = document.getElementById("controls").clientWidth;
+    console.log(WIDTH);
+    if (WIDTH <= 750) {
+      HEIGHT = WIDTH;
+    } else {
+      HEIGHT = window.innerHeight - parseInt(1.5 * document.getElementById("controls").clientHeight);
+    }
+    console.log(HEIGHT);
+  }
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   if (canvas.getContext) {
