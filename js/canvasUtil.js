@@ -396,29 +396,33 @@ class Vec3D extends Point3D {
 }
 
 
-class Point4D {
-  constructor(x, y, z, w) {
-    this.x = x; // float
-    this.y = y; // float
-    this.z = z; // float
-    this.w = w; // float
-  }
+const zip = (a, b) => a.map((k, i) => [k, b[i]]);
 
-  translate(dir, dist) { // vec4D and float
-    let unit_dir = dir.scale(1 / dir.norm());
-    let new_x = this.x + unit_dir.x * dist;
-    let new_y = this.y + unit_dir.y * dist;
-    let new_z = this.z + unit_dir.z * dist;
-    let new_w = this.w + unit_dir.w * dist;
-    return new Point4D(new_x, new_y, new_z, new_w);
+function prepend(item, xs) {
+  return [item].concat(xs.slice(0, xs.length - 1));
+}
+
+class PointND {
+  constructor(xs) {
+    this.xs = xs; // Array of float
   }
 
   toString() {
-    return `(${this.x.toFixed(3)}, ${this.y.toFixed(3)}, ${this.z.toFixed(3)}, ${this.w.toFixed(3)})`;
+    return `(${this.xs.map(x => x.toFixed(3)).join(", ")})`;
+  }
+
+  get(i) {
+    console.assert(0 <= i && i < this.dim());
+    return this.xs[i];
+  }
+
+  dim() {
+    return this.xs.length;
   }
 
   distanceSq(p) {
-    return (this.x - p.x) * (this.x - p.x) + (this.y - p.y) * (this.y - p.y) + (this.z - p.z) * (this.z - p.z) + (this.w - p.w) * (this.w - p.w);
+    console.assert(this.dim() == p.dim());
+    return zip(this.xs, p.xs).map(pair => (pair[0] - pair[1])**2).reduce((a, b) => a + b)
   }
 
   distance(p) {
@@ -426,33 +430,30 @@ class Point4D {
   }
 }
 
-class Vec4D extends Point4D {
-  constructor(x, y, z, w) {
-    super(x, y, z, w);
+class VecND extends PointND {
+  constructor(xs) {
+    super(xs);
   }
 
   scale(a) {
-    return new Vec3D(a * this.x, a * this.y, a * this.z, a * this.w);
+    return new VecND(this.xs.map(x => a * x));
   }
 
   plus(v) {
-    return new Vec3D(this.x + v.x, this.y + v.y, this.z + v.z, this.w + v.w);
+    return new VecND(zip(this.xs, v.xs).map(pair => pair[0] + pair[1]));
   }
 
   times(v) {
-    return new Vec3D(this.x * v.x, this.y * v.y, this.z * v.z, this.w * v.w);
+    return new VecND(zip(this.xs, v.xs).map(pair => pair[0] * pair[1]));
   }
 
   minus(v) {
-    return new Vec3D(this.x - v.x, this.y - v.y, this.z - v.z, this.w - v.w);
+    // this - v
+    return this.plus(v.scale(-1));
   }
 
-  normSq() {
-    return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
-  }
-
-  norm() {
-    return Math.sqrt(this.normSq());
+  negative() {
+    return this.scale(-1);
   }
 
   toUnitVector() {
@@ -460,11 +461,25 @@ class Vec4D extends Point4D {
   }
 
   dot(v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
+    return this.times(v).xs.reduce((a, b) => a + b);
+  }
+
+  normSq() {
+    return this.dot(this);
+  }
+
+  norm() {
+    return Math.sqrt(this.normSq());
   }
 
   projXY() {
-    return new Vec2D(this.x, this.y);
+    return new VecND(this.xs[0], this.xs[1]);
+  }
+
+  static getStdBasisVector(i, n) {
+    let xs = new Array(n).fill(0);
+    xs[i] = 1;
+    return new VecND(xs);
   }
 
   near(v) {
@@ -472,19 +487,34 @@ class Vec4D extends Point4D {
   }
 }
 
-class AnimatedCurve {
-  constructor(p0, updateFn, projectionFn, colorFn) {
-    this.p0 = p0; // PointND -- initial data for curve
-    this.points = new Array(MAX_POINTS).fill(p0); // array of Point3D objects, e.g., solution of ODE; most recent stored first, at most maxPoints items
-    this.updateFn = updateFn; // function R^N -> R^N (e.g, the system of ODE)
-    this.maxPoints = MAX_POINTS;
-    this.projectionFn = projectionFn; // function R^N -> R^2 mapping space to canvas
-    this.colorFn = colorFn; // function from points array index to color
-    console.log(`initialized with p0=${this.p0}; num points = ${this.points.length}; updateFn = ${updateFn}`);
+
+class ODESolver {
+  constructor(odeSystem, method, timeStep) {
+    this.odeSystem = odeSystem; // function R^N -> R^N (e.g, the system of ODE)
+    this.update = (method == "runge-kutta") ? this.rungeKuttaUpdate : this.eulerUpdate;
+    this.timeStep = timeStep  ;
   }
 
-  updatePoints() {
-    let pNew = this.updateFn(this.points[0]);
-    this.points = prepend(this.points, pNew);
+  eulerUpdate(x) {
+    let dx = this.odeSystem(x);
+    return dx.scale(this.timeStep).plus(x);
+  }
+
+  rungeKuttaUpdate(x) {
+    let dx = this.odeSystem(x);
+    let x_half = dx.scale(0.5 * this.timeStep).plus(x);
+    let dx_half = this.odeSystem(x_half).scale(0.5 * this.timeStep).plus(dx);
+    return dx_half.scale(this.timeStep).plus(x);
   }
 }
+
+// class AnimatedCurve {
+//   constructor(odeSystem, method) {
+//     // this.x0 = x0; // VecND -- initial data for curve
+//     // this.maxPoints = maxPoints;
+//     // this.solution = new Array(this.maxPoints).fill(x0); // array of VecND objects, e.g., solution of ODE; most recent stored first, at most maxPoints items
+//     this.odeSystem = odeSystem; // function R^N -> R^N (e.g, the system of ODE)
+//     this.update = method == "runge-kutta" ? this.rungeKuttaUpdate : this.gaussUpdate;
+//     this.timeStep = 0.01;
+//     // console.log(`initialized with p0=${this.p0}; num points = ${this.solution.length}; odeSystem = ${this.odeSystem}; method = ${this.method}`);
+//   }

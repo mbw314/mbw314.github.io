@@ -2,70 +2,33 @@ let WIDTH = 750;
 let HEIGHT = 750;
 let canvasUtil;
 let paused = false;
-let curve; // AnimatedCurve object
+let solver; // ODESolver object
+let solution = [];
 
-let x0 = 1.0;
-let y0 = -1.4;
-let z0 = 0.6;
+const INITIAL_DATA = [1.0, -1.4, 0.6]; // initial data for Lorenz
 const SIGMA = 10;
 const RHO = 28;
 const BETA = 8 / 3.0;
-const T = 0.01;
-const MAX_POINTS = 5000;
+const TIMESTEP = 0.005;
+const MAX_POINTS = 10000;
 const BLUE = new Color(0, 0, 255);
 const RED = new Color(255, 0, 0);
 const WHITE = new Color(255, 255, 255);
 
-function colorFn(i) {
-  return Color.interpolate(BLUE, WHITE, i / MAX_POINTS);
-}
-
-function draw() {
-  if (paused) {
-    return 0;
-  }
-
-  curve.updatePoints();
-  canvasUtil.clearCanvas();
-  let proj = document.parameters.projection.value;
-  if (proj == "xy") {
-    curve.projectionFn = spaceToScreenXY;
-  } else if (proj == "xz") {
-    curve.projectionFn = spaceToScreenXZ;
-  } else if (proj == "yz") {
-    curve.projectionFn = spaceToScreenYZ;
-  }
-  for (let i=0; i < MAX_POINTS-1; i++) {
-    let c = curve.colorFn(i);
-    let p0 = curve.projectionFn(curve.points[i]);
-    let p1 = curve.projectionFn(curve.points[i+1]);
-    canvasUtil.drawLine(p0.x, p0.y, p1.x, p1.y, c, 1);
-  }
-}
-
-function resetDrawing() {
-  let p0 = new Point3D(
-    x0 + Math.random() * 0.1,
-    y0 + Math.random() * 0.1,
-    z0 + Math.random() * 0.1);
-  curve = new AnimatedCurve(p0, lorenzUpdate, spaceToScreenXY, colorFn);
-  canvasUtil.clearCanvas();
-  canvasUtil.clearText();
-  canvasUtil.println(`initial position: (${p0.x.toFixed(3)}, ${p0.y.toFixed(3)}, ${p0.z.toFixed(3)})`);
-  canvasUtil.println(`sigma = ${SIGMA.toFixed(3)}`);
-  canvasUtil.println(`rho = ${RHO.toFixed(3)}`);
-  canvasUtil.println(`beta = ${BETA.toFixed(3)}`);
-}
-
-function lorenzUpdate(p) {
-  let dx = SIGMA * (p.y - p.x);
-  let dy = p.x * (RHO - p.z) - p.y;
-  let dz = p.x * p.y - BETA * p.z;
-  return new Point3D(p.x + T * dx, p.y + T * dy, p.z + T * dz);
-}
-
 function pauseDrawing() {
   paused = !paused;
+}
+
+function lorenzSystem(x) {
+  return new VecND([
+    SIGMA * (x.get(1) - x.get(0)),
+    x.get(0) * (RHO - x.get(2)) - x.get(1),
+    x.get(0) * x.get(1) - BETA * x.get(2)
+  ]);
+}
+
+function colorFn(i) {
+  return Color.interpolate(BLUE, WHITE, i / MAX_POINTS);
 }
 
 function spaceToScreenXY(p) {
@@ -75,8 +38,8 @@ function spaceToScreenXY(p) {
   let c = -32;
   let d = 32;
 
-  let px = WIDTH * (p.x - a) / (b - a);
-  let py = HEIGHT * (d - p.y) / (d - c);
+  let px = WIDTH * (p.get(0) - a) / (b - a);
+  let py = HEIGHT * (d - p.get(1)) / (d - c);
   return new Point(px, py);
 }
 
@@ -87,8 +50,8 @@ function spaceToScreenXZ(p) {
   let c = 0;
   let d = 64;
 
-  let px = WIDTH * (p.x - a) / (b - a);
-  let pz = HEIGHT * (d - p.z) / (d - c);
+  let px = WIDTH * (p.get(0) - a) / (b - a);
+  let pz = HEIGHT * (d - p.get(2)) / (d - c);
   return new Point(px, pz);
 }
 
@@ -99,18 +62,51 @@ function spaceToScreenYZ(p) {
   let c = 0;
   let d = 64;
 
-  let py = WIDTH * (p.y - a) / (b - a);
-  let pz = HEIGHT * (d - p.z) / (d - c);
+  let py = WIDTH * (p.get(1) - a) / (b - a);
+  let pz = HEIGHT * (d - p.get(2)) / (d - c);
   return new Point(py, pz);
 }
 
-function prepend(a, item) {
-  for (let i=a.length-1; i>0; i--) {
-    a[i] = a[i-1];
+function draw() {
+  if (!paused) {
+    let x = solver.update(solution[0]);
+    solution = prepend(x, solution);
   }
-  a[0] = item;
-  return a;
+
+  canvasUtil.clearCanvas();
+  let proj = document.parameters.projection.value;
+  let projectionFn = spaceToScreenXY;
+  if (proj == "xy") {
+    projectionFn = spaceToScreenXY;
+  } else if (proj == "xz") {
+    projectionFn = spaceToScreenXZ;
+  } else if (proj == "yz") {
+    projectionFn = spaceToScreenYZ;
+  }
+
+  for (let i=0; i < MAX_POINTS-1; i++) {
+    let c = colorFn(i);
+    let p0 = projectionFn(solution[i]);
+    let p1 = projectionFn(solution[i+1]);
+    canvasUtil.drawLine(p0.x, p0.y, p1.x, p1.y, c, 1);
+  }
+  let p = projectionFn(solution[0])
+  canvasUtil.drawDisk(p.x, p.y, 3, colorFn(0));
 }
+
+function resetDrawing() {
+  let noise = new VecND([Math.random() * 0.1, Math.random() * 0.1, Math.random() * 0.1]);
+  let x0 = new VecND(INITIAL_DATA).plus(noise);
+  solution = new Array(MAX_POINTS).fill(x0);
+  solver = new ODESolver(lorenzSystem, "runge-kutta", TIMESTEP);
+  canvasUtil.clearCanvas();
+  canvasUtil.clearText();
+  canvasUtil.println(`initial position: ${x0.toString()}`);
+  canvasUtil.println(`sigma = ${SIGMA.toFixed(3)}`);
+  canvasUtil.println(`rho = ${RHO.toFixed(3)}`);
+  canvasUtil.println(`beta = ${BETA.toFixed(3)}`);
+}
+
 
 function init(adjustSize) {
   let canvas = document.getElementById("canvas");
@@ -131,7 +127,7 @@ function init(adjustSize) {
     let ctx = canvas.getContext('2d');
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);
     resetDrawing();
-    return setInterval(draw, 50);
+    return setInterval(draw, 10);
   } else {
     alert('You need a better web browser to see this.');
   }
