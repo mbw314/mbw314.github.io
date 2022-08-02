@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Michael Bradford Williams | Spelling Bee</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/spelling.js"></script>
+</head>
+
+<body onload="init();">
+
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Spelling Bee</h3>
+</div>
+
+
+
+
+<div class="content-row">
+  <form name="parameters" action="#">
+    <table border="1" align="center" id="controls_table">
+      <tr>
+        <td colspan="1" align="right">
+          <textarea rows="1" cols="20" name="input"></textarea>
+        </td>
+        <td colspan="1" align="right">
+          <input type="button" name="submit_word" value="Submit Word" onclick="submitWord();" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="button" name="new_random" value="New Game (Random)" onClick="newPuzzleRandom();">
+        </td>
+        <td>
+          <input type="button" name="new_from_input" value="New Game (from input)" onClick="newPuzzle();">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="button" name="shuffle" value="Shuffle Display" onClick="shuffleDisplay();">
+        </td>
+        <td>
+          <input type="button" name="end_game" value="End Game" onClick="endGame();">
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<div class="canvas-row">
+  <canvas id="canvas" width="250" height="250">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
+</div>
+
+<div class="content-row">
+  <form name="msgform" action="#">
+    <textarea rows="1" cols="40" name="message"></textarea>
+  </form>
+</div>
+
+<div class="content-row">
+  <form name="outform" action="#">
+    <textarea rows="1" cols="20" name="wordlist"></textarea>
+  </form>
+</div>
+
+</body>
+</html>
