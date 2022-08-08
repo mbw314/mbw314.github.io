@@ -325,7 +325,7 @@ class Point3D {
     let new_x = this.x + unit_dir.x * dist;
     let new_y = this.y + unit_dir.y * dist;
     let new_z = this.z + unit_dir.z * dist;
-    return new Point(new_x, new_y, new_z);
+    return new Point3D(new_x, new_y, new_z);
   }
 
   toString() {
@@ -395,19 +395,126 @@ class Vec3D extends Point3D {
   }
 }
 
-class AnimatedCurve {
-  constructor(p0, updateFn, projectionFn, colorFn) {
-    this.p0 = p0; // Point3D -- initial data for curve
-    this.points = new Array(MAX_POINTS).fill(p0); // array of Point3D objects, e.g., solution of ODE; most recent stored first, at most maxPoints items
-    this.updateFn = updateFn; // function R^3 -> R^3 (e.g, the system of ODE)
-    this.maxPoints = MAX_POINTS;
-    this.projectionFn = projectionFn; // function R^3 -> R^2 mapping space to canvas
-    this.colorFn = colorFn; // function from points array index to color
-    console.log(`initialized with p0=${this.p0}; num points = ${this.points.length}; updateFn = ${updateFn}`);
+
+const zip = (a, b) => a.map((k, i) => [k, b[i]]);
+
+function prepend(item, xs) {
+  return [item].concat(xs.slice(0, xs.length - 1));
+}
+
+class PointND {
+  constructor(xs) {
+    this.xs = xs; // Array of float
   }
 
-  updatePoints() {
-    let pNew = this.updateFn(this.points[0]);
-    this.points = prepend(this.points, pNew);
+  toString() {
+    return `(${this.xs.map(x => x.toFixed(3)).join(", ")})`;
+  }
+
+  get(i) {
+    console.assert(0 <= i && i < this.dim());
+    return this.xs[i];
+  }
+
+  dim() {
+    return this.xs.length;
+  }
+
+  distanceSq(p) {
+    console.assert(this.dim() == p.dim());
+    return zip(this.xs, p.xs).map(pair => (pair[0] - pair[1])**2).reduce((a, b) => a + b)
+  }
+
+  distance(p) {
+    return Math.sqrt(this.distanceSq(p));
   }
 }
+
+class VecND extends PointND {
+  constructor(xs) {
+    super(xs);
+  }
+
+  scale(a) {
+    return new VecND(this.xs.map(x => a * x));
+  }
+
+  plus(v) {
+    return new VecND(zip(this.xs, v.xs).map(pair => pair[0] + pair[1]));
+  }
+
+  times(v) {
+    return new VecND(zip(this.xs, v.xs).map(pair => pair[0] * pair[1]));
+  }
+
+  minus(v) {
+    // this - v
+    return this.plus(v.scale(-1));
+  }
+
+  negative() {
+    return this.scale(-1);
+  }
+
+  toUnitVector() {
+    return this.scale(1.0 / this.norm());
+  }
+
+  dot(v) {
+    return this.times(v).xs.reduce((a, b) => a + b);
+  }
+
+  normSq() {
+    return this.dot(this);
+  }
+
+  norm() {
+    return Math.sqrt(this.normSq());
+  }
+
+  projXY() {
+    return new VecND(this.xs[0], this.xs[1]);
+  }
+
+  static getStdBasisVector(i, n) {
+    let xs = new Array(n).fill(0);
+    xs[i] = 1;
+    return new VecND(xs);
+  }
+
+  near(v) {
+    return this.minus(v).normSq() < EPSILON * EPSILON;
+  }
+}
+
+
+class ODESolver {
+  constructor(odeSystem, method, timeStep) {
+    this.odeSystem = odeSystem; // function R^N -> R^N (e.g, the system of ODE)
+    this.update = (method == "runge-kutta") ? this.rungeKuttaUpdate : this.eulerUpdate;
+    this.timeStep = timeStep  ;
+  }
+
+  eulerUpdate(x) {
+    let dx = this.odeSystem(x);
+    return dx.scale(this.timeStep).plus(x);
+  }
+
+  rungeKuttaUpdate(x) {
+    let dx = this.odeSystem(x);
+    let x_half = dx.scale(0.5 * this.timeStep).plus(x);
+    let dx_half = this.odeSystem(x_half).scale(0.5 * this.timeStep).plus(dx);
+    return dx_half.scale(this.timeStep).plus(x);
+  }
+}
+
+// class AnimatedCurve {
+//   constructor(odeSystem, method) {
+//     // this.x0 = x0; // VecND -- initial data for curve
+//     // this.maxPoints = maxPoints;
+//     // this.solution = new Array(this.maxPoints).fill(x0); // array of VecND objects, e.g., solution of ODE; most recent stored first, at most maxPoints items
+//     this.odeSystem = odeSystem; // function R^N -> R^N (e.g, the system of ODE)
+//     this.update = method == "runge-kutta" ? this.rungeKuttaUpdate : this.gaussUpdate;
+//     this.timeStep = 0.01;
+//     // console.log(`initialized with p0=${this.p0}; num points = ${this.solution.length}; odeSystem = ${this.odeSystem}; method = ${this.method}`);
+//   }
