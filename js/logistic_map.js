@@ -107,6 +107,7 @@ class BifurcationPlot {
     let xScale = (this.xMax - this.xMin) / this.canvasWidth;
     let yScale = (this.yMax - this.yMin) / this.canvasHeight;
 
+    // calculate more values than there are pixels to improve image quality
     range2(0, this.canvasWidth, 0.25).forEach(pixelX => {    
       let r = this.xMin + pixelX * xScale;
       let ys = recurrenceLimits(quadraticRecurrence, r, X_0);
@@ -125,8 +126,6 @@ class BifurcationPlot {
     canvasUtil.println(this.toString());
     canvasUtil.println(`Drawing completed in ${t1 - t0} milliseconds.`);
   };
-
-
 }
 
 
@@ -183,7 +182,6 @@ function init(adjustSize) {
     ctx.mozImageSmoothingEnabled = true;
     ctx.webkitImageSmoothingEnabled = true;
     ctx.msImageSmoothingEnabled = true;
-    // ctx.globalAlpha = 0.05;
     canvasUtil = new CanvasUtil(ctx, WIDTH, HEIGHT, document.outform.output);    
 
     canvas.addEventListener('click', function(e) {
