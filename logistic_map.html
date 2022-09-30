@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Michael Bradford Williams | Logistic Map</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="shortcut icon" href="favicon.ico" />
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/canvasUtil.js"></script>
+  <script language="JavaScript" type="text/javascript" src="./js/logistic_map.js"></script>
+</head>
+
+<body onload="init(1);">
+
+<div class="content-row" id="header-row">
+  <h2>Michael Bradford Williams</h2>
+  <h3><a href="./index.html">Home</a> / <a href="./prog.html">Programming</a> / Bifurcations in the Logistic Map</h3>
+</div>
+
+<div class="content-row">
+
+<p>
+The <a href="https://en.wikipedia.org/wiki/Logistic_map">logistic map</a> is a seemingly simple non-linear <a href="https://en.wikipedia.org/wiki/Recurrence_relation">recurrence relation</a>:
+\[ x_{n+1} = r x_n (1 - x_n) \]
+where \(r\) is a real parameter. It is useful as a model of population dynamics, for example. 
+</p>
+
+<p>
+It is natural to ask about the long-term behavior of the values \(x_n\) as \(n \rightarrow \infty\), 
+and in particular how it depends on the parameter \(r\). It turns out that the behavior is quite 
+complicated, indeed chaotic. When \(r \in [0, 3]\), the sequence has a unique limit for any initial data
+\(x_0 \in [0, 1]\), but for \(r > 3\), strange things start to happen. There is no longer a unique limit, 
+instead the sequence values oscillate between multiple targets, and the number of targets changes as well: 
+from 1, to 2 (i.e., there is a bifurcation), to 4, to 8, and so on, but eventually there is no finite set 
+of "limits", and chaos takes over (slightly after \(r = 3.56\)). There is also chaotic behavior for negative 
+values of \(r\).
+</p>
+
+<p>
+These phenomena can be explored in the plot below. Click to zoom in, and shift-click to zoom out.
+</p>
+
+</div>
+
+<div class="canvas-row">
+  <canvas id="canvas" width="750" height="500" background-color="white">
+    <p>Your browser is currently unsupported.</p>
+  </canvas>
+</div>
+
+<div class="content-row" id="controls">
+	<form name="controls">
+    <input type="button" name="reset" value="Reset" onclick="resetState();" />
+  </form>
+  <form name="outform">
+    <textarea rows="2" cols="45" name="output"></textarea>
+  </form>
+</div>
+
+</body>
+</html>
